@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — LALA Bridge</title>
+  <meta name="description" content="Create your LALA Bridge account. Register as a Lalíder with your verification code or as a donor to start making a difference.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌉</text></svg>">
+</head>
+<body>
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <div class="navbar__logo-icon">🌉</div>
+        LALA Bridge
+      </a>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="browse.html" class="navbar__link">Browse</a>
+        <a href="donate.html" class="navbar__link">Donate</a>
+      </div>
+      <div class="navbar__actions">
+        <a href="login.html" class="btn btn--ghost btn--sm">Log In</a>
+      </div>
+      <button class="navbar__hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Register Page -->
+  <div class="auth-page">
+    <div class="auth-card" style="max-width: 580px;">
+      <div class="auth-card__header">
+        <a href="index.html" class="auth-card__logo">
+          <div class="navbar__logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🌉</div>
+          LALA Bridge
+        </a>
+        <h1 class="auth-card__title">Create Your Account</h1>
+        <p class="auth-card__subtitle">Join the community and start making an impact</p>
+      </div>
+
+      <!-- Role Tabs -->
+      <div class="tabs" style="margin-bottom: var(--space-xl);">
+        <button class="tab active" data-tab="lalider" id="tab-lalider" onclick="switchTab('lalider')">
+          🎓 I'm a Lalíder
+        </button>
+        <button class="tab" data-tab="donor" id="tab-donor" onclick="switchTab('donor')">
+          💝 I'm a Donor
+        </button>
+      </div>
+
+      <!-- Lalíder Registration Form -->
+      <div class="tab-content active" id="form-lalider">
+        <form id="lalider-form" onsubmit="handleLaliderRegister(event)">
+          
+          <!-- Verification Code (first and prominent) -->
+          <div class="verification-widget" id="verification-widget">
+            <div class="verification-widget__label">
+              🔐 LALA Verification Code
+            </div>
+            <input 
+              type="text" 
+              class="form-input form-input--code" 
+              id="lalider-code"
+              placeholder="e.g. LALA-VLB32-001"
+              required
+              autocomplete="off"
+              oninput="handleCodeInput(this.value)"
+            >
+            <div class="verification-widget__status" id="code-status"></div>
+            <p class="form-hint">Enter the verification code provided by LALA. This confirms your identity as a Lalíder.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label--required">Full Name</label>
+            <input type="text" class="form-input" id="lalider-name" placeholder="Your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label--required">Email</label>
+            <input type="email" class="form-input" id="lalider-email" placeholder="you@example.com" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label form-label--required">Camp / Cohort</label>
+              <select class="form-select" id="lalider-camp" required>
+                <option value="">Select your camp</option>
+              </select>
+              <p class="form-hint">VLB = Virtual, BLB = In-person</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label--required">Country</label>
+              <select class="form-select" id="lalider-country" required>
+                <option value="">Select country</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">State / Region</label>
+            <input type="text" class="form-input" id="lalider-state" placeholder="e.g. São Paulo, CDMX, Bogotá">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">🎵 Favorite Shower Song</label>
+            <input type="text" class="form-input" id="lalider-shower-song" placeholder="What song do you sing in the shower?">
+            <p class="form-hint">Just a fun way to know you better! 🚿🎶</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Area of Interest</label>
+            <select class="form-select" id="lalider-area">
+              <option value="">Select area</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description of Your Need</label>
+            <textarea class="form-textarea" id="lalider-need" placeholder="Tell us what equipment you need and why. This helps donors understand your situation and match with you."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label form-label--required">Password</label>
+              <input type="password" class="form-input" id="lalider-password" placeholder="Min. 6 characters" required minlength="6">
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label--required">Confirm Password</label>
+              <input type="password" class="form-input" id="lalider-password-confirm" placeholder="Repeat password" required minlength="6">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--full" id="lalider-submit" disabled>
+            🎓 Register as Lalíder
+          </button>
+        </form>
+      </div>
+
+      <!-- Donor Registration Form -->
+      <div class="tab-content" id="form-donor">
+        <form id="donor-form" onsubmit="handleDonorRegister(event)">
+          <div class="form-group">
+            <label class="form-label form-label--required">Full Name</label>
+            <input type="text" class="form-input" id="donor-name" placeholder="Your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label--required">Email</label>
+            <input type="email" class="form-input" id="donor-email" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Company / Organization</label>
+            <input type="text" class="form-input" id="donor-org" placeholder="Optional — your company or org">
+            <p class="form-hint">If donating on behalf of a company</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label--required">Country</label>
+            <select class="form-select" id="donor-country" required>
+              <option value="">Select country</option>
+              <option value="United States">United States</option>
+              <option value="Canada">Canada</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Spain">Spain</option>
+              <option value="Portugal">Portugal</option>
+              <option value="Australia">Australia</option>
+              <option value="Japan">Japan</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label form-label--required">Password</label>
+              <input type="password" class="form-input" id="donor-password" placeholder="Min. 6 characters" required minlength="6">
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label--required">Confirm Password</label>
+              <input type="password" class="form-input" id="donor-password-confirm" placeholder="Repeat password" required minlength="6">
+            </div>
+          </div>
+
+          <div class="card card--flat" style="margin-bottom: var(--space-xl); padding: var(--space-md);">
+            <p class="text-sm text-secondary">
+              💡 <strong>As a donor</strong>, you can list equipment for donation and browse Lalíderes' needs. You cannot request or receive donations.
+            </p>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg btn--full">
+            💝 Register as Donor
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-card__footer">
+        Already have an account? <a href="login.html" style="margin-left: 4px;">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/donations.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Populate dropdowns
+    document.addEventListener('DOMContentLoaded', () => {
+      // Camp dropdown
+      const campSelect = document.getElementById('lalider-camp');
+      MockDB.camps.forEach(camp => {
+        const opt = document.createElement('option');
+        opt.value = camp;
+        opt.textContent = camp + (camp.startsWith('VLB') ? ' (Virtual)' : ' (In-person)');
+        campSelect.appendChild(opt);
+      });
+
+      // Country dropdown (Lalíder — Latin American countries)
+      const countrySelect = document.getElementById('lalider-country');
+      MockDB.countries.forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        countrySelect.appendChild(opt);
+      });
+
+      // Also add Latin American countries to donor dropdown
+      const donorCountrySelect = document.getElementById('donor-country');
+      MockDB.countries.forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        donorCountrySelect.appendChild(opt);
+      });
+
+      // Area of interest
+      const areaSelect = document.getElementById('lalider-area');
+      MockDB.areasOfInterest.forEach(area => {
+        const opt = document.createElement('option');
+        opt.value = area;
+        opt.textContent = area;
+        areaSelect.appendChild(opt);
+      });
+
+      // Check URL params for pre-selected tab
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('type') === 'lalider') {
+        switchTab('lalider');
+      } else if (params.get('type') === 'donor') {
+        switchTab('donor');
+      }
+
+      // Redirect if already logged in
+      if (Auth.isLoggedIn()) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    // Tab switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('form-' + tab).classList.add('active');
+    }
+
+    // Code verification
+    let codeVerified = false;
+
+    function handleCodeInput(value) {
+      const widget = document.getElementById('verification-widget');
+      const status = document.getElementById('code-status');
+      const submitBtn = document.getElementById('lalider-submit');
+      const input = document.getElementById('lalider-code');
+
+      if (!value.trim()) {
+        widget.className = 'verification-widget';
+        status.innerHTML = '';
+        submitBtn.disabled = true;
+        input.className = 'form-input form-input--code';
+        codeVerified = false;
+        return;
+      }
+
+      // Show verifying state
+      widget.className = 'verification-widget verifying';
+      status.innerHTML = '<span class="spinner"></span> Verifying code...';
+
+      // Simulate API delay
+      clearTimeout(window._codeTimeout);
+      window._codeTimeout = setTimeout(() => {
+        const result = verifyLaliderCode(value, '');
+        
+        if (result.valid) {
+          widget.className = 'verification-widget verified';
+          input.className = 'form-input form-input--code form-input--success';
+          status.innerHTML = `<span style="color: var(--success);">✅ ${result.message}</span>`;
+          submitBtn.disabled = false;
+          codeVerified = true;
+
+          // Auto-fill camp and country
+          if (result.data) {
+            document.getElementById('lalider-camp').value = result.data.camp;
+            document.getElementById('lalider-country').value = result.data.country;
+          }
+        } else {
+          widget.className = 'verification-widget failed';
+          input.className = 'form-input form-input--code form-input--error';
+          status.innerHTML = `<span style="color: var(--error);">❌ ${result.message}</span>`;
+          submitBtn.disabled = true;
+          codeVerified = false;
+        }
+      }, 800);
+    }
+
+    // Lalíder registration
+    function handleLaliderRegister(e) {
+      e.preventDefault();
+
+      if (!codeVerified) {
+        App.showToast('Please verify your LALA code first.', 'error');
+        return;
+      }
+
+      const password = document.getElementById('lalider-password').value;
+      const confirm = document.getElementById('lalider-password-confirm').value;
+
+      if (password !== confirm) {
+        App.showToast('Passwords do not match.', 'error');
+        return;
+      }
+
+      const result = Auth.registerLalider({
+        name: document.getElementById('lalider-name').value,
+        email: document.getElementById('lalider-email').value,
+        password,
+        verificationCode: document.getElementById('lalider-code').value,
+        camp: document.getElementById('lalider-camp').value,
+        country: document.getElementById('lalider-country').value,
+        state: document.getElementById('lalider-state').value,
+        showerSong: document.getElementById('lalider-shower-song').value,
+        areaOfInterest: document.getElementById('lalider-area').value,
+        needDescription: document.getElementById('lalider-need').value
+      });
+
+      if (result.success) {
+        // Auto login
+        Auth.login(document.getElementById('lalider-email').value, password);
+        App.showToast(result.message, 'success');
+        
+        // Create initial need if description provided
+        const needDesc = document.getElementById('lalider-need').value;
+        if (needDesc) {
+          Donations.createNeed({
+            laliderId: result.user.verificationCode,
+            laliderName: result.user.name.split(' ')[0] + ' ' + result.user.name.split(' ').pop()[0] + '.',
+            camp: result.user.camp,
+            country: result.user.country,
+            category: 'laptop', // default
+            title: 'Equipment needed for studies',
+            description: needDesc,
+            urgency: 'medium'
+          });
+        }
+
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+      } else {
+        App.showToast(result.message, 'error');
+      }
+    }
+
+    // Donor registration
+    function handleDonorRegister(e) {
+      e.preventDefault();
+
+      const password = document.getElementById('donor-password').value;
+      const confirm = document.getElementById('donor-password-confirm').value;
+
+      if (password !== confirm) {
+        App.showToast('Passwords do not match.', 'error');
+        return;
+      }
+
+      const result = Auth.registerDonor({
+        name: document.getElementById('donor-name').value,
+        email: document.getElementById('donor-email').value,
+        password,
+        country: document.getElementById('donor-country').value,
+        organization: document.getElementById('donor-org').value
+      });
+
+      if (result.success) {
+        Auth.login(document.getElementById('donor-email').value, password);
+        App.showToast(result.message, 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1500);
+      } else {
+        App.showToast(result.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

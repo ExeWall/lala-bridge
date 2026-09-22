@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse — LALA Bridge</title>
+  <meta name="description" content="Browse available donations and Lalíder requests on LALA Bridge. Find equipment to donate or discover what's available.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌉</text></svg>">
+</head>
+<body>
+  <div class="bg-mesh"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <div class="navbar__logo-icon">🌉</div>
+        LALA Bridge
+      </a>
+      <div class="navbar__links">
+        <a href="index.html" class="navbar__link">Home</a>
+        <a href="browse.html" class="navbar__link active">Browse</a>
+        <a href="donate.html" class="navbar__link">Donate</a>
+        <a href="dashboard.html" class="navbar__link">Dashboard</a>
+      </div>
+      <div class="navbar__actions"></div>
+      <button class="navbar__hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-header__title">
+        <span class="text-gradient">Browse & Connect</span>
+      </h1>
+      <p class="page-header__desc">Explore available donations and Lalíder requests. Find your perfect match.</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container" style="padding-bottom: var(--space-4xl);">
+    
+    <!-- View Toggle Tabs -->
+    <div class="tabs" style="margin-bottom: var(--space-xl); max-width: 400px;">
+      <button class="tab active" id="tab-donations" onclick="switchView('donations')">
+        🎁 Donations
+      </button>
+      <button class="tab" id="tab-needs" onclick="switchView('needs')">
+        📢 Requests
+      </button>
+    </div>
+
+    <!-- Donations View -->
+    <div id="view-donations">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-bar__search">
+          <span class="filter-bar__search-icon">🔍</span>
+          <input type="text" class="form-input" id="search-donations" placeholder="Search donations..." oninput="filterDonations()">
+        </div>
+        <div class="filter-bar__tags" id="category-filters">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <p class="text-sm text-secondary" id="donations-count" style="margin-bottom: var(--space-lg);"></p>
+
+      <!-- Donations Grid -->
+      <div class="donations-grid" id="donations-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="donations-empty" style="display: none;">
+        <div class="empty-state">
+          <div class="empty-state__icon">🔍</div>
+          <h3 class="empty-state__title">No Donations Found</h3>
+          <p class="empty-state__desc">Try adjusting your filters or search terms.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Needs View -->
+    <div id="view-needs" style="display: none;">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-bar__search">
+          <span class="filter-bar__search-icon">🔍</span>
+          <input type="text" class="form-input" id="search-needs" placeholder="Search requests..." oninput="filterNeeds()">
+        </div>
+        <div class="filter-bar__tags" id="urgency-filters">
+          <button class="tag active" data-urgency="all" onclick="setUrgencyFilter('all')">All</button>
+          <button class="tag" data-urgency="high" onclick="setUrgencyFilter('high')">🔴 High</button>
+          <button class="tag" data-urgency="medium" onclick="setUrgencyFilter('medium')">🟡 Medium</button>
+          <button class="tag" data-urgency="low" onclick="setUrgencyFilter('low')">🟢 Low</button>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <p class="text-sm text-secondary" id="needs-count" style="margin-bottom: var(--space-lg);"></p>
+
+      <!-- Needs Grid -->
+      <div class="donations-grid" id="needs-grid">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="needs-empty" style="display: none;">
+        <div class="empty-state">
+          <div class="empty-state__icon">🔍</div>
+          <h3 class="empty-state__title">No Requests Found</h3>
+          <p class="empty-state__desc">Try adjusting your filters or search terms.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA for non-logged users -->
+    <div id="browse-cta" style="display: none; margin-top: var(--space-2xl);">
+      <div class="card card--glass text-center" style="padding: var(--space-2xl); border: 1px solid var(--border-accent);">
+        <h3 class="heading-sm" style="margin-bottom: var(--space-sm);">Want to Help?</h3>
+        <p class="text-secondary" style="margin-bottom: var(--space-lg);">Sign up to start donating or register as a Lalíder to request equipment.</p>
+        <div class="flex items-center justify-center gap-md" style="flex-wrap: wrap;">
+          <a href="register.html?type=donor" class="btn btn--primary">💝 Register as Donor</a>
+          <a href="register.html?type=lalider" class="btn btn--accent">🎓 I'm a Lalíder</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">
+        <p class="footer__copyright">© 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/donations.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentCategoryFilter = 'all';
+    let currentUrgencyFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Render category filter tags
+      const categoryFilters = document.getElementById('category-filters');
+      categoryFilters.innerHTML = `
+        <button class="tag active" data-category="all" onclick="setCategoryFilter('all')">All</button>
+        ${MockDB.equipmentCategories.map(cat => 
+          `<button class="tag" data-category="${cat.id}" onclick="setCategoryFilter('${cat.id}')">${cat.icon} ${cat.name}</button>`
+        ).join('')}
+      `;
+
+      // Initial render
+      renderDonations();
+      renderNeeds();
+
+      // Show CTA for non-logged users
+      if (!Auth.isLoggedIn()) {
+        document.getElementById('browse-cta').style.display = 'block';
+      }
+
+      // Check URL params
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('view') === 'needs') {
+        switchView('needs');
+      }
+    });
+
+    function switchView(view) {
+      document.getElementById('view-donations').style.display = view === 'donations' ? 'block' : 'none';
+      document.getElementById('view-needs').style.display = view === 'needs' ? 'block' : 'none';
+      
+      document.getElementById('tab-donations').classList.toggle('active', view === 'donations');
+      document.getElementById('tab-needs').classList.toggle('active', view === 'needs');
+    }
+
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+      document.querySelectorAll('#category-filters .tag').forEach(t => 
+        t.classList.toggle('active', t.dataset.category === category)
+      );
+      renderDonations();
+    }
+
+    function setUrgencyFilter(urgency) {
+      currentUrgencyFilter = urgency;
+      document.querySelectorAll('#urgency-filters .tag').forEach(t => 
+        t.classList.toggle('active', t.dataset.urgency === urgency)
+      );
+      renderNeeds();
+    }
+
+    function filterDonations() {
+      renderDonations();
+    }
+
+    function filterNeeds() {
+      renderNeeds();
+    }
+
+    function renderDonations() {
+      const search = document.getElementById('search-donations').value;
+      let donations = Donations.getAvailable();
+
+      // Apply filters
+      donations = Donations.filter(donations, {
+        category: currentCategoryFilter,
+        search
+      });
+
+      const grid = document.getElementById('donations-grid');
+      const countEl = document.getElementById('donations-count');
+      const emptyEl = document.getElementById('donations-empty');
+
+      if (donations.length > 0) {
+        grid.innerHTML = donations.map(d => App.renderDonationCard(d)).join('');
+        grid.style.display = 'grid';
+        emptyEl.style.display = 'none';
+      } else {
+        grid.style.display = 'none';
+        emptyEl.style.display = 'block';
+      }
+
+      countEl.textContent = `${donations.length} donation${donations.length !== 1 ? 's' : ''} available`;
+    }
+
+    function renderNeeds() {
+      const search = document.getElementById('search-needs').value;
+      let needs = Donations.getOpenNeeds();
+
+      // Apply urgency filter
+      if (currentUrgencyFilter !== 'all') {
+        needs = needs.filter(n => n.urgency === currentUrgencyFilter);
+      }
+
+      // Apply search
+      if (search) {
+        const q = search.toLowerCase();
+        needs = needs.filter(n => 
+          n.title.toLowerCase().includes(q) || 
+          n.description.toLowerCase().includes(q) ||
+          n.laliderName.toLowerCase().includes(q) ||
+          n.camp.toLowerCase().includes(q)
+        );
+      }
+
+      const grid = document.getElementById('needs-grid');
+      const countEl = document.getElementById('needs-count');
+      const emptyEl = document.getElementById('needs-empty');
+
+      if (needs.length > 0) {
+        grid.innerHTML = needs.map(n => App.renderNeedCard(n)).join('');
+        grid.style.display = 'grid';
+        emptyEl.style.display = 'none';
+      } else {
+        grid.style.display = 'none';
+        emptyEl.style.display = 'block';
+      }
+
+      countEl.textContent = `${needs.length} request${needs.length !== 1 ? 's' : ''} open`;
+    }
+  </script>
+</body>
+</html>
