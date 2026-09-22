@@ -6,39 +6,33 @@
   <title>Log In — LALA Bridge</title>
   <meta name="description" content="Log in to your LALA Bridge account to manage donations or check your requests as a Lalíder.">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌉</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>">
 </head>
 <body>
-  <div class="bg-mesh"></div>
-  <div class="bg-grid"></div>
 
-  <!-- Navigation -->
-  <nav class="navbar scrolled" id="navbar">
-    <div class="navbar__inner">
-      <a href="index.html" class="navbar__logo">
-        <div class="navbar__logo-icon">🌉</div>
+  <nav class="nav" id="navbar">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-mark">B</div>
         LALA Bridge
       </a>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="browse.html" class="navbar__link">Browse</a>
-        <a href="donate.html" class="navbar__link">Donate</a>
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="browse.html" class="nav__link">Browse</a>
+        <a href="donate.html" class="nav__link">Donate</a>
       </div>
-      <div class="navbar__actions">
+      <div class="nav__actions">
         <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
       </div>
-      <button class="navbar__hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav__hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <!-- Login Page -->
   <div class="auth-page">
     <div class="auth-card">
       <div class="auth-card__header">
         <a href="index.html" class="auth-card__logo">
-          <div class="navbar__logo-icon" style="width: 32px; height: 32px; font-size: 1rem;">🌉</div>
+          <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem;">B</div>
           LALA Bridge
         </a>
         <h1 class="auth-card__title">Welcome Back</h1>
@@ -50,37 +44,31 @@
           <label class="form-label form-label--required">Email</label>
           <input type="email" class="form-input" id="login-email" placeholder="you@example.com" required autofocus>
         </div>
-
         <div class="form-group">
           <label class="form-label form-label--required">Password</label>
           <input type="password" class="form-input" id="login-password" placeholder="Your password" required>
         </div>
-
-        <div id="login-error" class="form-error" style="margin-bottom: var(--space-lg);"></div>
-
-        <button type="submit" class="btn btn--primary btn--lg btn--full" id="login-btn">
-          Log In
-        </button>
+        <div id="login-error" class="form-error" style="margin-bottom: var(--s-5);"></div>
+        <button type="submit" class="btn btn--primary btn--lg btn--full" id="login-btn">Log In</button>
       </form>
 
-      <!-- Demo credentials -->
-      <div class="card card--flat" style="margin-top: var(--space-xl); padding: var(--space-md);">
-        <p class="text-sm" style="font-weight: 600; margin-bottom: var(--space-sm);">🧪 Demo Accounts</p>
-        <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
-          <button class="btn btn--ghost btn--sm" onclick="fillDemo('techcorp@example.com', 'demo123')" style="justify-content: flex-start; text-align: left;">
-            <span class="badge badge--donor" style="margin-right: 8px;">Donor</span>
-            techcorp@example.com
+      <div class="card card--flat" style="margin-top: var(--s-6); padding: var(--s-4); background: var(--cream);">
+        <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2);">Demo Accounts</p>
+        <div style="display: flex; flex-direction: column; gap: var(--s-2);">
+          <button class="btn btn--ghost btn--sm" onclick="fillDemo('techcorp@example.com', 'demo123')" style="justify-content: flex-start;">
+            <span class="badge badge--donor">Donor</span>
+            <span style="margin-left: 8px;">techcorp@example.com</span>
           </button>
-          <button class="btn btn--ghost btn--sm" onclick="fillDemo('sarah@example.com', 'demo123')" style="justify-content: flex-start; text-align: left;">
-            <span class="badge badge--donor" style="margin-right: 8px;">Donor</span>
-            sarah@example.com
+          <button class="btn btn--ghost btn--sm" onclick="fillDemo('sarah@example.com', 'demo123')" style="justify-content: flex-start;">
+            <span class="badge badge--donor">Donor</span>
+            <span style="margin-left: 8px;">sarah@example.com</span>
           </button>
         </div>
-        <p class="form-hint" style="margin-top: var(--space-sm);">Register as a Lalíder first to see the Lalíder dashboard.</p>
+        <p class="form-hint" style="margin-top: var(--s-3);">Register as a Lalíder first to see the Lalíder dashboard.</p>
       </div>
 
       <div class="auth-card__footer">
-        Don't have an account? <a href="register.html" style="margin-left: 4px;">Create one</a>
+        Don't have an account? <a href="register.html">Create one</a>
       </div>
     </div>
   </div>
@@ -91,9 +79,7 @@
   <script src="js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      if (Auth.isLoggedIn()) {
-        window.location.href = 'dashboard.html';
-      }
+      if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
     });
 
     function fillDemo(email, password) {
@@ -103,7 +89,6 @@
 
     function handleLogin(e) {
       e.preventDefault();
-
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       const errorEl = document.getElementById('login-error');
@@ -114,14 +99,11 @@
 
       setTimeout(() => {
         const result = Auth.login(email, password);
-
         if (result.success) {
           App.showToast(result.message, 'success');
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 1000);
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
         } else {
-          errorEl.textContent = '❌ ' + result.message;
+          errorEl.textContent = result.message;
           errorEl.classList.add('visible');
           btn.disabled = false;
           btn.innerHTML = 'Log In';

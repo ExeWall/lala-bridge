@@ -21,7 +21,7 @@ const App = {
   // =========================================================================
 
   initNavbar() {
-    const navbar = document.querySelector('.navbar');
+    const navbar = document.querySelector('.nav');
     if (!navbar) return;
 
     window.addEventListener('scroll', () => {
@@ -32,21 +32,18 @@ const App = {
       }
     });
 
-    // Trigger on load
     if (window.scrollY > 50) navbar.classList.add('scrolled');
   },
 
   initMobileMenu() {
-    const hamburger = document.querySelector('.navbar__hamburger');
-    const links = document.querySelector('.navbar__links');
-    const actions = document.querySelector('.navbar__actions');
+    const hamburger = document.querySelector('.nav__hamburger');
+    const links = document.querySelector('.nav__links');
 
     if (!hamburger) return;
 
     hamburger.addEventListener('click', () => {
       hamburger.classList.toggle('active');
       links?.classList.toggle('mobile-open');
-      actions?.classList.toggle('mobile-open');
     });
   },
 
@@ -54,19 +51,19 @@ const App = {
    * Update navbar to show user state
    */
   updateNavbarAuth() {
-    const actionsContainer = document.querySelector('.navbar__actions');
+    const actionsContainer = document.querySelector('.nav__actions');
     if (!actionsContainer) return;
 
     if (Auth.isLoggedIn()) {
       const user = Auth.getCurrentUser();
       const typeBadge = user?.type === 'lalider' 
-        ? '<span class="badge badge--lalider">🎓 Lalíder</span>'
-        : '<span class="badge badge--donor">💝 Donor</span>';
+        ? '<span class="badge badge--lalider">Lalíder</span>'
+        : '<span class="badge badge--donor">Donor</span>';
       
       actionsContainer.innerHTML = `
         ${typeBadge}
-        <a href="dashboard.html" class="btn btn--secondary btn--sm">Dashboard</a>
-        <button class="btn btn--ghost btn--sm" id="logout-btn" onclick="App.handleLogout()">Logout</button>
+        <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard</a>
+        <button class="btn btn--ghost btn--sm" id="logout-btn" onclick="App.handleLogout()">Log out</button>
       `;
     } else {
       actionsContainer.innerHTML = `
@@ -121,7 +118,6 @@ const App = {
       function update() {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        // Ease out
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.floor(start + (target - start) * eased);
         counter.textContent = current.toLocaleString() + suffix;
@@ -131,7 +127,6 @@ const App = {
         }
       }
 
-      // Only animate when visible
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -158,24 +153,15 @@ const App = {
       document.body.appendChild(container);
     }
 
-    const icons = {
-      success: '✅',
-      error: '❌',
-      warning: '⚠️',
-      info: 'ℹ️'
-    };
-
     const toast = document.createElement('div');
     toast.className = `toast toast--${type}`;
     toast.innerHTML = `
-      <span class="toast__icon">${icons[type]}</span>
       <span class="toast__message">${message}</span>
-      <button class="toast__close" onclick="this.parentElement.remove()">✕</button>
+      <button class="toast__close" onclick="this.parentElement.remove()">&times;</button>
     `;
 
     container.appendChild(toast);
 
-    // Auto remove
     setTimeout(() => {
       toast.style.animation = 'fadeOut 0.3s ease forwards';
       setTimeout(() => toast.remove(), 300);
@@ -187,14 +173,13 @@ const App = {
   // =========================================================================
 
   showModal(title, body, actions = []) {
-    // Remove existing modal
     document.querySelector('.modal-overlay')?.remove();
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
     
     const actionsHTML = actions.map(a => 
-      `<button class="btn ${a.class || 'btn--secondary'}" onclick="${a.onclick}">${a.label}</button>`
+      `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${a.label}</button>`
     ).join('');
 
     overlay.innerHTML = `
@@ -208,7 +193,6 @@ const App = {
       </div>
     `;
 
-    // Close on overlay click
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) App.closeModal();
     });
@@ -228,9 +212,6 @@ const App = {
   // Utility Helpers
   // =========================================================================
 
-  /**
-   * Format a date string
-   */
   formatDate(dateStr) {
     const date = new Date(dateStr);
     const now = new Date();
@@ -245,30 +226,22 @@ const App = {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   },
 
-  /**
-   * Get category info by ID
-   */
   getCategory(id) {
-    return MockDB.equipmentCategories.find(c => c.id === id) || { id: 'other', name: 'Other', icon: '📦' };
+    return MockDB.equipmentCategories.find(c => c.id === id) || { id: 'other', name: 'Other', icon: '' };
   },
 
-  /**
-   * Get condition info by ID
-   */
   getCondition(id) {
     return MockDB.conditions.find(c => c.id === id) || { id: 'unknown', label: 'Unknown' };
   },
 
-  /**
-   * Get initials from name
-   */
   getInitials(name) {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   },
 
-  /**
-   * Render a donation card HTML
-   */
+  // =========================================================================
+  // Card Renderers
+  // =========================================================================
+
   renderDonationCard(donation) {
     const cat = this.getCategory(donation.category);
     const cond = this.getCondition(donation.condition);
@@ -279,18 +252,17 @@ const App = {
     return `
       <div class="card donation-card" data-id="${donation.id}">
         <div class="donation-card__category">
-          <span class="donation-card__category-icon">${cat.icon}</span>
           <span class="donation-card__category-name">${cat.name}</span>
         </div>
         <h3 class="donation-card__title">${donation.title}</h3>
         <p class="donation-card__desc">${donation.description}</p>
         <div class="card__footer">
           <div class="donation-card__meta">
-            <span class="donation-card__meta-item">📍 ${donation.country}</span>
-            <span class="donation-card__meta-item">📅 ${this.formatDate(donation.createdAt)}</span>
+            <span class="donation-card__meta-item">${donation.country}</span>
+            <span class="donation-card__meta-item">${this.formatDate(donation.createdAt)}</span>
           </div>
-          <div class="flex items-center gap-sm">
-            <span class="badge badge--primary">${cond.label}</span>
+          <div class="flex items-center gap-2">
+            <span class="badge badge--gold">${cond.label}</span>
             ${statusBadge}
           </div>
         </div>
@@ -298,16 +270,13 @@ const App = {
     `;
   },
 
-  /**
-   * Render a need card HTML
-   */
   renderNeedCard(need) {
     const cat = this.getCategory(need.category);
     const urgencyClass = `need-card--${need.urgency}`;
     const urgencyBadge = {
-      high: '<span class="badge badge--error">🔴 High Priority</span>',
-      medium: '<span class="badge badge--warning">🟡 Medium</span>',
-      low: '<span class="badge badge--accent">🟢 Low</span>'
+      high: '<span class="badge badge--error">High Priority</span>',
+      medium: '<span class="badge badge--warning">Medium</span>',
+      low: '<span class="badge badge--success">Low</span>'
     };
 
     return `
@@ -321,22 +290,18 @@ const App = {
           ${urgencyBadge[need.urgency] || ''}
         </div>
         <div class="donation-card__category">
-          <span class="donation-card__category-icon">${cat.icon}</span>
           <span class="donation-card__category-name">${cat.name}</span>
         </div>
         <h3 class="donation-card__title">${need.title}</h3>
         <p class="donation-card__desc">${need.description}</p>
         <div class="card__footer">
-          <span class="donation-card__meta-item">📅 ${this.formatDate(need.createdAt)}</span>
+          <span class="donation-card__meta-item">${this.formatDate(need.createdAt)}</span>
           ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" onclick="App.showMatchModal('${need.id}')">Offer to Help</button>` : ''}
         </div>
       </div>
     `;
   },
 
-  /**
-   * Show match modal
-   */
   showMatchModal(needId) {
     const need = Donations.getAllNeeds().find(n => n.id === needId);
     if (!need) return;
@@ -345,16 +310,16 @@ const App = {
     this.showModal(
       `Help ${need.laliderName}`,
       `<p>You're offering to help with:</p>
-       <p><strong>${cat.icon} ${need.title}</strong></p>
-       <p class="text-sm text-secondary" style="margin-top: var(--space-sm);">${need.description}</p>
-       <p style="margin-top: var(--space-md);">This will notify the Lalíder that you want to help. They'll receive your contact information to coordinate the donation.</p>`,
-      [{ label: '💝 Confirm Offer', class: 'btn--primary', onclick: `App.confirmMatch('${needId}')` }]
+       <p><strong>${need.title}</strong></p>
+       <p class="text-sm text-muted" style="margin-top: var(--s-2);">${need.description}</p>
+       <p style="margin-top: var(--s-4);">This will notify the Lalíder that you want to help. They'll receive your contact information to coordinate the donation.</p>`,
+      [{ label: 'Confirm Offer', class: 'btn--primary', onclick: `App.confirmMatch('${needId}')` }]
     );
   },
 
   confirmMatch(needId) {
     this.closeModal();
-    this.showToast('Your offer has been sent! The Lalíder will be notified. 🎉', 'success');
+    this.showToast('Your offer has been sent! The Lalíder will be notified.', 'success');
   }
 };
 
@@ -363,5 +328,4 @@ document.addEventListener('DOMContentLoaded', () => {
   App.init();
 });
 
-// Make available globally
 window.App = App;

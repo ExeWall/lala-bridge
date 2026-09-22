@@ -6,62 +6,40 @@
   <title>Dashboard — LALA Bridge</title>
   <meta name="description" content="Your LALA Bridge dashboard. Manage donations, view requests, and track your impact.">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌉</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>">
 </head>
 <body>
-  <div class="bg-mesh"></div>
-  <div class="bg-grid"></div>
 
-  <!-- Navigation -->
-  <nav class="navbar scrolled" id="navbar">
-    <div class="navbar__inner">
-      <a href="index.html" class="navbar__logo">
-        <div class="navbar__logo-icon">🌉</div>
+  <nav class="nav" id="navbar">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">
+        <div class="nav__logo-mark">B</div>
         LALA Bridge
       </a>
-      <div class="navbar__links">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="browse.html" class="navbar__link">Browse</a>
-        <a href="donate.html" class="navbar__link">Donate</a>
-        <a href="dashboard.html" class="navbar__link active">Dashboard</a>
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="browse.html" class="nav__link">Browse</a>
+        <a href="donate.html" class="nav__link">Donate</a>
+        <a href="dashboard.html" class="nav__link active">Dashboard</a>
       </div>
-      <div class="navbar__actions">
-        <!-- Updated by JS -->
-      </div>
-      <button class="navbar__hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="nav__actions"></div>
+      <button class="nav__hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <!-- Dashboard Content -->
   <div class="dashboard">
     <div class="container">
-      <!-- Header -->
-      <div class="dashboard__header" id="dashboard-header">
-        <!-- Rendered by JS -->
-      </div>
-
-      <!-- Stats Grid -->
-      <div class="dashboard__grid" id="dashboard-stats">
-        <!-- Rendered by JS -->
-      </div>
-
-      <!-- Action Buttons -->
-      <div id="dashboard-actions" style="margin-bottom: var(--space-2xl);"></div>
-
-      <!-- Content Sections -->
-      <div id="dashboard-content">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="dashboard__header" id="dashboard-header"></div>
+      <div class="dashboard__grid" id="dashboard-stats"></div>
+      <div id="dashboard-actions" style="margin-bottom: var(--s-7);"></div>
+      <div id="dashboard-content"></div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer" style="margin-top: var(--space-3xl);">
+  <footer class="footer" style="margin-top: var(--s-8);">
     <div class="container">
       <div class="footer__bottom">
-        <p class="footer__copyright">© 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.</p>
+        <p class="footer__copyright">&copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.</p>
       </div>
     </div>
   </footer>
@@ -73,118 +51,76 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (!Auth.requireAuth()) return;
-
       const user = Auth.getCurrentUser();
-      if (!user) {
-        Auth.logout();
-        window.location.href = 'login.html';
-        return;
-      }
-
-      if (user.type === 'lalider') {
-        renderLaliderDashboard(user);
-      } else {
-        renderDonorDashboard(user);
-      }
+      if (!user) { Auth.logout(); window.location.href = 'login.html'; return; }
+      if (user.type === 'lalider') renderLaliderDashboard(user);
+      else renderDonorDashboard(user);
     });
 
     function renderLaliderDashboard(user) {
       const stats = Donations.getStats();
       const myNeeds = Donations.getNeedsByLalider(user.verificationCode);
       const myDonations = Donations.getMatchedToLalider(user.verificationCode);
-      const availableDonations = Donations.getAvailable();
+      const available = Donations.getAvailable();
 
-      // Header
       document.getElementById('dashboard-header').innerHTML = `
-        <div class="flex items-center gap-lg" style="flex-wrap: wrap;">
-          <div>
-            <div class="dashboard__welcome">
-              Welcome, ${user.name.split(' ')[0]}! 
-              <span class="badge badge--lalider" style="margin-left: 8px;">🎓 Verified Lalíder ✓</span>
-            </div>
-            <p class="dashboard__subtitle">
-              ${user.camp} · ${user.country}${user.state ? ', ' + user.state : ''} · ${user.areaOfInterest || 'LALA Community'}
-            </p>
-            ${user.showerSong ? `<p class="text-sm text-secondary" style="margin-top: 4px;">🎵 Shower song: "${user.showerSong}"</p>` : ''}
+        <div>
+          <div class="dashboard__welcome">
+            Welcome, ${user.name.split(' ')[0]}
+            <span class="badge badge--lalider" style="margin-left: 8px; vertical-align: middle;">Verified Lalíder</span>
           </div>
+          <p class="dashboard__subtitle">
+            ${user.camp} &middot; ${user.country}${user.state ? ', ' + user.state : ''} &middot; ${user.areaOfInterest || 'LALA Community'}
+          </p>
+          ${user.showerSong ? `<p class="text-sm text-muted" style="margin-top: 4px;">Shower song: "${user.showerSong}"</p>` : ''}
         </div>
       `;
 
-      // Stats
       document.getElementById('dashboard-stats').innerHTML = `
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--primary">📋</div>
-          <div>
-            <div class="stat-card__value">${myNeeds.length}</div>
-            <div class="stat-card__label">My Requests</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--gold">&#9776;</div>
+          <div><div class="stat-card__value">${myNeeds.length}</div><div class="stat-card__label">My Requests</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--success">🎁</div>
-          <div>
-            <div class="stat-card__value">${myDonations.length}</div>
-            <div class="stat-card__label">Donations Received</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--success">&#10003;</div>
+          <div><div class="stat-card__value">${myDonations.length}</div><div class="stat-card__label">Donations Received</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--accent">💻</div>
-          <div>
-            <div class="stat-card__value">${availableDonations.length}</div>
-            <div class="stat-card__label">Available Donations</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--violet">&#9679;</div>
+          <div><div class="stat-card__value">${available.length}</div><div class="stat-card__label">Available Donations</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--info">🌎</div>
-          <div>
-            <div class="stat-card__value">${stats.countries}</div>
-            <div class="stat-card__label">Countries Active</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--orange">&#9673;</div>
+          <div><div class="stat-card__value">${stats.countries}</div><div class="stat-card__label">Countries Active</div></div>
         </div>
       `;
 
-      // Actions
       document.getElementById('dashboard-actions').innerHTML = `
-        <div class="flex gap-md" style="flex-wrap: wrap;">
-          <a href="browse.html" class="btn btn--primary">💻 Browse Available Donations</a>
-          <button class="btn btn--secondary" onclick="showRequestForm()">📋 Submit a New Request</button>
+        <div class="flex gap-4" style="flex-wrap: wrap;">
+          <a href="browse.html" class="btn btn--primary">Browse Available Donations</a>
+          <button class="btn btn--outline" onclick="showRequestForm()">Submit a New Request</button>
         </div>
       `;
 
-      // Content
-      let contentHTML = '';
-
-      // My requests
-      contentHTML += `
-        <div style="margin-bottom: var(--space-2xl);">
-          <h2 class="heading-sm" style="margin-bottom: var(--space-lg);">📋 My Requests</h2>
-      `;
-
+      let html = '<div style="margin-bottom: var(--s-7);"><h2 class="h-3" style="margin-bottom: var(--s-5);">My Requests</h2>';
       if (myNeeds.length > 0) {
-        contentHTML += `<div class="donations-grid">${myNeeds.map(n => App.renderNeedCard(n)).join('')}</div>`;
+        html += '<div class="grid-auto">' + myNeeds.map(n => App.renderNeedCard(n)).join('') + '</div>';
       } else {
-        contentHTML += `
-          <div class="empty-state card card--flat">
-            <div class="empty-state__icon">📋</div>
-            <h3 class="empty-state__title">No Requests Yet</h3>
-            <p class="empty-state__desc">Submit a request describing the equipment you need. Donors will see it and can offer to help!</p>
-            <button class="btn btn--primary" onclick="showRequestForm()">Submit a Request</button>
-          </div>
-        `;
+        html += `<div class="empty-state card card--flat">
+          <div class="empty-state__icon">—</div>
+          <h3 class="empty-state__title">No Requests Yet</h3>
+          <p class="empty-state__desc">Submit a request describing the equipment you need. Donors will see it and can offer to help.</p>
+          <button class="btn btn--primary" onclick="showRequestForm()">Submit a Request</button>
+        </div>`;
       }
-      contentHTML += '</div>';
+      html += '</div>';
 
-      // Available donations
-      contentHTML += `
-        <div>
-          <h2 class="heading-sm" style="margin-bottom: var(--space-lg);">🎁 Available Donations</h2>
-          <div class="donations-grid">
-            ${availableDonations.slice(0, 4).map(d => App.renderDonationCard(d)).join('')}
-          </div>
-          ${availableDonations.length > 4 ? '<div style="margin-top: var(--space-lg);"><a href="browse.html" class="btn btn--secondary">View All →</a></div>' : ''}
-        </div>
-      `;
+      html += '<div><h2 class="h-3" style="margin-bottom: var(--s-5);">Available Donations</h2>';
+      html += '<div class="grid-auto">' + available.slice(0,4).map(d => App.renderDonationCard(d)).join('') + '</div>';
+      if (available.length > 4) html += '<div style="margin-top: var(--s-5);"><a href="browse.html" class="link-underline">View all</a></div>';
+      html += '</div>';
 
-      document.getElementById('dashboard-content').innerHTML = contentHTML;
+      document.getElementById('dashboard-content').innerHTML = html;
     }
 
     function renderDonorDashboard(user) {
@@ -192,113 +128,75 @@
       const myDonations = Donations.getByDonor(user.id);
       const openNeeds = Donations.getOpenNeeds();
 
-      // Header
       document.getElementById('dashboard-header').innerHTML = `
         <div>
           <div class="dashboard__welcome">
-            Welcome, ${user.name.split(' ')[0]}!
-            <span class="badge badge--donor" style="margin-left: 8px;">💝 Donor</span>
+            Welcome, ${user.name.split(' ')[0]}
+            <span class="badge badge--donor" style="margin-left: 8px; vertical-align: middle;">Donor</span>
           </div>
           <p class="dashboard__subtitle">
-            ${user.organization ? user.organization + ' · ' : ''}${user.country} · Thank you for your generosity!
+            ${user.organization ? user.organization + ' &middot; ' : ''}${user.country} &middot; Thank you for your generosity
           </p>
         </div>
       `;
 
-      // Stats
       document.getElementById('dashboard-stats').innerHTML = `
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--primary">🎁</div>
-          <div>
-            <div class="stat-card__value">${myDonations.length}</div>
-            <div class="stat-card__label">My Donations</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--gold">&#9679;</div>
+          <div><div class="stat-card__value">${myDonations.length}</div><div class="stat-card__label">My Donations</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--success">✅</div>
-          <div>
-            <div class="stat-card__value">${myDonations.filter(d => d.status === 'matched').length}</div>
-            <div class="stat-card__label">Matched</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--success">&#10003;</div>
+          <div><div class="stat-card__value">${myDonations.filter(d => d.status === 'matched').length}</div><div class="stat-card__label">Matched</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--accent">📢</div>
-          <div>
-            <div class="stat-card__value">${openNeeds.length}</div>
-            <div class="stat-card__label">Open Requests</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--violet">&#9776;</div>
+          <div><div class="stat-card__value">${openNeeds.length}</div><div class="stat-card__label">Open Requests</div></div>
         </div>
         <div class="card stat-card">
-          <div class="stat-card__icon stat-card__icon--info">🌎</div>
-          <div>
-            <div class="stat-card__value">${stats.countries}</div>
-            <div class="stat-card__label">Countries Active</div>
-          </div>
+          <div class="stat-card__icon stat-card__icon--orange">&#9673;</div>
+          <div><div class="stat-card__value">${stats.countries}</div><div class="stat-card__label">Countries Active</div></div>
         </div>
       `;
 
-      // Actions
       document.getElementById('dashboard-actions').innerHTML = `
-        <div class="flex gap-md" style="flex-wrap: wrap;">
-          <a href="donate.html" class="btn btn--primary">🎁 Create New Donation</a>
-          <a href="browse.html" class="btn btn--secondary">📢 View Lalíder Requests</a>
+        <div class="flex gap-4" style="flex-wrap: wrap;">
+          <a href="donate.html" class="btn btn--primary">Create New Donation</a>
+          <a href="browse.html?view=needs" class="btn btn--outline">View Lalíder Requests</a>
         </div>
       `;
 
-      // Content
-      let contentHTML = '';
-
-      // My donations
-      contentHTML += `
-        <div style="margin-bottom: var(--space-2xl);">
-          <h2 class="heading-sm" style="margin-bottom: var(--space-lg);">🎁 My Donations</h2>
-      `;
-
+      let html = '<div style="margin-bottom: var(--s-7);"><h2 class="h-3" style="margin-bottom: var(--s-5);">My Donations</h2>';
       if (myDonations.length > 0) {
-        contentHTML += `<div class="donations-grid">${myDonations.map(d => App.renderDonationCard(d)).join('')}</div>`;
+        html += '<div class="grid-auto">' + myDonations.map(d => App.renderDonationCard(d)).join('') + '</div>';
       } else {
-        contentHTML += `
-          <div class="empty-state card card--flat">
-            <div class="empty-state__icon">🎁</div>
-            <h3 class="empty-state__title">No Donations Yet</h3>
-            <p class="empty-state__desc">List equipment you'd like to donate. Lalíderes across Latin America are waiting for your help!</p>
-            <a href="donate.html" class="btn btn--primary">Create Your First Donation</a>
-          </div>
-        `;
+        html += `<div class="empty-state card card--flat">
+          <div class="empty-state__icon">—</div>
+          <h3 class="empty-state__title">No Donations Yet</h3>
+          <p class="empty-state__desc">List equipment you'd like to donate. Lalíderes across Latin America are waiting for your help.</p>
+          <a href="donate.html" class="btn btn--primary">Create Your First Donation</a>
+        </div>`;
       }
-      contentHTML += '</div>';
+      html += '</div>';
 
-      // Lalíder needs
-      contentHTML += `
-        <div>
-          <h2 class="heading-sm" style="margin-bottom: var(--space-lg);">📢 Lalíderes Need Your Help</h2>
-          <div class="donations-grid">
-            ${openNeeds.slice(0, 4).map(n => App.renderNeedCard(n)).join('')}
-          </div>
-          ${openNeeds.length > 4 ? '<div style="margin-top: var(--space-lg);"><a href="browse.html" class="btn btn--secondary">View All Requests →</a></div>' : ''}
-        </div>
-      `;
+      html += '<div><h2 class="h-3" style="margin-bottom: var(--s-5);">Lalíderes Need Your Help</h2>';
+      html += '<div class="grid-auto">' + openNeeds.slice(0,4).map(n => App.renderNeedCard(n)).join('') + '</div>';
+      if (openNeeds.length > 4) html += '<div style="margin-top: var(--s-5);"><a href="browse.html?view=needs" class="link-underline">View all requests</a></div>';
+      html += '</div>';
 
-      document.getElementById('dashboard-content').innerHTML = contentHTML;
+      document.getElementById('dashboard-content').innerHTML = html;
     }
 
-    // Lalíder request form modal
     function showRequestForm() {
-      const user = Auth.getCurrentUser();
       const categoriesHTML = MockDB.equipmentCategories.map(c => 
-        `<option value="${c.id}">${c.icon} ${c.name}</option>`
+        `<option value="${c.id}">${c.name}</option>`
       ).join('');
 
-      App.showModal(
-        '📋 Submit Equipment Request',
-        `
-        <form id="request-form" style="text-align: left;">
+      App.showModal('Submit Equipment Request',
+        `<form id="request-form" style="text-align: left;">
           <div class="form-group">
             <label class="form-label form-label--required">Category</label>
-            <select class="form-select" id="request-category" required>
-              <option value="">Select category</option>
-              ${categoriesHTML}
-            </select>
+            <select class="form-select" id="request-category" required><option value="">Select category</option>${categoriesHTML}</select>
           </div>
           <div class="form-group">
             <label class="form-label form-label--required">Title</label>
@@ -311,14 +209,13 @@
           <div class="form-group">
             <label class="form-label">Priority Level</label>
             <select class="form-select" id="request-urgency">
-              <option value="medium">🟡 Medium</option>
-              <option value="high">🔴 High — Urgently needed</option>
-              <option value="low">🟢 Low — No rush</option>
+              <option value="medium">Medium</option>
+              <option value="high">High — Urgently needed</option>
+              <option value="low">Low — No rush</option>
             </select>
           </div>
-        </form>
-        `,
-        [{ label: '📋 Submit Request', class: 'btn--primary', onclick: 'submitRequest()' }]
+        </form>`,
+        [{ label: 'Submit Request', class: 'btn--primary', onclick: 'submitRequest()' }]
       );
     }
 
@@ -328,27 +225,17 @@
       const title = document.getElementById('request-title').value;
       const desc = document.getElementById('request-desc').value;
       const urgency = document.getElementById('request-urgency').value;
-
-      if (!category || !title || !desc) {
-        App.showToast('Please fill in all required fields.', 'error');
-        return;
-      }
+      if (!category || !title || !desc) { App.showToast('Please fill in all required fields.', 'error'); return; }
 
       Donations.createNeed({
         laliderId: user.verificationCode,
         laliderName: user.name.split(' ')[0] + ' ' + user.name.split(' ').pop()[0] + '.',
-        camp: user.camp,
-        country: user.country,
-        category,
-        title,
-        description: desc,
-        urgency
+        camp: user.camp, country: user.country,
+        category, title, description: desc, urgency
       });
 
       App.closeModal();
-      App.showToast('Request submitted successfully! Donors can now see your request. 🎉', 'success');
-
-      // Refresh dashboard
+      App.showToast('Request submitted successfully! Donors can now see your request.', 'success');
       setTimeout(() => location.reload(), 1500);
     }
   </script>
