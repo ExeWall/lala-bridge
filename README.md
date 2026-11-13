@@ -28,6 +28,10 @@ npm run dev
 | `npm run lint`   | Lints the code (ESLint)                        |
 | `npm run format` | Formats the code (Prettier)                    |
 
+## 🌐 Deploy
+
+The site is static, so it runs on GitHub Pages. `.github/workflows/deploy.yml` publishes it on every push to `master`, after lint and tests pass. One-time setup: **Settings → Pages → Source: GitHub Actions**. The demo then lives at `https://exewall.github.io/lala-bridge/`.
+
 ## 🔄 How matching works
 
 1. A **donor** clicks "Offer to Help" on a Lalíder's request (optionally linking one of their donations), or a **Lalíder** clicks "Request" on an available donation.
