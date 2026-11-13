@@ -143,6 +143,7 @@ function renderLaliderDashboard(user) {
   if (available.length > 4) availableHTML += viewAllLink('browse.html', t('dashboard.viewAll'));
   html += section(t('dashboard.sectionAvailable'), availableHTML);
 
+  html += renderMyDataSection(user);
   document.getElementById('dashboard-content').innerHTML = html;
 }
 
@@ -205,11 +206,73 @@ function renderDonorDashboard(user) {
   }
   html += section(t('dashboard.sectionNeedHelp'), needsHTML);
 
+  html += renderMyDataSection(user);
   document.getElementById('dashboard-content').innerHTML = html;
+}
+
+/**
+ * LGPD: baixar os próprios dados e excluir a conta.
+ */
+function renderMyDataSection(user) {
+  const consent = user.consentAt
+    ? `<p class="text-sm text-muted" style="margin-top: var(--s-2);">${esc(t('myData.consentOn', { date: I18n.formatDate(user.consentAt) }))}</p>`
+    : '';
+  return section(
+    t('myData.title'),
+    `<div class="card card--flat my-data">
+      <p>${esc(t('myData.desc'))}</p>
+      ${consent}
+      <div class="flex gap-4" style="flex-wrap: wrap; margin-top: var(--s-5);">
+        <button type="button" class="btn btn--outline" data-action="download-data">${esc(t('myData.download'))}</button>
+        <button type="button" class="btn btn--ghost btn--danger" data-action="delete-account">${esc(t('myData.delete'))}</button>
+        <a href="privacidade.html" class="link-underline" style="align-self: center;">${esc(t('myData.privacyLink'))}</a>
+      </div>
+    </div>`
+  );
+}
+
+function showDeleteAccountModal() {
+  const user = Auth.getCurrentUser();
+  if (!user) return;
+  const word = t('myData.deleteWord');
+  App.showModal(
+    t('myData.deleteTitle'),
+    `<p>${esc(t('myData.deleteBody'))}</p>
+     <div class="form-group" style="margin-top: var(--s-4); text-align: left;">
+       <label class="form-label" for="delete-confirm">${esc(t('myData.deleteConfirmLabel'))}</label>
+       <input type="text" class="form-input" id="delete-confirm" autocomplete="off" autocapitalize="characters">
+     </div>`,
+    [
+      {
+        label: t('myData.deleteButton'),
+        class: 'btn--danger',
+        onClick: () => {
+          const typed = document.getElementById('delete-confirm').value.trim();
+          if (typed.toUpperCase() !== word.toUpperCase()) {
+            App.showToast(t('myData.deleteMismatch'), 'error');
+            return;
+          }
+          const result = Privacy.deleteAccount(user.id);
+          App.closeModal();
+          App.showToast(result.message, result.success ? 'success' : 'error');
+          if (result.success) {
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 1200);
+          }
+        },
+      },
+    ]
+  );
 }
 
 App.registerActions({
   'new-request': () => showRequestForm(),
+  'download-data': () => {
+    const user = Auth.getCurrentUser();
+    if (user) Privacy.downloadData(user.id);
+  },
+  'delete-account': () => showDeleteAccountModal(),
 });
 
 function showRequestForm() {

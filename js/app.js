@@ -47,11 +47,18 @@ const App = {
    */
   initDemoNotice() {
     if (!LALA_CONFIG.DEMO_MODE || document.querySelector('.demo-notice')) return;
-    const notice = document.createElement('div');
+    const notice = document.createElement('p');
     notice.className = 'demo-notice';
     notice.setAttribute('role', 'note');
     notice.textContent = I18n.t('demo.notice');
-    document.body.appendChild(notice);
+    // Nas telas de cadastro e login o aviso fica no topo do cartão (é onde a
+    // pessoa digitaria dados reais); nas demais, no rodapé. Nunca flutuante,
+    // para não cobrir conteúdo no celular.
+    const authCard = document.querySelector('.auth-card');
+    const footer = document.querySelector('.footer__bottom');
+    if (authCard) authCard.prepend(notice);
+    else if (footer) footer.prepend(notice);
+    else document.body.appendChild(notice);
   },
 
   /**

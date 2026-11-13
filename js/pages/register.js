@@ -137,6 +137,7 @@ async function handleLaliderRegister(e) {
       showerSong: document.getElementById('lalider-shower-song').value,
       areaOfInterest: document.getElementById('lalider-area').value,
       needDescription: needDesc,
+      consent: document.getElementById('lalider-consent').checked,
     })
   );
 
@@ -193,6 +194,7 @@ async function handleDonorRegister(e) {
       password,
       ...App.readLocation('donor'),
       organization: document.getElementById('donor-org').value,
+      consent: document.getElementById('donor-consent').checked,
     })
   );
 

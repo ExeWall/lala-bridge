@@ -12,6 +12,7 @@ describe('Auth: senhas', () => {
       name: 'Empresa Teste',
       email: 'empresa@example.com',
       password: 'segredo123',
+      consent: true,
       country: 'BR',
       state: 'PE',
       city: 'Recife',
@@ -37,6 +38,7 @@ describe('Auth: senhas', () => {
       name: 'D',
       email: 'd@example.com',
       password: 'certa123',
+      consent: true,
       country: 'BR',
       state: 'PE',
       city: 'Recife',
@@ -64,6 +66,7 @@ describe('Auth: verificação do código LALA', () => {
   const base = {
     email: 'ana@example.com',
     password: 'senha123',
+    consent: true,
     verificationCode: 'lala-vlb32-003',
     camp: 'VLB32',
     country: 'BR',
@@ -165,6 +168,7 @@ describe('Auth: validação e sessão', () => {
       name: 'D',
       email: 'd@example.com',
       password: 'abcdef',
+      consent: true,
       country: 'BR',
       state: 'PE',
       city: 'Recife',
@@ -179,6 +183,7 @@ describe('Auth: validação e sessão', () => {
       name: 'D',
       email: '  D@Example.com ',
       password: 'abcdef',
+      consent: true,
       country: 'BR',
       state: 'PE',
       city: 'Recife',
@@ -237,7 +242,7 @@ describe('Auth: localização', () => {
   beforeEach(() => {
     ({ Auth } = loadApp());
   });
-  const donor = { name: 'D', email: 'd@example.com', password: 'abcdef' };
+  const donor = { name: 'D', email: 'd@example.com', password: 'abcdef', consent: true };
 
   it('no Brasil exige UF válida e cidade', async () => {
     const noUf = await Auth.registerDonor({ ...donor, country: 'BR', city: 'Recife' });
@@ -269,5 +274,25 @@ describe('Auth: localização', () => {
     const res = await Auth.registerDonor({ ...donor, country: 'CO', city: 'Medellín' });
     expect(res.success).toBe(true);
     expect(res.user).toMatchObject({ country: 'CO', state: '', city: 'Medellín' });
+  });
+});
+
+describe('Auth: consentimento (LGPD)', () => {
+  it('não cria conta sem consentimento e registra data e versão quando há', async () => {
+    const { Auth } = loadApp();
+    const data = {
+      name: 'D',
+      email: 'd@example.com',
+      password: 'abcdef',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
+    };
+    const without = await Auth.registerDonor(data);
+    expect(without.success).toBe(false);
+    expect(without.message).toMatch(/Privacidade/);
+    const withConsent = await Auth.registerDonor({ ...data, consent: true });
+    expect(withConsent.user.consentAt).toBeTruthy();
+    expect(withConsent.user.consentVersion).toBe(Auth.PRIVACY_POLICY_VERSION);
   });
 });

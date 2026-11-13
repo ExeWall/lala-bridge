@@ -218,6 +218,13 @@ const Auth = {
 
   MIN_PASSWORD_LENGTH: 6,
 
+  /** Versão da Política de Privacidade aceita no cadastro (privacidade.html). */
+  PRIVACY_POLICY_VERSION: '2026-11-13',
+
+  _consentRecord() {
+    return { consentAt: new Date().toISOString(), consentVersion: this.PRIVACY_POLICY_VERSION };
+  },
+
   /**
    * Validação básica dos dados de cadastro (os formulários também validam,
    * mas a camada de dados não deve confiar só no HTML).
@@ -274,7 +281,9 @@ const Auth = {
     showerSong,
     areaOfInterest,
     needDescription,
+    consent,
   }) {
+    if (consent !== true) return { success: false, message: I18n.t('consent.required') };
     const invalid = this._validateAccount({ name, email, password });
     if (invalid) return { success: false, message: invalid };
     const { error: locationError, location } = this._validateLocation({ country, state, city });
@@ -300,7 +309,7 @@ const Auth = {
     }
 
     const user = {
-      id: 'lalider-' + Date.now(),
+      id: newId('lalider'),
       type: 'lalider',
       name,
       email,
@@ -312,6 +321,7 @@ const Auth = {
       areaOfInterest: areaOfInterest || '',
       needDescription: needDescription || '',
       verified: true,
+      ...this._consentRecord(),
       createdAt: new Date().toISOString(),
     };
 
@@ -324,7 +334,8 @@ const Auth = {
   /**
    * Register a new Donor
    */
-  async registerDonor({ name, email, password, country, state, city, organization }) {
+  async registerDonor({ name, email, password, country, state, city, organization, consent }) {
+    if (consent !== true) return { success: false, message: I18n.t('consent.required') };
     const invalid = this._validateAccount({ name, email, password });
     if (invalid) return { success: false, message: invalid };
     const { error: locationError, location } = this._validateLocation({ country, state, city });
@@ -340,13 +351,14 @@ const Auth = {
     }
 
     const user = {
-      id: 'donor-' + Date.now(),
+      id: newId('donor'),
       type: 'donor',
       name,
       email,
       ...credentials,
       ...location,
       organization: organization || '',
+      ...this._consentRecord(),
       createdAt: new Date().toISOString(),
     };
 
