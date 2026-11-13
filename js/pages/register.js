@@ -49,9 +49,8 @@ App.registerActions({
 });
 
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+  App.selectTab(document.getElementById('tab-' + tab));
   document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
   document.getElementById('form-' + tab).classList.add('active');
 }
 

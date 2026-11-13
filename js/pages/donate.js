@@ -49,9 +49,11 @@ App.registerActions({
 function selectCategory(id) {
   selectedCategory = id;
   document.getElementById('donation-category').value = id;
-  document
-    .querySelectorAll('#category-grid .tag')
-    .forEach((t) => t.classList.toggle('active', t.dataset.category === id));
+  document.querySelectorAll('#category-grid .tag').forEach((t) => {
+    const on = t.dataset.category === id;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-pressed', String(on));
+  });
 }
 
 function showPreview() {

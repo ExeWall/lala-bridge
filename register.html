@@ -16,6 +16,7 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <!-- Navigation -->
     <nav class="nav" id="navbar">
       <div class="nav__inner">
@@ -23,7 +24,7 @@
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
@@ -31,462 +32,523 @@
         <div class="nav__actions">
           <a href="login.html" class="btn btn--ghost" data-i18n="nav.login">Entrar</a>
         </div>
-        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <!-- Register Page -->
-    <div class="auth-page">
-      <div class="auth-card" style="max-width: 580px">
-        <div class="auth-card__header">
-          <a href="index.html" class="auth-card__logo">
-            <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">B</div>
-            LALA Bridge
-          </a>
-          <h1 class="auth-card__title" data-i18n="register.heading">Crie sua conta</h1>
-          <p class="auth-card__subtitle" data-i18n="register.subtitle">
-            Faça parte da comunidade e comece a gerar impacto
-          </p>
-        </div>
-
-        <!-- Role Tabs -->
-        <div class="tabs" style="margin-bottom: var(--s-6)">
-          <button
-            class="tab active"
-            data-tab="lalider"
-            id="tab-lalider"
-            data-action="switch-tab"
-            data-i18n="register.tabLalider"
-          >
-            Lalíder
-          </button>
-          <button
-            class="tab"
-            data-tab="donor"
-            id="tab-donor"
-            data-action="switch-tab"
-            data-i18n="register.tabDonor"
-          >
-            Doador
-          </button>
-        </div>
-
-        <!-- Lalíder Registration Form -->
-        <div class="tab-content active" id="form-lalider">
-          <form id="lalider-form">
-            <!-- Verification Code -->
-            <div class="verification-widget" id="verification-widget">
-              <div class="verification-widget__label" data-i18n="register.code">
-                Código de verificação LALA
+    <main id="main" tabindex="-1">
+      <!-- Register Page -->
+      <div class="auth-page">
+        <div class="auth-card" style="max-width: 580px">
+          <div class="auth-card__header">
+            <a href="index.html" class="auth-card__logo">
+              <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">
+                B
               </div>
-              <input
-                data-i18n-attr="placeholder:register.codePlaceholder"
-                type="text"
-                class="form-input form-input--code"
-                id="lalider-code"
-                placeholder="ex.: LALA-VLB32-001"
-                required
-                autocomplete="off"
-              />
-              <div class="verification-widget__status" id="code-status"></div>
-              <p class="form-hint" data-i18n="register.codeHint">
-                Informe o código fornecido pela LALA. Ele confirma que você é Lalíder.
-              </p>
-            </div>
+              LALA Bridge
+            </a>
+            <h1 class="auth-card__title" data-i18n="register.heading">Crie sua conta</h1>
+            <p class="auth-card__subtitle" data-i18n="register.subtitle">
+              Faça parte da comunidade e comece a gerar impacto
+            </p>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="register.fullName"
-                >Nome completo</label
-              >
-              <input
-                data-i18n-attr="placeholder:register.fullNamePlaceholder"
-                type="text"
-                class="form-input"
-                id="lalider-name"
-                placeholder="Seu nome completo"
-                required
-              />
-            </div>
+          <!-- Role Tabs -->
+          <div class="tabs" role="tablist" style="margin-bottom: var(--s-6)">
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="form-lalider"
+              class="tab active"
+              data-tab="lalider"
+              id="tab-lalider"
+              data-action="switch-tab"
+              data-i18n="register.tabLalider"
+            >
+              Lalíder
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="form-donor"
+              tabindex="-1"
+              class="tab"
+              data-tab="donor"
+              id="tab-donor"
+              data-action="switch-tab"
+              data-i18n="register.tabDonor"
+            >
+              Doador
+            </button>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="register.email"
-                >E-mail</label
-              >
-              <input
-                data-i18n-attr="placeholder:login.emailPlaceholder"
-                type="email"
-                class="form-input"
-                id="lalider-email"
-                placeholder="voce@exemplo.com"
-                required
-              />
-            </div>
+          <!-- Lalíder Registration Form -->
+          <div
+            class="tab-content active"
+            id="form-lalider"
+            role="tabpanel"
+            aria-labelledby="tab-lalider"
+          >
+            <form id="lalider-form">
+              <!-- Verification Code -->
+              <div class="verification-widget" id="verification-widget">
+                <label
+                  class="verification-widget__label"
+                  for="lalider-code"
+                  data-i18n="register.code"
+                >
+                  Código de verificação LALA
+                </label>
+                <input
+                  data-i18n-attr="placeholder:register.codePlaceholder"
+                  type="text"
+                  class="form-input form-input--code"
+                  id="lalider-code"
+                  placeholder="ex.: LALA-VLB32-001"
+                  required
+                  autocomplete="off"
+                />
+                <div class="verification-widget__status" id="code-status" aria-live="polite"></div>
+                <p class="form-hint" data-i18n="register.codeHint">
+                  Informe o código fornecido pela LALA. Ele confirma que você é Lalíder.
+                </p>
+              </div>
 
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="register.camp"
-                >Turma (camp)</label
-              >
-              <select class="form-select" id="lalider-camp" required>
-                <option value="" data-i18n="register.selectCamp">Selecione sua turma</option>
-              </select>
-              <p class="form-hint" data-i18n="register.campHint">VLB = virtual, BLB = presencial</p>
-            </div>
-
-            <div class="location-fields" data-location="lalider">
               <div class="form-group">
                 <label
+                  for="lalider-name"
                   class="form-label form-label--required"
-                  for="lalider-country"
-                  data-i18n="location.country"
-                  >País</label
+                  data-i18n="register.fullName"
+                  >Nome completo</label
                 >
-                <select class="form-select" id="lalider-country" required autocomplete="country">
-                  <option value="" data-i18n="location.selectCountry">Selecione o país</option>
-                </select>
+                <input
+                  data-i18n-attr="placeholder:register.fullNamePlaceholder"
+                  type="text"
+                  class="form-input"
+                  id="lalider-name"
+                  placeholder="Seu nome completo"
+                  required
+                />
               </div>
-              <div class="form-row">
-                <div class="form-group" data-location-br>
+
+              <div class="form-group">
+                <label
+                  for="lalider-email"
+                  class="form-label form-label--required"
+                  data-i18n="register.email"
+                  >E-mail</label
+                >
+                <input
+                  data-i18n-attr="placeholder:login.emailPlaceholder"
+                  type="email"
+                  class="form-input"
+                  id="lalider-email"
+                  placeholder="voce@exemplo.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label
+                  for="lalider-camp"
+                  class="form-label form-label--required"
+                  data-i18n="register.camp"
+                  >Turma (camp)</label
+                >
+                <select class="form-select" id="lalider-camp" required>
+                  <option value="" data-i18n="register.selectCamp">Selecione sua turma</option>
+                </select>
+                <p class="form-hint" data-i18n="register.campHint">
+                  VLB = virtual, BLB = presencial
+                </p>
+              </div>
+
+              <div class="location-fields" data-location="lalider">
+                <div class="form-group">
                   <label
                     class="form-label form-label--required"
-                    for="lalider-uf"
-                    data-i18n="location.uf"
-                    >Estado (UF)</label
+                    for="lalider-country"
+                    data-i18n="location.country"
+                    >País</label
                   >
-                  <select class="form-select" id="lalider-uf">
-                    <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                  <select class="form-select" id="lalider-country" required autocomplete="country">
+                    <option value="" data-i18n="location.selectCountry">Selecione o país</option>
                   </select>
                 </div>
-                <div class="form-group" data-location-other hidden>
-                  <label class="form-label" for="lalider-region" data-i18n="location.region"
-                    >Estado / Região</label
+                <div class="form-row">
+                  <div class="form-group" data-location-br>
+                    <label
+                      class="form-label form-label--required"
+                      for="lalider-uf"
+                      data-i18n="location.uf"
+                      >Estado (UF)</label
+                    >
+                    <select class="form-select" id="lalider-uf">
+                      <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                    </select>
+                  </div>
+                  <div class="form-group" data-location-other hidden>
+                    <label class="form-label" for="lalider-region" data-i18n="location.region"
+                      >Estado / Região</label
+                    >
+                    <input
+                      type="text"
+                      class="form-input"
+                      id="lalider-region"
+                      maxlength="80"
+                      autocomplete="address-level1"
+                      data-i18n-attr="placeholder:location.regionPlaceholder"
+                      placeholder="ex.: Antioquia, Jalisco"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label
+                      class="form-label form-label--required"
+                      for="lalider-city"
+                      data-i18n="location.city"
+                      >Cidade</label
+                    >
+                    <input
+                      type="text"
+                      class="form-input"
+                      id="lalider-city"
+                      maxlength="80"
+                      required
+                      autocomplete="address-level2"
+                      data-i18n-attr="placeholder:location.cityPlaceholder"
+                      placeholder="ex.: Recife"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lalider-shower-song" class="form-label" data-i18n="register.showerSong"
+                  >Música de chuveiro favorita</label
+                >
+                <input
+                  data-i18n-attr="placeholder:register.showerSongPlaceholder"
+                  type="text"
+                  class="form-input"
+                  id="lalider-shower-song"
+                  placeholder="Que música você canta no chuveiro?"
+                />
+                <p class="form-hint" data-i18n="register.showerSongHint">
+                  Uma tradição das apresentações da LALA!
+                </p>
+              </div>
+
+              <div class="form-group">
+                <label for="lalider-area" class="form-label" data-i18n="register.area"
+                  >Área de interesse</label
+                >
+                <select class="form-select" id="lalider-area">
+                  <option value="" data-i18n="register.selectArea">Selecione a área</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="form-label"
+                  for="lalider-need-category"
+                  data-i18n="register.needCategory"
+                  >Do que você mais precisa?</label
+                >
+                <select class="form-select" id="lalider-need-category">
+                  <option value="" data-i18n="register.selectNeedCategory">
+                    Selecione o equipamento (opcional)
+                  </option>
+                </select>
+                <p class="form-hint" data-i18n="register.needCategoryHint">
+                  Obrigatório se você descrever uma necessidade abaixo.
+                </p>
+              </div>
+
+              <div class="form-group">
+                <label for="lalider-need" class="form-label" data-i18n="register.needDescription"
+                  >Descreva sua necessidade</label
+                >
+                <textarea
+                  data-i18n-attr="placeholder:register.needDescriptionPlaceholder"
+                  class="form-textarea"
+                  id="lalider-need"
+                  placeholder="Conte qual equipamento você precisa e por quê. Isso ajuda os doadores a entender sua situação."
+                ></textarea>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
+                <div class="form-group">
+                  <label
+                    for="lalider-password"
+                    class="form-label form-label--required"
+                    data-i18n="register.password"
+                    >Senha</label
                   >
                   <input
-                    type="text"
+                    data-i18n-attr="placeholder:register.passwordPlaceholder"
+                    type="password"
                     class="form-input"
-                    id="lalider-region"
-                    maxlength="80"
-                    autocomplete="address-level1"
-                    data-i18n-attr="placeholder:location.regionPlaceholder"
-                    placeholder="ex.: Antioquia, Jalisco"
+                    id="lalider-password"
+                    placeholder="Mín. 6 caracteres"
+                    required
+                    minlength="6"
                   />
                 </div>
                 <div class="form-group">
                   <label
+                    for="lalider-password-confirm"
                     class="form-label form-label--required"
-                    for="lalider-city"
-                    data-i18n="location.city"
-                    >Cidade</label
+                    data-i18n="register.confirmPassword"
+                    >Confirme a senha</label
                   >
                   <input
-                    type="text"
+                    data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
+                    type="password"
                     class="form-input"
-                    id="lalider-city"
-                    maxlength="80"
+                    id="lalider-password-confirm"
+                    placeholder="Repita a senha"
                     required
-                    autocomplete="address-level2"
-                    data-i18n-attr="placeholder:location.cityPlaceholder"
-                    placeholder="ex.: Recife"
+                    minlength="6"
                   />
                 </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="form-label" data-i18n="register.showerSong"
-                >Música de chuveiro favorita</label
-              >
-              <input
-                data-i18n-attr="placeholder:register.showerSongPlaceholder"
-                type="text"
-                class="form-input"
-                id="lalider-shower-song"
-                placeholder="Que música você canta no chuveiro?"
-              />
-              <p class="form-hint" data-i18n="register.showerSongHint">
-                Uma tradição das apresentações da LALA!
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" data-i18n="register.area">Área de interesse</label>
-              <select class="form-select" id="lalider-area">
-                <option value="" data-i18n="register.selectArea">Selecione a área</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label
-                class="form-label"
-                for="lalider-need-category"
-                data-i18n="register.needCategory"
-                >Do que você mais precisa?</label
-              >
-              <select class="form-select" id="lalider-need-category">
-                <option value="" data-i18n="register.selectNeedCategory">
-                  Selecione o equipamento (opcional)
-                </option>
-              </select>
-              <p class="form-hint" data-i18n="register.needCategoryHint">
-                Obrigatório se você descrever uma necessidade abaixo.
-              </p>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" data-i18n="register.needDescription"
-                >Descreva sua necessidade</label
-              >
-              <textarea
-                data-i18n-attr="placeholder:register.needDescriptionPlaceholder"
-                class="form-textarea"
-                id="lalider-need"
-                placeholder="Conte qual equipamento você precisa e por quê. Isso ajuda os doadores a entender sua situação."
-              ></textarea>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
-              <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="register.password"
-                  >Senha</label
+              <div class="form-group form-check">
+                <input type="checkbox" id="lalider-consent" required />
+                <label for="lalider-consent" data-i18n="consent.lalider"
+                  >Li a Política de Privacidade e autorizo o uso dos meus dados para receber
+                  doações. Se tenho menos de 18 anos, meu responsável legal está ciente e de
+                  acordo.</label
                 >
-                <input
-                  data-i18n-attr="placeholder:register.passwordPlaceholder"
-                  type="password"
-                  class="form-input"
-                  id="lalider-password"
-                  placeholder="Mín. 6 caracteres"
-                  required
-                  minlength="6"
-                />
               </div>
-              <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="register.confirmPassword"
-                  >Confirme a senha</label
+              <p class="form-hint" style="margin-bottom: var(--s-5)">
+                <a
+                  href="privacidade.html"
+                  target="_blank"
+                  rel="noopener"
+                  class="link-underline"
+                  data-i18n="consent.readPolicy"
+                  >Ler a Política de Privacidade</a
                 >
-                <input
-                  data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
-                  type="password"
-                  class="form-input"
-                  id="lalider-password-confirm"
-                  placeholder="Repita a senha"
-                  required
-                  minlength="6"
-                />
-              </div>
-            </div>
-
-            <div class="form-group form-check">
-              <input type="checkbox" id="lalider-consent" required />
-              <label for="lalider-consent" data-i18n="consent.lalider"
-                >Li a Política de Privacidade e autorizo o uso dos meus dados para receber doações.
-                Se tenho menos de 18 anos, meu responsável legal está ciente e de acordo.</label
-              >
-            </div>
-            <p class="form-hint" style="margin-bottom: var(--s-5)">
-              <a
-                href="privacidade.html"
-                target="_blank"
-                rel="noopener"
-                class="link-underline"
-                data-i18n="consent.readPolicy"
-                >Ler a Política de Privacidade</a
-              >
-            </p>
-
-            <button
-              type="submit"
-              class="btn btn--primary btn--lg btn--full"
-              id="lalider-submit"
-              disabled
-              data-i18n="register.submitLalider"
-            >
-              Cadastrar como Lalíder
-            </button>
-          </form>
-        </div>
-
-        <!-- Donor Registration Form -->
-        <div class="tab-content" id="form-donor">
-          <form id="donor-form">
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="register.fullName"
-                >Nome completo</label
-              >
-              <input
-                data-i18n-attr="placeholder:register.fullNamePlaceholder"
-                type="text"
-                class="form-input"
-                id="donor-name"
-                placeholder="Seu nome completo"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="register.email"
-                >E-mail</label
-              >
-              <input
-                data-i18n-attr="placeholder:login.emailPlaceholder"
-                type="email"
-                class="form-input"
-                id="donor-email"
-                placeholder="voce@exemplo.com"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" data-i18n="register.organization"
-                >Empresa / organização</label
-              >
-              <input
-                data-i18n-attr="placeholder:register.organizationPlaceholder"
-                type="text"
-                class="form-input"
-                id="donor-org"
-                placeholder="Opcional — sua empresa ou organização"
-              />
-              <p class="form-hint" data-i18n="register.organizationHint">
-                Se for doar em nome de uma empresa
               </p>
-            </div>
 
-            <div class="location-fields" data-location="donor">
+              <button
+                type="submit"
+                class="btn btn--primary btn--lg btn--full"
+                id="lalider-submit"
+                disabled
+                data-i18n="register.submitLalider"
+              >
+                Cadastrar como Lalíder
+              </button>
+            </form>
+          </div>
+
+          <!-- Donor Registration Form -->
+          <div class="tab-content" id="form-donor" role="tabpanel" aria-labelledby="tab-donor">
+            <form id="donor-form">
               <div class="form-group">
                 <label
+                  for="donor-name"
                   class="form-label form-label--required"
-                  for="donor-country"
-                  data-i18n="location.country"
-                  >País</label
+                  data-i18n="register.fullName"
+                  >Nome completo</label
                 >
-                <select class="form-select" id="donor-country" required autocomplete="country">
-                  <option value="" data-i18n="location.selectCountry">Selecione o país</option>
-                </select>
+                <input
+                  data-i18n-attr="placeholder:register.fullNamePlaceholder"
+                  type="text"
+                  class="form-input"
+                  id="donor-name"
+                  placeholder="Seu nome completo"
+                  required
+                />
               </div>
-              <div class="form-row">
-                <div class="form-group" data-location-br>
+
+              <div class="form-group">
+                <label
+                  for="donor-email"
+                  class="form-label form-label--required"
+                  data-i18n="register.email"
+                  >E-mail</label
+                >
+                <input
+                  data-i18n-attr="placeholder:login.emailPlaceholder"
+                  type="email"
+                  class="form-input"
+                  id="donor-email"
+                  placeholder="voce@exemplo.com"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="donor-org" class="form-label" data-i18n="register.organization"
+                  >Empresa / organização</label
+                >
+                <input
+                  data-i18n-attr="placeholder:register.organizationPlaceholder"
+                  type="text"
+                  class="form-input"
+                  id="donor-org"
+                  placeholder="Opcional — sua empresa ou organização"
+                />
+                <p class="form-hint" data-i18n="register.organizationHint">
+                  Se for doar em nome de uma empresa
+                </p>
+              </div>
+
+              <div class="location-fields" data-location="donor">
+                <div class="form-group">
                   <label
                     class="form-label form-label--required"
-                    for="donor-uf"
-                    data-i18n="location.uf"
-                    >Estado (UF)</label
+                    for="donor-country"
+                    data-i18n="location.country"
+                    >País</label
                   >
-                  <select class="form-select" id="donor-uf">
-                    <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                  <select class="form-select" id="donor-country" required autocomplete="country">
+                    <option value="" data-i18n="location.selectCountry">Selecione o país</option>
                   </select>
                 </div>
-                <div class="form-group" data-location-other hidden>
-                  <label class="form-label" for="donor-region" data-i18n="location.region"
-                    >Estado / Região</label
+                <div class="form-row">
+                  <div class="form-group" data-location-br>
+                    <label
+                      class="form-label form-label--required"
+                      for="donor-uf"
+                      data-i18n="location.uf"
+                      >Estado (UF)</label
+                    >
+                    <select class="form-select" id="donor-uf">
+                      <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                    </select>
+                  </div>
+                  <div class="form-group" data-location-other hidden>
+                    <label class="form-label" for="donor-region" data-i18n="location.region"
+                      >Estado / Região</label
+                    >
+                    <input
+                      type="text"
+                      class="form-input"
+                      id="donor-region"
+                      maxlength="80"
+                      autocomplete="address-level1"
+                      data-i18n-attr="placeholder:location.regionPlaceholder"
+                      placeholder="ex.: Antioquia, Jalisco"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label
+                      class="form-label form-label--required"
+                      for="donor-city"
+                      data-i18n="location.city"
+                      >Cidade</label
+                    >
+                    <input
+                      type="text"
+                      class="form-input"
+                      id="donor-city"
+                      maxlength="80"
+                      required
+                      autocomplete="address-level2"
+                      data-i18n-attr="placeholder:location.cityPlaceholder"
+                      placeholder="ex.: Recife"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
+                <div class="form-group">
+                  <label
+                    for="donor-password"
+                    class="form-label form-label--required"
+                    data-i18n="register.password"
+                    >Senha</label
                   >
                   <input
-                    type="text"
+                    data-i18n-attr="placeholder:register.passwordPlaceholder"
+                    type="password"
                     class="form-input"
-                    id="donor-region"
-                    maxlength="80"
-                    autocomplete="address-level1"
-                    data-i18n-attr="placeholder:location.regionPlaceholder"
-                    placeholder="ex.: Antioquia, Jalisco"
+                    id="donor-password"
+                    placeholder="Mín. 6 caracteres"
+                    required
+                    minlength="6"
                   />
                 </div>
                 <div class="form-group">
                   <label
+                    for="donor-password-confirm"
                     class="form-label form-label--required"
-                    for="donor-city"
-                    data-i18n="location.city"
-                    >Cidade</label
+                    data-i18n="register.confirmPassword"
+                    >Confirme a senha</label
                   >
                   <input
-                    type="text"
+                    data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
+                    type="password"
                     class="form-input"
-                    id="donor-city"
-                    maxlength="80"
+                    id="donor-password-confirm"
+                    placeholder="Repita a senha"
                     required
-                    autocomplete="address-level2"
-                    data-i18n-attr="placeholder:location.cityPlaceholder"
-                    placeholder="ex.: Recife"
+                    minlength="6"
                   />
                 </div>
               </div>
-            </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
-              <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="register.password"
-                  >Senha</label
-                >
-                <input
-                  data-i18n-attr="placeholder:register.passwordPlaceholder"
-                  type="password"
-                  class="form-input"
-                  id="donor-password"
-                  placeholder="Mín. 6 caracteres"
-                  required
-                  minlength="6"
-                />
+              <div
+                class="card card--flat"
+                style="margin-bottom: var(--s-5); padding: var(--s-4); background: var(--cream)"
+              >
+                <p class="text-sm text-muted" data-i18n="register.donorNote">
+                  Como doador, você pode publicar equipamentos e ver os pedidos dos Lalíderes.
+                  Doadores não pedem nem recebem doações.
+                </p>
               </div>
-              <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="register.confirmPassword"
-                  >Confirme a senha</label
-                >
-                <input
-                  data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
-                  type="password"
-                  class="form-input"
-                  id="donor-password-confirm"
-                  placeholder="Repita a senha"
-                  required
-                  minlength="6"
-                />
-              </div>
-            </div>
 
-            <div
-              class="card card--flat"
-              style="margin-bottom: var(--s-5); padding: var(--s-4); background: var(--cream)"
-            >
-              <p class="text-sm text-muted" data-i18n="register.donorNote">
-                Como doador, você pode publicar equipamentos e ver os pedidos dos Lalíderes.
-                Doadores não pedem nem recebem doações.
+              <div class="form-group form-check">
+                <input type="checkbox" id="donor-consent" required />
+                <label for="donor-consent" data-i18n="consent.donor"
+                  >Li a Política de Privacidade e autorizo o uso dos meus dados para conectar minhas
+                  doações a Lalíderes.</label
+                >
+              </div>
+              <p class="form-hint" style="margin-bottom: var(--s-5)">
+                <a
+                  href="privacidade.html"
+                  target="_blank"
+                  rel="noopener"
+                  class="link-underline"
+                  data-i18n="consent.readPolicy"
+                  >Ler a Política de Privacidade</a
+                >
               </p>
-            </div>
 
-            <div class="form-group form-check">
-              <input type="checkbox" id="donor-consent" required />
-              <label for="donor-consent" data-i18n="consent.donor"
-                >Li a Política de Privacidade e autorizo o uso dos meus dados para conectar minhas
-                doações a Lalíderes.</label
+              <button
+                type="submit"
+                class="btn btn--primary btn--lg btn--full"
+                data-i18n="register.submitDonor"
               >
-            </div>
-            <p class="form-hint" style="margin-bottom: var(--s-5)">
-              <a
-                href="privacidade.html"
-                target="_blank"
-                rel="noopener"
-                class="link-underline"
-                data-i18n="consent.readPolicy"
-                >Ler a Política de Privacidade</a
-              >
-            </p>
+                Cadastrar como doador
+              </button>
+            </form>
+          </div>
 
-            <button
-              type="submit"
-              class="btn btn--primary btn--lg btn--full"
-              data-i18n="register.submitDonor"
-            >
-              Cadastrar como doador
-            </button>
-          </form>
-        </div>
-
-        <div class="auth-card__footer">
-          <span data-i18n="register.haveAccount">Já tem conta?</span>
-          <a href="login.html" data-i18n="register.login">Entre</a>
+          <div class="auth-card__footer">
+            <span data-i18n="register.haveAccount">Já tem conta?</span>
+            <a href="login.html" data-i18n="register.login">Entre</a>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <script src="js/config.js"></script>
     <script src="js/i18n.js"></script>

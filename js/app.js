@@ -15,6 +15,7 @@ const App = {
     this.initNavbar();
     this.initScrollReveal();
     this.initMobileMenu();
+    this.initTabsKeyboard();
     this.updateNavbarAuth();
     this.initLanguageSelector();
     this.initDemoNotice();
@@ -127,13 +128,65 @@ const App = {
 
   initMobileMenu() {
     const hamburger = document.querySelector('.nav__hamburger');
+    const nav = document.querySelector('.nav');
     const links = document.querySelector('.nav__links');
+    if (!hamburger || !nav) return;
 
-    if (!hamburger) return;
+    const setOpen = (open) => {
+      hamburger.classList.toggle('active', open);
+      links?.classList.toggle('mobile-open', open);
+      nav.classList.toggle('nav--menu-open', open);
+      document.body.classList.toggle('no-scroll', open);
+      hamburger.setAttribute('aria-expanded', String(open));
+    };
 
     hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      links?.classList.toggle('mobile-open');
+      setOpen(hamburger.getAttribute('aria-expanded') !== 'true');
+    });
+    // Esc fecha o menu e devolve o foco ao botão.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && hamburger.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        hamburger.focus();
+      }
+    });
+    // Clicar em um link do menu fecha o menu.
+    nav.addEventListener('click', (e) => {
+      if (e.target.closest('.nav__links a, .nav__actions a')) setOpen(false);
+    });
+  },
+
+  /**
+   * Abas acessíveis (padrão WAI-ARIA): atualiza aria-selected/tabindex e
+   * permite trocar de aba com as setas, Home e End.
+   */
+  selectTab(tab) {
+    const list = tab.closest('[role="tablist"]');
+    if (!list) return;
+    list.querySelectorAll('[role="tab"]').forEach((t) => {
+      const selected = t === tab;
+      t.classList.toggle('active', selected);
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+    });
+  },
+
+  initTabsKeyboard() {
+    document.addEventListener('keydown', (e) => {
+      const tab = e.target.closest?.('[role="tab"]');
+      if (!tab) return;
+      const tabs = [...tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]')];
+      const i = tabs.indexOf(tab);
+      const next = {
+        ArrowRight: tabs[(i + 1) % tabs.length],
+        ArrowLeft: tabs[(i - 1 + tabs.length) % tabs.length],
+        Home: tabs[0],
+        End: tabs[tabs.length - 1],
+      }[e.key];
+      if (!next) return;
+      e.preventDefault();
+      next.focus();
+      next.click();
     });
   },
 
@@ -266,11 +319,15 @@ const App = {
     if (!container) {
       container = document.createElement('div');
       container.className = 'toast-container';
+      // Região ao vivo: leitores de tela anunciam as mensagens.
+      container.setAttribute('aria-live', 'polite');
+      container.setAttribute('role', 'status');
       document.body.appendChild(container);
     }
 
     const toast = document.createElement('div');
     toast.className = `toast toast--${type}`;
+    if (type === 'error') toast.setAttribute('role', 'alert');
     const messageEl = document.createElement('span');
     messageEl.className = 'toast__message';
     messageEl.textContent = message;
@@ -303,13 +360,15 @@ const App = {
    */
   showModal(title, body, actions = []) {
     document.querySelector('.modal-overlay')?.remove();
+    // Guarda quem abriu o modal para devolver o foco ao fechar.
+    if (!this._modalOpener) this._modalOpener = document.activeElement;
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
 
     overlay.innerHTML = `
-      <div class="modal">
-        <h3 class="modal__title">${App.escapeHTML(title)}</h3>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <h2 class="modal__title" id="modal-title">${App.escapeHTML(title)}</h2>
         <div class="modal__body">${body}</div>
         <div class="modal__actions">
           <button type="button" class="btn btn--ghost" data-action="close-modal">${App.escapeHTML(I18n.t('common.cancel'))}</button>
@@ -331,15 +390,53 @@ const App = {
       if (e.target === overlay) App.closeModal();
     });
 
+    // Teclado: Esc fecha; Tab fica preso dentro do modal.
+    overlay.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        App.closeModal();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusables = [
+        ...overlay.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ),
+      ].filter((el) => el.offsetParent !== null || el === document.activeElement);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
     document.body.appendChild(overlay);
+    document.body.classList.add('no-scroll');
+
+    // Foco inicial: primeiro campo do formulário ou, se não houver, o primeiro botão de ação.
+    const firstField = overlay.querySelector(
+      '.modal__body input, .modal__body select, .modal__body textarea'
+    );
+    const firstAction = overlay.querySelector('.modal__actions .btn:last-child');
+    (firstField || firstAction)?.focus();
   },
 
   closeModal() {
     const overlay = document.querySelector('.modal-overlay');
     if (overlay) {
       overlay.style.opacity = '0';
+      overlay.setAttribute('aria-hidden', 'true');
       setTimeout(() => overlay.remove(), 250);
     }
+    document.body.classList.remove('no-scroll');
+    const opener = this._modalOpener;
+    this._modalOpener = null;
+    if (opener && document.contains(opener) && typeof opener.focus === 'function') opener.focus();
   },
 
   // =========================================================================

@@ -16,227 +16,252 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <nav class="nav" id="navbar">
       <div class="nav__inner">
         <a href="index.html" class="nav__logo">
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link active" data-i18n="nav.donate">Doar</a>
           <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
         </div>
         <div class="nav__actions"></div>
-        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <div class="page-header">
-      <div class="container">
-        <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="donate.eyebrow">
-          Faça a diferença
-        </p>
-        <h1 class="page-header__title" data-i18n="donate.title">Doar equipamento</h1>
-        <p class="page-header__desc" data-i18n="donate.desc">
-          Publique seu equipamento e ajude um Lalíder a ter as ferramentas de que precisa para
-          aprender e liderar.
-        </p>
-      </div>
-    </div>
-
-    <div class="container container--narrow" style="padding-bottom: var(--s-9)">
-      <div id="auth-required" style="display: none">
-        <div class="empty-state card">
-          <div class="empty-state__icon">—</div>
-          <h3 class="empty-state__title" data-i18n="donate.loginTitle">É preciso entrar</h3>
-          <p class="empty-state__desc" data-i18n="donate.loginDesc">
-            Entre na sua conta para publicar uma doação.
+    <main id="main" tabindex="-1">
+      <div class="page-header">
+        <div class="container">
+          <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="donate.eyebrow">
+            Faça a diferença
           </p>
-          <div class="flex items-center justify-center gap-4">
-            <a href="login.html" class="btn btn--outline" data-i18n="nav.login">Entrar</a>
-            <a
-              href="register.html?type=donor"
-              class="btn btn--primary"
-              data-i18n="donate.registerDonor"
-              >Cadastrar como doador</a
-            >
-          </div>
+          <h1 class="page-header__title" data-i18n="donate.title">Doar equipamento</h1>
+          <p class="page-header__desc" data-i18n="donate.desc">
+            Publique seu equipamento e ajude um Lalíder a ter as ferramentas de que precisa para
+            aprender e liderar.
+          </p>
         </div>
       </div>
 
-      <div id="donor-only" style="display: none">
-        <div class="empty-state card">
-          <div class="empty-state__icon">—</div>
-          <h3 class="empty-state__title" data-i18n="donate.donorOnlyTitle">
-            Somente para doadores
-          </h3>
-          <p class="empty-state__desc" data-i18n="donate.donorOnlyDesc">
-            Só contas de doador publicam doações. Como Lalíder, você pode fazer um pedido ou
-            solicitar uma doação disponível.
-          </p>
-          <div class="flex items-center justify-center gap-4">
-            <a href="browse.html" class="btn btn--outline" data-i18n="donate.browse">Ver doações</a>
-            <a href="dashboard.html" class="btn btn--primary" data-i18n="donate.goDashboard"
-              >Ir para o painel</a
-            >
-          </div>
-        </div>
-      </div>
-
-      <div id="donation-form-container" style="display: none">
-        <form id="donation-form" class="card" style="padding: var(--s-7)">
-          <div class="form-group">
-            <label
-              class="form-label form-label--required"
-              style="font-size: 0.9rem; margin-bottom: var(--s-4)"
-              data-i18n="donate.what"
-              >O que você está doando?</label
-            >
-            <div
-              id="category-grid"
-              style="
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: var(--s-2);
-              "
-            ></div>
-            <input type="hidden" id="donation-category" required />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label form-label--required" data-i18n="donate.titleLabel"
-              >Título</label
-            >
-            <input
-              data-i18n-attr="placeholder:donate.titlePlaceholder"
-              type="text"
-              class="form-input"
-              id="donation-title"
-              placeholder="ex.: Dell Inspiron 15 — 8GB RAM, SSD 256GB"
-              required
-            />
-            <p class="form-hint" data-i18n="donate.titleHint">
-              Seja específico: marca, modelo e principais configurações
+      <div class="container container--narrow" style="padding-bottom: var(--s-9)">
+        <div id="auth-required" style="display: none">
+          <div class="empty-state card">
+            <div class="empty-state__icon">—</div>
+            <h2 class="empty-state__title" data-i18n="donate.loginTitle">É preciso entrar</h2>
+            <p class="empty-state__desc" data-i18n="donate.loginDesc">
+              Entre na sua conta para publicar uma doação.
             </p>
+            <div class="flex items-center justify-center gap-4">
+              <a href="login.html" class="btn btn--outline" data-i18n="nav.login">Entrar</a>
+              <a
+                href="register.html?type=donor"
+                class="btn btn--primary"
+                data-i18n="donate.registerDonor"
+                >Cadastrar como doador</a
+              >
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label class="form-label form-label--required" data-i18n="donate.description"
-              >Descrição</label
-            >
-            <textarea
-              data-i18n-attr="placeholder:donate.descriptionPlaceholder"
-              class="form-textarea"
-              id="donation-desc"
-              placeholder="Descreva o item: estado, o que acompanha (carregador, capa...) e outras informações úteis."
-              required
-              style="min-height: 120px"
-            ></textarea>
+        <div id="donor-only" style="display: none">
+          <div class="empty-state card">
+            <div class="empty-state__icon">—</div>
+            <h2 class="empty-state__title" data-i18n="donate.donorOnlyTitle">
+              Somente para doadores
+            </h2>
+            <p class="empty-state__desc" data-i18n="donate.donorOnlyDesc">
+              Só contas de doador publicam doações. Como Lalíder, você pode fazer um pedido ou
+              solicitar uma doação disponível.
+            </p>
+            <div class="flex items-center justify-center gap-4">
+              <a href="browse.html" class="btn btn--outline" data-i18n="donate.browse"
+                >Ver doações</a
+              >
+              <a href="dashboard.html" class="btn btn--primary" data-i18n="donate.goDashboard"
+                >Ir para o painel</a
+              >
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label class="form-label form-label--required" data-i18n="donate.condition"
-              >Estado de conservação</label
-            >
-            <select class="form-select" id="donation-condition" required>
-              <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
-            </select>
-          </div>
-          <div class="location-fields" data-location="donation">
+        <div id="donation-form-container" style="display: none">
+          <form id="donation-form" class="card" style="padding: var(--s-7)">
+            <div class="form-group">
+              <p
+                id="category-label"
+                class="form-label form-label--required"
+                style="font-size: 0.9rem; margin-bottom: var(--s-4)"
+                data-i18n="donate.what"
+              >
+                O que você está doando?
+              </p>
+              <div
+                id="category-grid"
+                role="group"
+                aria-labelledby="category-label"
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                  gap: var(--s-2);
+                "
+              ></div>
+              <input type="hidden" id="donation-category" required />
+            </div>
+
             <div class="form-group">
               <label
+                for="donation-title"
                 class="form-label form-label--required"
-                for="donation-country"
-                data-i18n="location.country"
-                >País</label
+                data-i18n="donate.titleLabel"
+                >Título</label
               >
-              <select class="form-select" id="donation-country" required autocomplete="country">
-                <option value="" data-i18n="location.selectCountry">Selecione o país</option>
+              <input
+                data-i18n-attr="placeholder:donate.titlePlaceholder"
+                type="text"
+                class="form-input"
+                id="donation-title"
+                placeholder="ex.: Dell Inspiron 15 — 8GB RAM, SSD 256GB"
+                required
+              />
+              <p class="form-hint" data-i18n="donate.titleHint">
+                Seja específico: marca, modelo e principais configurações
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label
+                for="donation-desc"
+                class="form-label form-label--required"
+                data-i18n="donate.description"
+                >Descrição</label
+              >
+              <textarea
+                data-i18n-attr="placeholder:donate.descriptionPlaceholder"
+                class="form-textarea"
+                id="donation-desc"
+                placeholder="Descreva o item: estado, o que acompanha (carregador, capa...) e outras informações úteis."
+                required
+                style="min-height: 120px"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label
+                for="donation-condition"
+                class="form-label form-label--required"
+                data-i18n="donate.condition"
+                >Estado de conservação</label
+              >
+              <select class="form-select" id="donation-condition" required>
+                <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
               </select>
             </div>
-            <div class="form-row">
-              <div class="form-group" data-location-br>
-                <label
-                  class="form-label form-label--required"
-                  for="donation-uf"
-                  data-i18n="location.uf"
-                  >Estado (UF)</label
-                >
-                <select class="form-select" id="donation-uf">
-                  <option value="" data-i18n="location.selectUf">Selecione o estado</option>
-                </select>
-              </div>
-              <div class="form-group" data-location-other hidden>
-                <label class="form-label" for="donation-region" data-i18n="location.region"
-                  >Estado / Região</label
-                >
-                <input
-                  type="text"
-                  class="form-input"
-                  id="donation-region"
-                  maxlength="80"
-                  autocomplete="address-level1"
-                  data-i18n-attr="placeholder:location.regionPlaceholder"
-                  placeholder="ex.: Antioquia, Jalisco"
-                />
-              </div>
+            <div class="location-fields" data-location="donation">
               <div class="form-group">
                 <label
                   class="form-label form-label--required"
-                  for="donation-city"
-                  data-i18n="location.city"
-                  >Cidade</label
+                  for="donation-country"
+                  data-i18n="location.country"
+                  >País</label
                 >
-                <input
-                  type="text"
-                  class="form-input"
-                  id="donation-city"
-                  maxlength="80"
-                  required
-                  autocomplete="address-level2"
-                  data-i18n-attr="placeholder:location.cityPlaceholder"
-                  placeholder="ex.: Recife"
-                />
+                <select class="form-select" id="donation-country" required autocomplete="country">
+                  <option value="" data-i18n="location.selectCountry">Selecione o país</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group" data-location-br>
+                  <label
+                    class="form-label form-label--required"
+                    for="donation-uf"
+                    data-i18n="location.uf"
+                    >Estado (UF)</label
+                  >
+                  <select class="form-select" id="donation-uf">
+                    <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                  </select>
+                </div>
+                <div class="form-group" data-location-other hidden>
+                  <label class="form-label" for="donation-region" data-i18n="location.region"
+                    >Estado / Região</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="donation-region"
+                    maxlength="80"
+                    autocomplete="address-level1"
+                    data-i18n-attr="placeholder:location.regionPlaceholder"
+                    placeholder="ex.: Antioquia, Jalisco"
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    class="form-label form-label--required"
+                    for="donation-city"
+                    data-i18n="location.city"
+                    >Cidade</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="donation-city"
+                    maxlength="80"
+                    required
+                    autocomplete="address-level2"
+                    data-i18n-attr="placeholder:location.cityPlaceholder"
+                    placeholder="ex.: Recife"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div id="donation-preview" style="display: none; margin-bottom: var(--s-5)">
-            <p
-              class="text-xs"
-              style="margin-bottom: var(--s-3); color: var(--text-2)"
-              data-i18n="donate.previewLabel"
-            >
-              Pré-visualização
-            </p>
-            <div id="preview-card"></div>
-          </div>
+            <div id="donation-preview" style="display: none; margin-bottom: var(--s-5)">
+              <p
+                class="text-xs"
+                style="margin-bottom: var(--s-3); color: var(--text-2)"
+                data-i18n="donate.previewLabel"
+              >
+                Pré-visualização
+              </p>
+              <div id="preview-card"></div>
+            </div>
 
-          <div class="flex gap-4" style="flex-wrap: wrap">
-            <button
-              type="button"
-              class="btn btn--outline"
-              data-action="preview"
-              data-i18n="donate.preview"
-            >
-              Pré-visualização
-            </button>
-            <button
-              type="submit"
-              class="btn btn--primary btn--lg"
-              style="flex: 1"
-              data-i18n="donate.publish"
-            >
-              Publicar doação
-            </button>
-          </div>
-        </form>
+            <div class="flex gap-4" style="flex-wrap: wrap">
+              <button
+                type="button"
+                class="btn btn--outline"
+                data-action="preview"
+                data-i18n="donate.preview"
+              >
+                Pré-visualização
+              </button>
+              <button
+                type="submit"
+                class="btn btn--primary btn--lg"
+                style="flex: 1"
+                data-i18n="donate.publish"
+              >
+                Publicar doação
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </main>
 
     <footer class="footer">
       <div class="container">

@@ -11,33 +11,43 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <nav class="nav" id="navbar">
       <div class="nav__inner">
         <a href="index.html" class="nav__logo">
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
           <a href="dashboard.html" class="nav__link active" data-i18n="nav.dashboard">Painel</a>
         </div>
         <div class="nav__actions"></div>
-        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <div class="dashboard">
-      <div class="container">
-        <div class="dashboard__header" id="dashboard-header"></div>
-        <div class="dashboard__grid" id="dashboard-stats"></div>
-        <div id="dashboard-actions" style="margin-bottom: var(--s-7)"></div>
-        <div id="dashboard-content"></div>
+    <main id="main" tabindex="-1">
+      <div class="dashboard">
+        <div class="container">
+          <div class="dashboard__header" id="dashboard-header"></div>
+          <div class="dashboard__grid" id="dashboard-stats"></div>
+          <div id="dashboard-actions" style="margin-bottom: var(--s-7)"></div>
+          <div id="dashboard-content"></div>
+        </div>
       </div>
-    </div>
+    </main>
 
     <footer class="footer" style="margin-top: var(--s-8)">
       <div class="container">

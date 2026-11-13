@@ -16,6 +16,7 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <!-- Navigation -->
     <nav class="nav nav--dark" id="navbar">
       <div class="nav__inner">
@@ -23,7 +24,7 @@
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link active" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
@@ -44,6 +45,9 @@
         <button
           data-i18n-attr="aria-label:nav.menu"
           class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
           id="hamburger"
           aria-label="Abrir menu"
         >
@@ -52,339 +56,347 @@
       </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero__content">
-          <p class="eyebrow hero__eyebrow" data-i18n="hero.eyebrow">
-            Latin American Leadership Academy
-          </p>
-          <h1 class="h-display hero__title text-balance">
-            <span data-i18n="hero.title1">Construa pontes.</span><br />
-            <span class="highlight" data-i18n="hero.title2">Impulsione um Lalíder.</span>
-          </h1>
-          <p class="hero__desc" data-i18n="hero.desc">
-            Conecte-se a Lalíderes verificados e doe as ferramentas de que eles precisam para
-            estudar, trabalhar e liderar. Cada equipamento doado abre uma porta.
-          </p>
-          <div class="hero__actions">
-            <a
-              href="register.html?type=donor"
-              class="btn btn--primary btn--lg"
-              data-i18n="hero.ctaDonate"
-              >Quero doar</a
-            >
-            <a
-              href="register.html?type=lalider"
-              class="btn btn--outline-light btn--lg"
-              data-i18n="hero.ctaLalider"
-              >Sou Lalíder</a
-            >
-          </div>
-          <div class="hero__metrics" id="hero-metrics">
-            <div>
-              <div class="hero__metric-value" id="metric-available">0</div>
-              <div class="hero__metric-label" data-i18n="hero.metricAvailable">
-                Doações disponíveis
+    <main id="main" tabindex="-1">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero__content">
+            <p class="eyebrow hero__eyebrow" data-i18n="hero.eyebrow">
+              Latin American Leadership Academy
+            </p>
+            <h1 class="h-display hero__title text-balance">
+              <span data-i18n="hero.title1">Construa pontes.</span><br />
+              <span class="highlight" data-i18n="hero.title2">Impulsione um Lalíder.</span>
+            </h1>
+            <p class="hero__desc" data-i18n="hero.desc">
+              Conecte-se a Lalíderes verificados e doe as ferramentas de que eles precisam para
+              estudar, trabalhar e liderar. Cada equipamento doado abre uma porta.
+            </p>
+            <div class="hero__actions">
+              <a
+                href="register.html?type=donor"
+                class="btn btn--primary btn--lg"
+                data-i18n="hero.ctaDonate"
+                >Quero doar</a
+              >
+              <a
+                href="register.html?type=lalider"
+                class="btn btn--outline-light btn--lg"
+                data-i18n="hero.ctaLalider"
+                >Sou Lalíder</a
+              >
+            </div>
+            <div class="hero__metrics" id="hero-metrics">
+              <div>
+                <div class="hero__metric-value" id="metric-available">0</div>
+                <div class="hero__metric-label" data-i18n="hero.metricAvailable">
+                  Doações disponíveis
+                </div>
               </div>
-            </div>
-            <div>
-              <div class="hero__metric-value" id="metric-open">0</div>
-              <div class="hero__metric-label" data-i18n="hero.metricOpen">Pedidos abertos</div>
-            </div>
-            <div>
-              <div class="hero__metric-value" id="metric-delivered">0</div>
-              <div class="hero__metric-label" data-i18n="hero.metricDelivered">
-                Equipamentos entregues
+              <div>
+                <div class="hero__metric-value" id="metric-open">0</div>
+                <div class="hero__metric-label" data-i18n="hero.metricOpen">Pedidos abertos</div>
+              </div>
+              <div>
+                <div class="hero__metric-value" id="metric-delivered">0</div>
+                <div class="hero__metric-label" data-i18n="hero.metricDelivered">
+                  Equipamentos entregues
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="hero__accent-line"></div>
-    </section>
+        <div class="hero__accent-line"></div>
+      </section>
 
-    <!-- How It Works -->
-    <section class="section" id="how-it-works">
-      <div class="container">
-        <div class="grid-2" style="align-items: start">
-          <div class="reveal">
-            <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="how.eyebrow">
-              Como funciona
+      <!-- How It Works -->
+      <section class="section" id="how-it-works">
+        <div class="container">
+          <div class="grid-2" style="align-items: start">
+            <div class="reveal">
+              <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="how.eyebrow">
+                Como funciona
+              </p>
+              <h2 class="h-1">
+                <span data-i18n="how.title1">Três passos para</span><br /><span
+                  data-i18n="how.title2"
+                  >gerar impacto.</span
+                >
+              </h2>
+              <p
+                class="text-muted"
+                style="
+                  margin-top: var(--s-4);
+                  max-width: 400px;
+                  font-family: var(--font-serif);
+                  line-height: 1.7;
+                "
+                data-i18n="how.desc"
+              >
+                Doando ou recebendo, o processo é simples, seguro e baseado em confiança.
+              </p>
+            </div>
+            <div class="steps reveal">
+              <div class="step">
+                <div class="step__number"></div>
+                <div>
+                  <h3 class="step__title" data-i18n="how.step1.title">Crie sua conta</h3>
+                  <p class="step__desc" data-i18n="how.step1.desc">
+                    Doadores se cadastram livremente. Lalíderes confirmam a identidade com o código
+                    de verificação da LALA.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step__number"></div>
+                <div>
+                  <h3 class="step__title" data-i18n="how.step2.title">Conecte-se</h3>
+                  <p class="step__desc" data-i18n="how.step2.desc">
+                    Doadores publicam equipamentos e Lalíderes publicam o que precisam. Um lado
+                    oferece, o outro aceita.
+                  </p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step__number"></div>
+                <div>
+                  <h3 class="step__title" data-i18n="how.step3.title">Doe e transforme</h3>
+                  <p class="step__desc" data-i18n="how.step3.desc">
+                    Com o match aceito, os contatos aparecem para os dois lados combinarem a
+                    entrega.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why LALA Bridge -->
+      <section class="section section--white">
+        <div class="container">
+          <div class="text-center reveal" style="margin-bottom: var(--s-7)">
+            <p
+              class="eyebrow eyebrow--violet"
+              style="margin-bottom: var(--s-3)"
+              data-i18n="why.eyebrow"
+            >
+              Confiança e impacto
             </p>
-            <h2 class="h-1">
-              <span data-i18n="how.title1">Três passos para</span><br /><span data-i18n="how.title2"
-                >gerar impacto.</span
+            <h2 class="h-1 text-balance" data-i18n="why.title">Por que o LALA Bridge</h2>
+          </div>
+          <div class="grid-3 reveal">
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--gold);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.verified.title">
+                Identidade verificada
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.verified.desc"
+              >
+                Todo Lalíder informa o código de verificação da LALA e o nome registrado. Só membros
+                reais da comunidade.
+              </p>
+            </div>
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--orange);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.network.title">
+                Feito para o Brasil
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.network.desc"
+              >
+                O piloto começa com a rede LALA no Brasil, pensado para quem acessa a internet só
+                pelo celular.
+              </p>
+            </div>
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--violet);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.matching.title">
+                Match com confirmação
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.matching.desc"
+              >
+                Doadores oferecem ajuda, Lalíderes pedem doações e quem recebe a oferta decide. Nada
+                acontece sem uma pessoa confirmar.
+              </p>
+            </div>
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--gold);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.equipment.title">
+                Qualquer equipamento
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.equipment.desc"
+              >
+                Notebooks, celulares, fones, livros, monitores: tudo que ajuda um Lalíder a estudar
+                e trabalhar melhor.
+              </p>
+            </div>
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--orange);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.privacy.title">
+                Privacidade por padrão
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.privacy.desc"
+              >
+                Nas telas públicas aparecem só o primeiro nome, o estado e a turma. Os contatos só
+                são revelados depois do aceite.
+              </p>
+            </div>
+            <div class="card card--flat">
+              <div
+                style="
+                  width: 40px;
+                  height: 4px;
+                  background: var(--violet);
+                  margin-bottom: var(--s-5);
+                  border-radius: 2px;
+                "
+              ></div>
+              <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.community.title">
+                Feito pela comunidade
+              </h3>
+              <p
+                class="text-muted"
+                style="font-size: 0.9rem; line-height: 1.6"
+                data-i18n="why.community.desc"
+              >
+                Código aberto, feito por Lalíderes, para Lalíderes. Qualquer ONG pode usar e
+                adaptar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Open Requests -->
+      <section class="section section--dark">
+        <div class="container">
+          <div class="text-center reveal" style="margin-bottom: var(--s-7)">
+            <p
+              class="eyebrow eyebrow--gold"
+              style="margin-bottom: var(--s-3)"
+              data-i18n="open.eyebrow"
+            >
+              Lalíderes precisam da sua ajuda
+            </p>
+            <h2 class="h-1" data-i18n="open.title">Pedidos abertos</h2>
+            <p
+              style="
+                color: var(--text-inverse-muted);
+                max-width: 480px;
+                margin: var(--s-3) auto 0;
+                font-family: var(--font-serif);
+              "
+              data-i18n="open.desc"
+            >
+              Estes Lalíderes verificados aguardam equipamentos para seguir estudando e liderando.
+            </p>
+          </div>
+          <div class="grid-auto" id="needs-preview">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="text-center" style="margin-top: var(--s-7)">
+            <a
+              href="browse.html"
+              class="link-underline link-underline--light"
+              data-i18n="open.viewAll"
+              >Ver todos os pedidos</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section">
+        <div class="container">
+          <div class="text-center reveal" style="max-width: 600px; margin: 0 auto">
+            <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="cta.eyebrow">
+              Participe
+            </p>
+            <h2 class="h-1" style="margin-bottom: var(--s-4)">
+              <span data-i18n="cta.title1">Pronto para</span><br /><span data-i18n="cta.title2"
+                >fazer a diferença?</span
               >
             </h2>
             <p
-              class="text-muted"
-              style="
-                margin-top: var(--s-4);
-                max-width: 400px;
-                font-family: var(--font-serif);
-                line-height: 1.7;
-              "
-              data-i18n="how.desc"
+              class="text-muted text-serif"
+              style="margin-bottom: var(--s-6); line-height: 1.7"
+              data-i18n="cta.desc"
             >
-              Doando ou recebendo, o processo é simples, seguro e baseado em confiança.
+              Doando ou recebendo, você faz parte de algo maior.
             </p>
-          </div>
-          <div class="steps reveal">
-            <div class="step">
-              <div class="step__number"></div>
-              <div>
-                <h3 class="step__title" data-i18n="how.step1.title">Crie sua conta</h3>
-                <p class="step__desc" data-i18n="how.step1.desc">
-                  Doadores se cadastram livremente. Lalíderes confirmam a identidade com o código de
-                  verificação da LALA.
-                </p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step__number"></div>
-              <div>
-                <h3 class="step__title" data-i18n="how.step2.title">Conecte-se</h3>
-                <p class="step__desc" data-i18n="how.step2.desc">
-                  Doadores publicam equipamentos e Lalíderes publicam o que precisam. Um lado
-                  oferece, o outro aceita.
-                </p>
-              </div>
-            </div>
-            <div class="step">
-              <div class="step__number"></div>
-              <div>
-                <h3 class="step__title" data-i18n="how.step3.title">Doe e transforme</h3>
-                <p class="step__desc" data-i18n="how.step3.desc">
-                  Com o match aceito, os contatos aparecem para os dois lados combinarem a entrega.
-                </p>
-              </div>
+            <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
+              <a href="register.html?type=donor" class="btn btn--dark btn--lg" data-i18n="cta.donor"
+                >Quero ser doador</a
+              >
+              <a
+                href="register.html?type=lalider"
+                class="btn btn--outline btn--lg"
+                data-i18n="cta.lalider"
+                >Cadastrar como Lalíder</a
+              >
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Why LALA Bridge -->
-    <section class="section section--white">
-      <div class="container">
-        <div class="text-center reveal" style="margin-bottom: var(--s-7)">
-          <p
-            class="eyebrow eyebrow--violet"
-            style="margin-bottom: var(--s-3)"
-            data-i18n="why.eyebrow"
-          >
-            Confiança e impacto
-          </p>
-          <h2 class="h-1 text-balance" data-i18n="why.title">Por que o LALA Bridge</h2>
-        </div>
-        <div class="grid-3 reveal">
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--gold);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.verified.title">
-              Identidade verificada
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.verified.desc"
-            >
-              Todo Lalíder informa o código de verificação da LALA e o nome registrado. Só membros
-              reais da comunidade.
-            </p>
-          </div>
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--orange);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.network.title">
-              Feito para o Brasil
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.network.desc"
-            >
-              O piloto começa com a rede LALA no Brasil, pensado para quem acessa a internet só pelo
-              celular.
-            </p>
-          </div>
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--violet);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.matching.title">
-              Match com confirmação
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.matching.desc"
-            >
-              Doadores oferecem ajuda, Lalíderes pedem doações e quem recebe a oferta decide. Nada
-              acontece sem uma pessoa confirmar.
-            </p>
-          </div>
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--gold);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.equipment.title">
-              Qualquer equipamento
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.equipment.desc"
-            >
-              Notebooks, celulares, fones, livros, monitores: tudo que ajuda um Lalíder a estudar e
-              trabalhar melhor.
-            </p>
-          </div>
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--orange);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.privacy.title">
-              Privacidade por padrão
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.privacy.desc"
-            >
-              Nas telas públicas aparecem só o primeiro nome, o estado e a turma. Os contatos só são
-              revelados depois do aceite.
-            </p>
-          </div>
-          <div class="card card--flat">
-            <div
-              style="
-                width: 40px;
-                height: 4px;
-                background: var(--violet);
-                margin-bottom: var(--s-5);
-                border-radius: 2px;
-              "
-            ></div>
-            <h3 class="h-4" style="margin-bottom: var(--s-2)" data-i18n="why.community.title">
-              Feito pela comunidade
-            </h3>
-            <p
-              class="text-muted"
-              style="font-size: 0.9rem; line-height: 1.6"
-              data-i18n="why.community.desc"
-            >
-              Código aberto, feito por Lalíderes, para Lalíderes. Qualquer ONG pode usar e adaptar.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <!-- Footer -->
+    </main>
 
-    <!-- Open Requests -->
-    <section class="section section--dark">
-      <div class="container">
-        <div class="text-center reveal" style="margin-bottom: var(--s-7)">
-          <p
-            class="eyebrow eyebrow--gold"
-            style="margin-bottom: var(--s-3)"
-            data-i18n="open.eyebrow"
-          >
-            Lalíderes precisam da sua ajuda
-          </p>
-          <h2 class="h-1" data-i18n="open.title">Pedidos abertos</h2>
-          <p
-            style="
-              color: var(--text-inverse-muted);
-              max-width: 480px;
-              margin: var(--s-3) auto 0;
-              font-family: var(--font-serif);
-            "
-            data-i18n="open.desc"
-          >
-            Estes Lalíderes verificados aguardam equipamentos para seguir estudando e liderando.
-          </p>
-        </div>
-        <div class="grid-auto" id="needs-preview">
-          <!-- Rendered by JS -->
-        </div>
-        <div class="text-center" style="margin-top: var(--s-7)">
-          <a
-            href="browse.html"
-            class="link-underline link-underline--light"
-            data-i18n="open.viewAll"
-            >Ver todos os pedidos</a
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="section">
-      <div class="container">
-        <div class="text-center reveal" style="max-width: 600px; margin: 0 auto">
-          <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="cta.eyebrow">Participe</p>
-          <h2 class="h-1" style="margin-bottom: var(--s-4)">
-            <span data-i18n="cta.title1">Pronto para</span><br /><span data-i18n="cta.title2"
-              >fazer a diferença?</span
-            >
-          </h2>
-          <p
-            class="text-muted text-serif"
-            style="margin-bottom: var(--s-6); line-height: 1.7"
-            data-i18n="cta.desc"
-          >
-            Doando ou recebendo, você faz parte de algo maior.
-          </p>
-          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
-            <a href="register.html?type=donor" class="btn btn--dark btn--lg" data-i18n="cta.donor"
-              >Quero ser doador</a
-            >
-            <a
-              href="register.html?type=lalider"
-              class="btn btn--outline btn--lg"
-              data-i18n="cta.lalider"
-              >Cadastrar como Lalíder</a
-            >
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer__grid">
@@ -401,7 +413,7 @@
             </p>
           </div>
           <div>
-            <h4 class="footer__heading" data-i18n="footer.platform">Plataforma</h4>
+            <h2 class="footer__heading" data-i18n="footer.platform">Plataforma</h2>
             <a href="browse.html" class="footer__link" data-i18n="footer.browseDonations"
               >Ver doações</a
             >
@@ -414,7 +426,7 @@
             <a href="register.html" class="footer__link" data-i18n="nav.getStarted">Começar</a>
           </div>
           <div>
-            <h4 class="footer__heading" data-i18n="footer.community">Comunidade</h4>
+            <h2 class="footer__heading" data-i18n="footer.community">Comunidade</h2>
             <a
               href="https://latinamericanleadershipacademy.org"
               target="_blank"

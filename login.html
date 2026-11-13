@@ -16,13 +16,14 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <nav class="nav" id="navbar">
       <div class="nav__inner">
         <a href="index.html" class="nav__logo">
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
@@ -32,92 +33,118 @@
             >Começar</a
           >
         </div>
-        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <div class="auth-page">
-      <div class="auth-card">
-        <div class="auth-card__header">
-          <a href="index.html" class="auth-card__logo">
-            <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">B</div>
-            LALA Bridge
-          </a>
-          <h1 class="auth-card__title" data-i18n="login.heading">Bem-vindo de volta</h1>
-          <p class="auth-card__subtitle" data-i18n="login.subtitle">
-            Entre para continuar sua jornada de impacto
-          </p>
-        </div>
-
-        <form id="login-form">
-          <div class="form-group">
-            <label class="form-label form-label--required" data-i18n="login.email">E-mail</label>
-            <input
-              data-i18n-attr="placeholder:login.emailPlaceholder"
-              type="email"
-              class="form-input"
-              id="login-email"
-              placeholder="voce@exemplo.com"
-              required
-              autofocus
-            />
+    <main id="main" tabindex="-1">
+      <div class="auth-page">
+        <div class="auth-card">
+          <div class="auth-card__header">
+            <a href="index.html" class="auth-card__logo">
+              <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">
+                B
+              </div>
+              LALA Bridge
+            </a>
+            <h1 class="auth-card__title" data-i18n="login.heading">Bem-vindo de volta</h1>
+            <p class="auth-card__subtitle" data-i18n="login.subtitle">
+              Entre para continuar sua jornada de impacto
+            </p>
           </div>
-          <div class="form-group">
-            <label class="form-label form-label--required" data-i18n="login.password">Senha</label>
-            <input
-              data-i18n-attr="placeholder:login.passwordPlaceholder"
-              type="password"
-              class="form-input"
-              id="login-password"
-              placeholder="Sua senha"
-              required
-            />
-          </div>
-          <div id="login-error" class="form-error" style="margin-bottom: var(--s-5)"></div>
-          <button
-            type="submit"
-            class="btn btn--primary btn--lg btn--full"
-            id="login-btn"
-            data-i18n="login.submit"
-          >
-            Entrar
-          </button>
-        </form>
 
-        <div
-          id="demo-login"
-          class="card card--flat"
-          style="
-            display: none;
-            margin-top: var(--s-6);
-            padding: var(--s-4);
-            background: var(--cream);
-          "
-        >
-          <p
-            class="text-xs"
-            style="margin-bottom: var(--s-3); color: var(--text-2)"
-            data-i18n="login.demoTitle"
-          >
-            Modo demonstração
-          </p>
+          <form id="login-form">
+            <div class="form-group">
+              <label
+                for="login-email"
+                class="form-label form-label--required"
+                data-i18n="login.email"
+                >E-mail</label
+              >
+              <input
+                data-i18n-attr="placeholder:login.emailPlaceholder"
+                type="email"
+                class="form-input"
+                id="login-email"
+                placeholder="voce@exemplo.com"
+                required
+                autofocus
+              />
+            </div>
+            <div class="form-group">
+              <label
+                for="login-password"
+                class="form-label form-label--required"
+                data-i18n="login.password"
+                >Senha</label
+              >
+              <input
+                data-i18n-attr="placeholder:login.passwordPlaceholder"
+                type="password"
+                class="form-input"
+                id="login-password"
+                placeholder="Sua senha"
+                required
+              />
+            </div>
+            <div
+              id="login-error"
+              class="form-error"
+              role="alert"
+              style="margin-bottom: var(--s-5)"
+            ></div>
+            <button
+              type="submit"
+              class="btn btn--primary btn--lg btn--full"
+              id="login-btn"
+              data-i18n="login.submit"
+            >
+              Entrar
+            </button>
+          </form>
+
           <div
-            id="demo-accounts"
-            style="display: flex; flex-direction: column; gap: var(--s-2)"
-          ></div>
-          <p class="form-hint" style="margin-top: var(--s-3)" data-i18n="login.demoHint">
-            Contas fictícias guardadas só neste navegador. Nenhum dado real.
-          </p>
-        </div>
+            id="demo-login"
+            class="card card--flat"
+            style="
+              display: none;
+              margin-top: var(--s-6);
+              padding: var(--s-4);
+              background: var(--cream);
+            "
+          >
+            <p
+              class="text-xs"
+              style="margin-bottom: var(--s-3); color: var(--text-2)"
+              data-i18n="login.demoTitle"
+            >
+              Modo demonstração
+            </p>
+            <div
+              id="demo-accounts"
+              style="display: flex; flex-direction: column; gap: var(--s-2)"
+            ></div>
+            <p class="form-hint" style="margin-top: var(--s-3)" data-i18n="login.demoHint">
+              Contas fictícias guardadas só neste navegador. Nenhum dado real.
+            </p>
+          </div>
 
-        <div class="auth-card__footer">
-          <span data-i18n="login.noAccount">Não tem conta?</span>
-          <a href="register.html" data-i18n="login.create">Crie uma</a>
+          <div class="auth-card__footer">
+            <span data-i18n="login.noAccount">Não tem conta?</span>
+            <a href="register.html" data-i18n="login.create">Crie uma</a>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <script src="js/config.js"></script>
     <script src="js/i18n.js"></script>

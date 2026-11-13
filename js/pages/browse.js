@@ -34,23 +34,26 @@ App.ready(() => {
 function switchView(view) {
   document.getElementById('view-donations').style.display = view === 'donations' ? 'block' : 'none';
   document.getElementById('view-needs').style.display = view === 'needs' ? 'block' : 'none';
-  document.getElementById('tab-donations').classList.toggle('active', view === 'donations');
-  document.getElementById('tab-needs').classList.toggle('active', view === 'needs');
+  App.selectTab(document.getElementById(view === 'needs' ? 'tab-needs' : 'tab-donations'));
 }
 
 function setCategoryFilter(category) {
   currentCategoryFilter = category;
-  document
-    .querySelectorAll('#category-filters .tag')
-    .forEach((t) => t.classList.toggle('active', t.dataset.category === category));
+  document.querySelectorAll('#category-filters .tag').forEach((t) => {
+    const on = t.dataset.category === category;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-pressed', String(on));
+  });
   renderDonations();
 }
 
 function setUrgencyFilter(urgency) {
   currentUrgencyFilter = urgency;
-  document
-    .querySelectorAll('#urgency-filters .tag')
-    .forEach((t) => t.classList.toggle('active', t.dataset.urgency === urgency));
+  document.querySelectorAll('#urgency-filters .tag').forEach((t) => {
+    const on = t.dataset.urgency === urgency;
+    t.classList.toggle('active', on);
+    t.setAttribute('aria-pressed', String(on));
+  });
   renderNeeds();
 }
 

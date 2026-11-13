@@ -16,172 +16,230 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
     <nav class="nav" id="navbar">
       <div class="nav__inner">
         <a href="index.html" class="nav__logo">
           <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <div class="nav__links">
+        <div class="nav__links" id="nav-menu">
           <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
           <a href="browse.html" class="nav__link active" data-i18n="nav.browse">Explorar</a>
           <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
           <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
         </div>
         <div class="nav__actions"></div>
-        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <div class="page-header">
-      <div class="container">
-        <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="browse.eyebrow">Explorar</p>
-        <h1 class="page-header__title" data-i18n="browse.title">Explore e conecte</h1>
-        <p class="page-header__desc" data-i18n="browse.desc">
-          Veja as doações disponíveis e os pedidos dos Lalíderes.
-        </p>
-      </div>
-    </div>
-
-    <div class="container" style="padding-bottom: var(--s-9)">
-      <div class="tabs" style="margin-bottom: var(--s-6); max-width: 360px">
-        <button
-          class="tab active"
-          id="tab-donations"
-          data-action="switch-view"
-          data-view="donations"
-          data-i18n="browse.tabDonations"
-        >
-          Doações
-        </button>
-        <button
-          class="tab"
-          id="tab-needs"
-          data-action="switch-view"
-          data-view="needs"
-          data-i18n="browse.tabNeeds"
-        >
-          Pedidos
-        </button>
-      </div>
-
-      <!-- Donations View -->
-      <div id="view-donations">
-        <div class="filter-bar">
-          <div class="filter-bar__search">
-            <span class="filter-bar__search-icon">&#x1F50D;</span>
-            <input
-              data-i18n-attr="placeholder:browse.searchDonations"
-              type="text"
-              class="form-input"
-              id="search-donations"
-              placeholder="Buscar doações..."
-            />
-          </div>
-          <div class="filter-bar__tags" id="category-filters"></div>
-        </div>
-        <p class="text-sm text-muted" id="donations-count" style="margin-bottom: var(--s-5)"></p>
-        <div class="grid-auto" id="donations-grid"></div>
-        <div id="donations-empty" style="display: none">
-          <div class="empty-state">
-            <div class="empty-state__icon">—</div>
-            <h3 class="empty-state__title" data-i18n="browse.emptyDonationsTitle">
-              Nenhuma doação encontrada
-            </h3>
-            <p class="empty-state__desc" data-i18n="browse.emptyDesc">
-              Tente mudar os filtros ou a busca.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Needs View -->
-      <div id="view-needs" style="display: none">
-        <div class="filter-bar">
-          <div class="filter-bar__search">
-            <span class="filter-bar__search-icon">&#x1F50D;</span>
-            <input
-              data-i18n-attr="placeholder:browse.searchNeeds"
-              type="text"
-              class="form-input"
-              id="search-needs"
-              placeholder="Buscar pedidos..."
-            />
-          </div>
-          <div class="filter-bar__tags" id="urgency-filters">
-            <button
-              class="tag active"
-              data-urgency="all"
-              data-action="filter-urgency"
-              data-i18n="browse.filterAll"
-            >
-              Todos
-            </button>
-            <button
-              class="tag"
-              data-urgency="high"
-              data-action="filter-urgency"
-              data-i18n="browse.filterHigh"
-            >
-              Alta
-            </button>
-            <button
-              class="tag"
-              data-urgency="medium"
-              data-action="filter-urgency"
-              data-i18n="browse.filterMedium"
-            >
-              Média
-            </button>
-            <button
-              class="tag"
-              data-urgency="low"
-              data-action="filter-urgency"
-              data-i18n="browse.filterLow"
-            >
-              Baixa
-            </button>
-          </div>
-        </div>
-        <p class="text-sm text-muted" id="needs-count" style="margin-bottom: var(--s-5)"></p>
-        <div class="grid-auto" id="needs-grid"></div>
-        <div id="needs-empty" style="display: none">
-          <div class="empty-state">
-            <div class="empty-state__icon">—</div>
-            <h3 class="empty-state__title" data-i18n="browse.emptyNeedsTitle">
-              Nenhum pedido encontrado
-            </h3>
-            <p class="empty-state__desc" data-i18n="browse.emptyDesc">
-              Tente mudar os filtros ou a busca.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div id="browse-cta" style="display: none; margin-top: var(--s-7)">
-        <div class="card text-center" style="padding: var(--s-7)">
-          <h3 class="h-3" style="margin-bottom: var(--s-2)" data-i18n="browse.ctaTitle">
-            Quer ajudar?
-          </h3>
-          <p class="text-muted" style="margin-bottom: var(--s-5)" data-i18n="browse.ctaDesc">
-            Cadastre-se para doar ou, se você é Lalíder, para pedir equipamentos.
+    <main id="main" tabindex="-1">
+      <div class="page-header">
+        <div class="container">
+          <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="browse.eyebrow">
+            Explorar
           </p>
-          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
-            <a href="register.html?type=donor" class="btn btn--primary" data-i18n="browse.ctaDonor"
-              >Cadastrar como doador</a
+          <h1 class="page-header__title" data-i18n="browse.title">Explore e conecte</h1>
+          <p class="page-header__desc" data-i18n="browse.desc">
+            Veja as doações disponíveis e os pedidos dos Lalíderes.
+          </p>
+        </div>
+      </div>
+
+      <div class="container" style="padding-bottom: var(--s-9)">
+        <div class="tabs" role="tablist" style="margin-bottom: var(--s-6); max-width: 360px">
+          <button
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="view-donations"
+            class="tab active"
+            id="tab-donations"
+            data-action="switch-view"
+            data-view="donations"
+            data-i18n="browse.tabDonations"
+          >
+            Doações
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="view-needs"
+            tabindex="-1"
+            class="tab"
+            id="tab-needs"
+            data-action="switch-view"
+            data-view="needs"
+            data-i18n="browse.tabNeeds"
+          >
+            Pedidos
+          </button>
+        </div>
+
+        <!-- Donations View -->
+        <div id="view-donations" role="tabpanel" aria-labelledby="tab-donations">
+          <h2 class="sr-only" data-i18n="browse.tabDonations">Doações</h2>
+          <div class="filter-bar">
+            <div class="filter-bar__search">
+              <span class="filter-bar__search-icon">&#x1F50D;</span>
+              <input
+                data-i18n-attr="placeholder:browse.searchDonations;aria-label:browse.searchDonations"
+                aria-label="Buscar doações..."
+                type="text"
+                class="form-input"
+                id="search-donations"
+                placeholder="Buscar doações..."
+              />
+            </div>
+            <div
+              class="filter-bar__tags"
+              id="category-filters"
+              role="group"
+              data-i18n-attr="aria-label:browse.filterCategory"
+              aria-label="Filtrar por categoria"
+            ></div>
+          </div>
+          <p
+            class="text-sm text-muted"
+            id="donations-count"
+            aria-live="polite"
+            style="margin-bottom: var(--s-5)"
+          ></p>
+          <div class="grid-auto" id="donations-grid"></div>
+          <div id="donations-empty" style="display: none">
+            <div class="empty-state">
+              <div class="empty-state__icon">—</div>
+              <h2 class="empty-state__title" data-i18n="browse.emptyDonationsTitle">
+                Nenhuma doação encontrada
+              </h2>
+              <p class="empty-state__desc" data-i18n="browse.emptyDesc">
+                Tente mudar os filtros ou a busca.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Needs View -->
+        <div id="view-needs" role="tabpanel" aria-labelledby="tab-needs" style="display: none">
+          <h2 class="sr-only" data-i18n="browse.tabNeeds">Pedidos</h2>
+          <div class="filter-bar">
+            <div class="filter-bar__search">
+              <span class="filter-bar__search-icon">&#x1F50D;</span>
+              <input
+                data-i18n-attr="placeholder:browse.searchNeeds;aria-label:browse.searchNeeds"
+                aria-label="Buscar pedidos..."
+                type="text"
+                class="form-input"
+                id="search-needs"
+                placeholder="Buscar pedidos..."
+              />
+            </div>
+            <div
+              class="filter-bar__tags"
+              id="urgency-filters"
+              role="group"
+              data-i18n-attr="aria-label:browse.filterUrgency"
+              aria-label="Filtrar por prioridade"
             >
-            <a
-              href="register.html?type=lalider"
-              class="btn btn--outline"
-              data-i18n="browse.ctaLalider"
-              >Sou Lalíder</a
-            >
+              <button
+                type="button"
+                aria-pressed="true"
+                class="tag active"
+                data-urgency="all"
+                data-action="filter-urgency"
+                data-i18n="browse.filterAll"
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                aria-pressed="false"
+                class="tag"
+                data-urgency="high"
+                data-action="filter-urgency"
+                data-i18n="browse.filterHigh"
+              >
+                Alta
+              </button>
+              <button
+                type="button"
+                aria-pressed="false"
+                class="tag"
+                data-urgency="medium"
+                data-action="filter-urgency"
+                data-i18n="browse.filterMedium"
+              >
+                Média
+              </button>
+              <button
+                type="button"
+                aria-pressed="false"
+                class="tag"
+                data-urgency="low"
+                data-action="filter-urgency"
+                data-i18n="browse.filterLow"
+              >
+                Baixa
+              </button>
+            </div>
+          </div>
+          <p
+            class="text-sm text-muted"
+            id="needs-count"
+            aria-live="polite"
+            style="margin-bottom: var(--s-5)"
+          ></p>
+          <div class="grid-auto" id="needs-grid"></div>
+          <div id="needs-empty" style="display: none">
+            <div class="empty-state">
+              <div class="empty-state__icon">—</div>
+              <h2 class="empty-state__title" data-i18n="browse.emptyNeedsTitle">
+                Nenhum pedido encontrado
+              </h2>
+              <p class="empty-state__desc" data-i18n="browse.emptyDesc">
+                Tente mudar os filtros ou a busca.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div id="browse-cta" style="display: none; margin-top: var(--s-7)">
+          <div class="card text-center" style="padding: var(--s-7)">
+            <h3 class="h-3" style="margin-bottom: var(--s-2)" data-i18n="browse.ctaTitle">
+              Quer ajudar?
+            </h3>
+            <p class="text-muted" style="margin-bottom: var(--s-5)" data-i18n="browse.ctaDesc">
+              Cadastre-se para doar ou, se você é Lalíder, para pedir equipamentos.
+            </p>
+            <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
+              <a
+                href="register.html?type=donor"
+                class="btn btn--primary"
+                data-i18n="browse.ctaDonor"
+                >Cadastrar como doador</a
+              >
+              <a
+                href="register.html?type=lalider"
+                class="btn btn--outline"
+                data-i18n="browse.ctaLalider"
+                >Sou Lalíder</a
+              >
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
 
     <footer class="footer">
       <div class="container">
