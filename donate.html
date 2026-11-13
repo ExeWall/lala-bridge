@@ -1,177 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Donate Equipment — LALA Bridge</title>
-  <meta name="description" content="Donate your laptop, phone, or study equipment to a verified Lalíder from the Latin American Leadership Academy.">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>">
-</head>
-<body>
-
-  <nav class="nav" id="navbar">
-    <div class="nav__inner">
-      <a href="index.html" class="nav__logo">
-        <div class="nav__logo-mark">B</div>
-        LALA Bridge
-      </a>
-      <div class="nav__links">
-        <a href="index.html" class="nav__link">Home</a>
-        <a href="browse.html" class="nav__link">Browse</a>
-        <a href="donate.html" class="nav__link active">Donate</a>
-        <a href="dashboard.html" class="nav__link">Dashboard</a>
-      </div>
-      <div class="nav__actions"></div>
-      <button class="nav__hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
-
-  <div class="page-header">
-    <div class="container">
-      <p class="eyebrow" style="margin-bottom: var(--s-3);">Make a Difference</p>
-      <h1 class="page-header__title">Donate Equipment</h1>
-      <p class="page-header__desc">List your equipment and help a Lalíder access the tools they need to learn and lead.</p>
-    </div>
-  </div>
-
-  <div class="container container--narrow" style="padding-bottom: var(--s-9);">
-    <div id="auth-required" style="display: none;">
-      <div class="empty-state card">
-        <div class="empty-state__icon">—</div>
-        <h3 class="empty-state__title">Login Required</h3>
-        <p class="empty-state__desc">You need to be logged in to create a donation.</p>
-        <div class="flex items-center justify-center gap-4">
-          <a href="login.html" class="btn btn--outline">Log In</a>
-          <a href="register.html?type=donor" class="btn btn--primary">Register as Donor</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donate Equipment — LALA Bridge</title>
+    <meta
+      name="description"
+      content="Donate your laptop, phone, or study equipment to a verified Lalíder from the Latin American Leadership Academy."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>"
+    />
+  </head>
+  <body>
+    <nav class="nav" id="navbar">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          <div class="nav__logo-mark">B</div>
+          LALA Bridge
+        </a>
+        <div class="nav__links">
+          <a href="index.html" class="nav__link">Home</a>
+          <a href="browse.html" class="nav__link">Browse</a>
+          <a href="donate.html" class="nav__link active">Donate</a>
+          <a href="dashboard.html" class="nav__link">Dashboard</a>
         </div>
+        <div class="nav__actions"></div>
+        <button class="nav__hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <p class="eyebrow" style="margin-bottom: var(--s-3)">Make a Difference</p>
+        <h1 class="page-header__title">Donate Equipment</h1>
+        <p class="page-header__desc">
+          List your equipment and help a Lalíder access the tools they need to learn and lead.
+        </p>
       </div>
     </div>
 
-    <div id="donation-form-container" style="display: none;">
-      <form id="donation-form" class="card" style="padding: var(--s-7);" onsubmit="handleDonation(event)">
-        <div class="form-group">
-          <label class="form-label form-label--required" style="font-size: 0.9rem; margin-bottom: var(--s-4);">What are you donating?</label>
-          <div id="category-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--s-2);"></div>
-          <input type="hidden" id="donation-category" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label form-label--required">Title</label>
-          <input type="text" class="form-input" id="donation-title" placeholder="e.g. Dell Inspiron 15 — 8GB RAM, 256GB SSD" required>
-          <p class="form-hint">Be specific — include brand, model, and key specs</p>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label form-label--required">Description</label>
-          <textarea class="form-textarea" id="donation-desc" placeholder="Describe the item in detail. Include condition notes, what's included (charger, case, etc.), and any relevant info." required style="min-height: 120px;"></textarea>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4);">
-          <div class="form-group">
-            <label class="form-label form-label--required">Condition</label>
-            <select class="form-select" id="donation-condition" required>
-              <option value="">Select condition</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label form-label--required">Your Location</label>
-            <input type="text" class="form-input" id="donation-location" placeholder="City, Country" required>
+    <div class="container container--narrow" style="padding-bottom: var(--s-9)">
+      <div id="auth-required" style="display: none">
+        <div class="empty-state card">
+          <div class="empty-state__icon">—</div>
+          <h3 class="empty-state__title">Login Required</h3>
+          <p class="empty-state__desc">You need to be logged in to create a donation.</p>
+          <div class="flex items-center justify-center gap-4">
+            <a href="login.html" class="btn btn--outline">Log In</a>
+            <a href="register.html?type=donor" class="btn btn--primary">Register as Donor</a>
           </div>
         </div>
+      </div>
 
-        <div id="donation-preview" style="display: none; margin-bottom: var(--s-5);">
-          <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2);">Preview</p>
-          <div id="preview-card"></div>
+      <div id="donor-only" style="display: none">
+        <div class="empty-state card">
+          <div class="empty-state__icon">—</div>
+          <h3 class="empty-state__title">Donor Accounts Only</h3>
+          <p class="empty-state__desc">
+            Only donor accounts can publish donations. As a Lalíder, you can submit a request or ask
+            for an available donation.
+          </p>
+          <div class="flex items-center justify-center gap-4">
+            <a href="browse.html" class="btn btn--outline">Browse Donations</a>
+            <a href="dashboard.html" class="btn btn--primary">Go to Dashboard</a>
+          </div>
         </div>
+      </div>
 
-        <div class="flex gap-4" style="flex-wrap: wrap;">
-          <button type="button" class="btn btn--outline" onclick="showPreview()">Preview</button>
-          <button type="submit" class="btn btn--primary btn--lg" style="flex: 1;">Publish Donation</button>
-        </div>
-      </form>
-    </div>
-  </div>
+      <div id="donation-form-container" style="display: none">
+        <form id="donation-form" class="card" style="padding: var(--s-7)">
+          <div class="form-group">
+            <label
+              class="form-label form-label--required"
+              style="font-size: 0.9rem; margin-bottom: var(--s-4)"
+              >What are you donating?</label
+            >
+            <div
+              id="category-grid"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: var(--s-2);
+              "
+            ></div>
+            <input type="hidden" id="donation-category" required />
+          </div>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__bottom">
-        <p class="footer__copyright">&copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.</p>
+          <div class="form-group">
+            <label class="form-label form-label--required">Title</label>
+            <input
+              type="text"
+              class="form-input"
+              id="donation-title"
+              placeholder="e.g. Dell Inspiron 15 — 8GB RAM, 256GB SSD"
+              required
+            />
+            <p class="form-hint">Be specific — include brand, model, and key specs</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label--required">Description</label>
+            <textarea
+              class="form-textarea"
+              id="donation-desc"
+              placeholder="Describe the item in detail. Include condition notes, what's included (charger, case, etc.), and any relevant info."
+              required
+              style="min-height: 120px"
+            ></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
+            <div class="form-group">
+              <label class="form-label form-label--required">Condition</label>
+              <select class="form-select" id="donation-condition" required>
+                <option value="">Select condition</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label--required">Your Location</label>
+              <input
+                type="text"
+                class="form-input"
+                id="donation-location"
+                placeholder="City, Country"
+                required
+              />
+            </div>
+          </div>
+
+          <div id="donation-preview" style="display: none; margin-bottom: var(--s-5)">
+            <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2)">Preview</p>
+            <div id="preview-card"></div>
+          </div>
+
+          <div class="flex gap-4" style="flex-wrap: wrap">
+            <button type="button" class="btn btn--outline" data-action="preview">Preview</button>
+            <button type="submit" class="btn btn--primary btn--lg" style="flex: 1">
+              Publish Donation
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  </footer>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/donations.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    let selectedCategory = '';
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__bottom">
+          <p class="footer__copyright">
+            &copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.
+          </p>
+        </div>
+      </div>
+    </footer>
 
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!Auth.isLoggedIn()) {
-        document.getElementById('auth-required').style.display = 'block';
-        return;
-      }
-      document.getElementById('donation-form-container').style.display = 'block';
-
-      const grid = document.getElementById('category-grid');
-      grid.innerHTML = MockDB.equipmentCategories.map(cat => 
-        `<button type="button" class="tag" data-category="${cat.id}" onclick="selectCategory('${cat.id}')">${cat.name}</button>`
-      ).join('');
-
-      const condSelect = document.getElementById('donation-condition');
-      MockDB.conditions.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.textContent = c.label + ' — ' + c.description;
-        condSelect.appendChild(opt);
-      });
-
-      const user = Auth.getCurrentUser();
-      if (user.country) document.getElementById('donation-location').value = user.country;
-    });
-
-    function selectCategory(id) {
-      selectedCategory = id;
-      document.getElementById('donation-category').value = id;
-      document.querySelectorAll('#category-grid .tag').forEach(t => 
-        t.classList.toggle('active', t.dataset.category === id)
-      );
-    }
-
-    function showPreview() {
-      const title = document.getElementById('donation-title').value;
-      if (!selectedCategory || !title) { App.showToast('Fill in at least the category and title to preview.', 'warning'); return; }
-      const user = Auth.getCurrentUser();
-      const previewData = {
-        id: 'preview', donorId: user.id, donorName: user.name,
-        category: selectedCategory, title,
-        description: document.getElementById('donation-desc').value || 'No description provided.',
-        condition: document.getElementById('donation-condition').value || 'good',
-        country: document.getElementById('donation-location').value || user.country || 'Unknown',
-        status: 'available', createdAt: new Date().toISOString()
-      };
-      document.getElementById('preview-card').innerHTML = App.renderDonationCard(previewData);
-      document.getElementById('donation-preview').style.display = 'block';
-      document.getElementById('donation-preview').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function handleDonation(e) {
-      e.preventDefault();
-      if (!selectedCategory) { App.showToast('Please select a category.', 'error'); return; }
-      const user = Auth.getCurrentUser();
-      Donations.create({
-        donorId: user.id, donorName: user.organization || user.name,
-        category: selectedCategory,
-        title: document.getElementById('donation-title').value,
-        description: document.getElementById('donation-desc').value,
-        condition: document.getElementById('donation-condition').value,
-        country: document.getElementById('donation-location').value
-      });
-      App.showToast('Donation published successfully! Lalíderes can now see it.', 'success');
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
-    }
-  </script>
-</body>
+    <script src="js/config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/donations.js"></script>
+    <script src="js/offers.js"></script>
+    <script src="js/migrations.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/pages/donate.js"></script>
+  </body>
 </html>

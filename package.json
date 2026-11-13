@@ -1,0 +1,28 @@
+{
+  "name": "lala-bridge",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Plataforma open source que conecta doadores de equipamentos a Lalíderes da Latin American Leadership Academy.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --open",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.0",
+    "prettier": "^3.10.1",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}

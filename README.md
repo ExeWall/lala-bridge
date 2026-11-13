@@ -14,41 +14,61 @@ LALA Bridge is a web platform that connects generous donors with verified Lalíd
 
 ## 🚀 Getting Started
 
-1. Clone this repository
-2. Open `index.html` in your browser (no build step needed!)
-3. Use demo accounts or register a new user
+Requirements: Node.js 20+.
 
-### Demo Accounts
+```bash
+npm install
+npm run dev
+```
 
-| Type | Email | Password |
-|------|-------|----------|
-| Donor | techcorp@example.com | demo123 |
-| Donor | sarah@example.com | demo123 |
+| Command          | What it does                                   |
+| ---------------- | ---------------------------------------------- |
+| `npm run dev`    | Starts a local server (Vite) and opens the app |
+| `npm test`       | Runs the unit tests (Vitest + jsdom)           |
+| `npm run lint`   | Lints the code (ESLint)                        |
+| `npm run format` | Formats the code (Prettier)                    |
 
-To test as a Lalíder, register with one of these verification codes:
-- `LALA-VLB32-001` through `LALA-VLB32-004`
-- `LALA-BLB10-001` through `LALA-BLB10-004`
-- And more (see `js/mock-data.js`)
+## 🌐 Deploy
+
+The site is static, so it runs on GitHub Pages. `.github/workflows/deploy.yml` publishes it on every push to `master`, after lint and tests pass. One-time setup: **Settings → Pages → Source: GitHub Actions**. The demo then lives at `https://exewall.github.io/lala-bridge/`.
+
+## 🔄 How matching works
+
+1. A **donor** clicks "Offer to Help" on a Lalíder's request (optionally linking one of their donations), or a **Lalíder** clicks "Request" on an available donation.
+2. This creates a pending **offer**. The other side sees it on their dashboard and chooses **Accept** or **Decline**.
+3. When accepted, the donation and the request become `matched` and **only then** both sides see each other's contact details.
+4. Either side clicks **Mark as delivered** after the handover: everything becomes `delivered`.
+
+### Demo mode
+
+With `DEMO_MODE: true` in `js/config.js` (the default for now), the app seeds fictitious sample data in your browser and the login page shows **"Enter as demo"** buttons for a donor and a Lalíder. Demo accounts have no password. Set `DEMO_MODE: false` for any pilot with real people.
 
 ## 📁 Project Structure
 
 ```
 lala-bridge/
-├── index.html          # Landing page
-├── register.html       # Registration (Lalíder + Donor)
-├── login.html          # Login page
-├── dashboard.html      # User dashboard
-├── donate.html         # Create a donation
-├── browse.html         # Browse donations & requests
-├── css/
-│   └── styles.css      # Design system & all styles
+├── index.html, register.html, login.html, dashboard.html, donate.html, browse.html
+├── css/styles.css        # Design system & all styles
 ├── js/
-│   ├── app.js          # Core app logic & UI utilities
-│   ├── auth.js         # Authentication system
-│   ├── donations.js    # Donations & needs management
-│   └── mock-data.js    # Mock database (replace with API)
-└── README.md
+│   ├── config.js         # DEMO_MODE flag
+│   ├── mock-data.js      # Verification codes, categories and demo data
+│   ├── auth.js           # Accounts, password hashing, LALA code verification
+│   ├── donations.js      # Donations & requests (needs)
+│   ├── offers.js         # Offers: the matching flow
+│   ├── migrations.js     # localStorage schema migrations
+│   ├── app.js            # UI utilities, escaping, cards, modals, action router
+│   └── pages/            # One script per page
+├── tests/                # Vitest unit tests
+└── docs/PLANO_DE_ACAO.md # Action plan (AI4Good 2027)
 ```
+
+## 🔒 Security & privacy notes
+
+This MVP still stores everything in the browser's `localStorage`. It is **not ready for real personal data**:
+
+- Passwords are hashed with PBKDF2-SHA256 + salt, but this is only a stopgap; real auth comes with the backend (Phase 3).
+- The session can still be edited in DevTools. Roles are read from the account record, not from the session.
+- All user-provided text is escaped before rendering (`App.escapeHTML`).
 
 ## 🔧 Tech Stack
 
@@ -59,6 +79,9 @@ lala-bridge/
 
 ## 🗺️ Roadmap
 
+See [`docs/PLANO_DE_ACAO.md`](docs/PLANO_DE_ACAO.md) for the full plan. Highlights:
+
+- [x] Real matching flow with offers, accept/decline and delivery (Phase 1)
 - [ ] Backend API (Node.js / Supabase)
 - [ ] Real Lalíder verification database
 - [ ] Email notifications for matches
@@ -69,11 +92,11 @@ lala-bridge/
 
 ## 🤝 Contributing
 
-This is a community initiative by Lalíderes, for Lalíderes. Contributions are welcome!
+This is a community initiative by Lalíderes, for Lalíderes. Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## 📄 License
 
-MIT License — Feel free to use and adapt for similar causes.
+[MIT License](LICENSE) — Feel free to use and adapt for similar causes.
 
 ---
 

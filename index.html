@@ -1,249 +1,356 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LALA Bridge — Empowering Lalíderes Through Donations</title>
-  <meta name="description" content="LALA Bridge connects generous donors with verified Lalíderes from the Latin American Leadership Academy. Donate laptops, phones, and study equipment to empower the next generation of Latin American leaders.">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>">
-</head>
-<body>
-
-  <!-- Navigation -->
-  <nav class="nav nav--dark" id="navbar">
-    <div class="nav__inner">
-      <a href="index.html" class="nav__logo">
-        <div class="nav__logo-mark">B</div>
-        LALA Bridge
-      </a>
-      <div class="nav__links">
-        <a href="index.html" class="nav__link active">Home</a>
-        <a href="browse.html" class="nav__link">Browse</a>
-        <a href="donate.html" class="nav__link">Donate</a>
-        <a href="dashboard.html" class="nav__link">Dashboard</a>
-      </div>
-      <div class="nav__actions">
-        <a href="login.html" class="btn btn--ghost" style="color: var(--text-inverse-muted);">Log In</a>
-        <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
-      </div>
-      <button class="nav__hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero__content">
-        <p class="eyebrow hero__eyebrow">Latin American Leadership Academy</p>
-        <h1 class="h-display hero__title text-balance">
-          Bridge the gap.<br>
-          <span class="highlight">Empower a Lalíder.</span>
-        </h1>
-        <p class="hero__desc">
-          Connect with verified Lalíderes across Latin America and donate the tools 
-          they need to lead, learn, and create change. Every device you give builds a brighter future.
-        </p>
-        <div class="hero__actions">
-          <a href="register.html?type=donor" class="btn btn--primary btn--lg">Start Donating</a>
-          <a href="register.html?type=lalider" class="btn btn--outline-light btn--lg">I'm a Lalíder</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LALA Bridge — Empowering Lalíderes Through Donations</title>
+    <meta
+      name="description"
+      content="LALA Bridge connects generous donors with verified Lalíderes from the Latin American Leadership Academy. Donate laptops, phones, and study equipment to empower the next generation of Latin American leaders."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>"
+    />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav nav--dark" id="navbar">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          <div class="nav__logo-mark">B</div>
+          LALA Bridge
+        </a>
+        <div class="nav__links">
+          <a href="index.html" class="nav__link active">Home</a>
+          <a href="browse.html" class="nav__link">Browse</a>
+          <a href="donate.html" class="nav__link">Donate</a>
+          <a href="dashboard.html" class="nav__link">Dashboard</a>
         </div>
-        <div class="hero__metrics">
-          <div>
-            <div class="hero__metric-value" data-count="500" data-suffix="+">0</div>
-            <div class="hero__metric-label">Lalíderes Registered</div>
+        <div class="nav__actions">
+          <a href="login.html" class="btn btn--ghost" style="color: var(--text-inverse-muted)"
+            >Log In</a
+          >
+          <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
+        </div>
+        <button class="nav__hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__content">
+          <p class="eyebrow hero__eyebrow">Latin American Leadership Academy</p>
+          <h1 class="h-display hero__title text-balance">
+            Bridge the gap.<br />
+            <span class="highlight">Empower a Lalíder.</span>
+          </h1>
+          <p class="hero__desc">
+            Connect with verified Lalíderes across Latin America and donate the tools they need to
+            lead, learn, and create change. Every device you give builds a brighter future.
+          </p>
+          <div class="hero__actions">
+            <a href="register.html?type=donor" class="btn btn--primary btn--lg">Start Donating</a>
+            <a href="register.html?type=lalider" class="btn btn--outline-light btn--lg"
+              >I'm a Lalíder</a
+            >
           </div>
-          <div>
-            <div class="hero__metric-value" data-count="120" data-suffix="+">0</div>
-            <div class="hero__metric-label">Devices Donated</div>
-          </div>
-          <div>
-            <div class="hero__metric-value" data-count="20">0</div>
-            <div class="hero__metric-label">Countries Reached</div>
+          <div class="hero__metrics">
+            <div>
+              <div class="hero__metric-value" data-count="500" data-suffix="+">0</div>
+              <div class="hero__metric-label">Lalíderes Registered</div>
+            </div>
+            <div>
+              <div class="hero__metric-value" data-count="120" data-suffix="+">0</div>
+              <div class="hero__metric-label">Devices Donated</div>
+            </div>
+            <div>
+              <div class="hero__metric-value" data-count="20">0</div>
+              <div class="hero__metric-label">Countries Reached</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="hero__accent-line"></div>
-  </section>
+      <div class="hero__accent-line"></div>
+    </section>
 
-  <!-- How It Works -->
-  <section class="section" id="how-it-works">
-    <div class="container">
-      <div class="grid-2" style="align-items: start;">
-        <div class="reveal">
-          <p class="eyebrow" style="margin-bottom: var(--s-3);">How It Works</p>
-          <h2 class="h-1">Three steps to<br>making an impact.</h2>
-          <p class="text-muted" style="margin-top: var(--s-4); max-width: 400px; font-family: var(--font-serif); line-height: 1.7;">
-            Whether you're donating equipment or receiving it, the process 
-            is simple, secure, and built on trust.
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="grid-2" style="align-items: start">
+          <div class="reveal">
+            <p class="eyebrow" style="margin-bottom: var(--s-3)">How It Works</p>
+            <h2 class="h-1">Three steps to<br />making an impact.</h2>
+            <p
+              class="text-muted"
+              style="
+                margin-top: var(--s-4);
+                max-width: 400px;
+                font-family: var(--font-serif);
+                line-height: 1.7;
+              "
+            >
+              Whether you're donating equipment or receiving it, the process is simple, secure, and
+              built on trust.
+            </p>
+          </div>
+          <div class="steps reveal">
+            <div class="step">
+              <div class="step__number"></div>
+              <div>
+                <h3 class="step__title">Create Your Account</h3>
+                <p class="step__desc">
+                  Donors sign up freely. Lalíderes verify their identity with their unique LALA
+                  verification code — ensuring authenticity.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step__number"></div>
+              <div>
+                <h3 class="step__title">Connect & Browse</h3>
+                <p class="step__desc">
+                  Donors list available equipment. Lalíderes share their needs. The platform matches
+                  them intelligently.
+                </p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step__number"></div>
+              <div>
+                <h3 class="step__title">Donate & Transform</h3>
+                <p class="step__desc">
+                  Get matched, coordinate the donation, and change a Lalíder's trajectory. Every
+                  device creates ripple effects across Latin America.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why LALA Bridge -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: var(--s-7)">
+          <p class="eyebrow eyebrow--violet" style="margin-bottom: var(--s-3)">
+            Built for Trust & Impact
+          </p>
+          <h2 class="h-1 text-balance">Why LALA Bridge</h2>
+        </div>
+        <div class="grid-3 reveal">
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--gold);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Verified Identity</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Every Lalíder must provide their unique LALA verification code. No fakes, no scams —
+              only real community members.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--orange);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Pan-Latin American</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Connecting 20+ countries across Latin America. From virtual to in-person camp alumni,
+              all Lalíderes are welcome.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--violet);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Smart Matching</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Browse donations, filter by category, and match donors' offerings with Lalíderes'
+              specific needs.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--gold);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Any Equipment</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Laptops, phones, headphones, books, monitors — anything that helps a Lalíder study and
+              work better.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--orange);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Transparent Process</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Track your donations, see the impact, and know exactly who you're helping. Full
+              visibility at every step.
+            </p>
+          </div>
+          <div class="card card--flat">
+            <div
+              style="
+                width: 40px;
+                height: 4px;
+                background: var(--violet);
+                margin-bottom: var(--s-5);
+                border-radius: 2px;
+              "
+            ></div>
+            <h3 class="h-4" style="margin-bottom: var(--s-2)">Community Driven</h3>
+            <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6">
+              Built by Lalíderes, for Lalíderes. A community initiative powered by the LALA network.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Requests -->
+    <section class="section section--dark">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: var(--s-7)">
+          <p class="eyebrow eyebrow--gold" style="margin-bottom: var(--s-3)">
+            Lalíderes Need Your Help
+          </p>
+          <h2 class="h-1">Open Requests</h2>
+          <p
+            style="
+              color: var(--text-inverse-muted);
+              max-width: 480px;
+              margin: var(--s-3) auto 0;
+              font-family: var(--font-serif);
+            "
+          >
+            These verified Lalíderes are waiting for equipment to continue their education and
+            leadership journey.
           </p>
         </div>
-        <div class="steps reveal">
-          <div class="step">
-            <div class="step__number"></div>
-            <div>
-              <h3 class="step__title">Create Your Account</h3>
-              <p class="step__desc">Donors sign up freely. Lalíderes verify their identity with their unique LALA verification code — ensuring authenticity.</p>
+        <div class="grid-auto" id="needs-preview">
+          <!-- Rendered by JS -->
+        </div>
+        <div class="text-center" style="margin-top: var(--s-7)">
+          <a href="browse.html" class="link-underline link-underline--light">View all requests</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="text-center reveal" style="max-width: 600px; margin: 0 auto">
+          <p class="eyebrow" style="margin-bottom: var(--s-3)">Join the Movement</p>
+          <h2 class="h-1" style="margin-bottom: var(--s-4)">Ready to make<br />a difference?</h2>
+          <p class="text-muted text-serif" style="margin-bottom: var(--s-6); line-height: 1.7">
+            Join LALA Bridge today. Whether you're giving or receiving, you're part of something
+            bigger than yourself.
+          </p>
+          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
+            <a href="register.html?type=donor" class="btn btn--dark btn--lg">Become a Donor</a>
+            <a href="register.html?type=lalider" class="btn btn--outline btn--lg"
+              >Register as Lalíder</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand">
+            <div class="footer__logo">
+              <div class="nav__logo-mark" style="width: 24px; height: 24px; font-size: 0.7rem">
+                B
+              </div>
+              LALA Bridge
             </div>
+            <p class="footer__desc">
+              Connecting generous donors with verified Lalíderes from the Latin American Leadership
+              Academy. Empowering the next generation of Latin American leaders, one device at a
+              time.
+            </p>
           </div>
-          <div class="step">
-            <div class="step__number"></div>
-            <div>
-              <h3 class="step__title">Connect & Browse</h3>
-              <p class="step__desc">Donors list available equipment. Lalíderes share their needs. The platform matches them intelligently.</p>
-            </div>
+          <div>
+            <h4 class="footer__heading">Platform</h4>
+            <a href="browse.html" class="footer__link">Browse Donations</a>
+            <a href="browse.html?view=needs" class="footer__link">Lalíder Requests</a>
+            <a href="donate.html" class="footer__link">Make a Donation</a>
+            <a href="register.html" class="footer__link">Get Started</a>
           </div>
-          <div class="step">
-            <div class="step__number"></div>
-            <div>
-              <h3 class="step__title">Donate & Transform</h3>
-              <p class="step__desc">Get matched, coordinate the donation, and change a Lalíder's trajectory. Every device creates ripple effects across Latin America.</p>
-            </div>
+          <div>
+            <h4 class="footer__heading">Community</h4>
+            <a
+              href="https://latinamericanleadershipacademy.org"
+              target="_blank"
+              class="footer__link"
+              >About LALA</a
+            >
+            <a href="#" class="footer__link">Lalíder Stories</a>
+            <a href="#" class="footer__link">Impact Report</a>
+            <a href="#" class="footer__link">Contact Us</a>
+          </div>
+          <div>
+            <h4 class="footer__heading">Support</h4>
+            <a href="#" class="footer__link">FAQ</a>
+            <a href="#" class="footer__link">How It Works</a>
+            <a href="#" class="footer__link">Privacy Policy</a>
+            <a href="#" class="footer__link">Terms of Service</a>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Why LALA Bridge -->
-  <section class="section section--white">
-    <div class="container">
-      <div class="text-center reveal" style="margin-bottom: var(--s-7);">
-        <p class="eyebrow eyebrow--violet" style="margin-bottom: var(--s-3);">Built for Trust & Impact</p>
-        <h2 class="h-1 text-balance">Why LALA Bridge</h2>
-      </div>
-      <div class="grid-3 reveal">
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--gold); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Verified Identity</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Every Lalíder must provide their unique LALA verification code. No fakes, no scams — only real community members.</p>
-        </div>
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--orange); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Pan-Latin American</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Connecting 20+ countries across Latin America. From virtual to in-person camp alumni, all Lalíderes are welcome.</p>
-        </div>
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--violet); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Smart Matching</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Browse donations, filter by category, and match donors' offerings with Lalíderes' specific needs.</p>
-        </div>
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--gold); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Any Equipment</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Laptops, phones, headphones, books, monitors — anything that helps a Lalíder study and work better.</p>
-        </div>
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--orange); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Transparent Process</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Track your donations, see the impact, and know exactly who you're helping. Full visibility at every step.</p>
-        </div>
-        <div class="card card--flat">
-          <div style="width: 40px; height: 4px; background: var(--violet); margin-bottom: var(--s-5); border-radius: 2px;"></div>
-          <h3 class="h-4" style="margin-bottom: var(--s-2);">Community Driven</h3>
-          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.6;">Built by Lalíderes, for Lalíderes. A community initiative powered by the LALA network.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Open Requests -->
-  <section class="section section--dark">
-    <div class="container">
-      <div class="text-center reveal" style="margin-bottom: var(--s-7);">
-        <p class="eyebrow eyebrow--gold" style="margin-bottom: var(--s-3);">Lalíderes Need Your Help</p>
-        <h2 class="h-1">Open Requests</h2>
-        <p style="color: var(--text-inverse-muted); max-width: 480px; margin: var(--s-3) auto 0; font-family: var(--font-serif);">
-          These verified Lalíderes are waiting for equipment to continue their education and leadership journey.
-        </p>
-      </div>
-      <div class="grid-auto" id="needs-preview">
-        <!-- Rendered by JS -->
-      </div>
-      <div class="text-center" style="margin-top: var(--s-7);">
-        <a href="browse.html" class="link-underline link-underline--light">View all requests</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section">
-    <div class="container">
-      <div class="text-center reveal" style="max-width: 600px; margin: 0 auto;">
-        <p class="eyebrow" style="margin-bottom: var(--s-3);">Join the Movement</p>
-        <h2 class="h-1" style="margin-bottom: var(--s-4);">Ready to make<br>a difference?</h2>
-        <p class="text-muted text-serif" style="margin-bottom: var(--s-6); line-height: 1.7;">
-          Join LALA Bridge today. Whether you're giving or receiving, you're part of something bigger than yourself.
-        </p>
-        <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap;">
-          <a href="register.html?type=donor" class="btn btn--dark btn--lg">Become a Donor</a>
-          <a href="register.html?type=lalider" class="btn btn--outline btn--lg">Register as Lalíder</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__grid">
-        <div class="footer__brand">
-          <div class="footer__logo">
-            <div class="nav__logo-mark" style="width: 24px; height: 24px; font-size: 0.7rem;">B</div>
-            LALA Bridge
-          </div>
-          <p class="footer__desc">
-            Connecting generous donors with verified Lalíderes from the Latin American Leadership Academy. Empowering the next generation of Latin American leaders, one device at a time.
+        <div class="footer__bottom">
+          <p class="footer__copyright">
+            &copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.
           </p>
         </div>
-        <div>
-          <h4 class="footer__heading">Platform</h4>
-          <a href="browse.html" class="footer__link">Browse Donations</a>
-          <a href="browse.html?view=needs" class="footer__link">Lalíder Requests</a>
-          <a href="donate.html" class="footer__link">Make a Donation</a>
-          <a href="register.html" class="footer__link">Get Started</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Community</h4>
-          <a href="https://latinamericanleadershipacademy.org" target="_blank" class="footer__link">About LALA</a>
-          <a href="#" class="footer__link">Lalíder Stories</a>
-          <a href="#" class="footer__link">Impact Report</a>
-          <a href="#" class="footer__link">Contact Us</a>
-        </div>
-        <div>
-          <h4 class="footer__heading">Support</h4>
-          <a href="#" class="footer__link">FAQ</a>
-          <a href="#" class="footer__link">How It Works</a>
-          <a href="#" class="footer__link">Privacy Policy</a>
-          <a href="#" class="footer__link">Terms of Service</a>
-        </div>
       </div>
-      <div class="footer__bottom">
-        <p class="footer__copyright">&copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/donations.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const container = document.getElementById('needs-preview');
-      const needs = Donations.getOpenNeeds().slice(0, 3);
-      container.innerHTML = needs.map(n => App.renderNeedCard(n)).join('');
-
-      // Dark card override for this section
-      container.querySelectorAll('.card').forEach(card => {
-        card.classList.add('card--dark');
-      });
-
-      App.animateCounters();
-    });
-  </script>
-</body>
+    <script src="js/config.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/donations.js"></script>
+    <script src="js/offers.js"></script>
+    <script src="js/migrations.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/pages/index.js"></script>
+  </body>
 </html>

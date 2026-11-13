@@ -1,7 +1,8 @@
 /**
  * LALA Bridge — Donations System
- * 
- * Handles creating, listing, filtering, and matching donations.
+ *
+ * Handles creating, listing and filtering donations and needs.
+ * The matching flow lives in js/offers.js.
  * Uses localStorage for the MVP.
  */
 
@@ -10,9 +11,10 @@ const Donations = {
   NEEDS_KEY: 'lala_bridge_needs',
 
   /**
-   * Initialize donations with sample data if empty
+   * No modo demo, popula doações e pedidos de exemplo se estiverem vazios
    */
   init() {
+    if (!LALA_CONFIG.DEMO_MODE) return;
     if (!localStorage.getItem(this.STORAGE_KEY)) {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(MockDB.sampleDonations));
     }
@@ -32,27 +34,23 @@ const Donations = {
    * Get available donations only
    */
   getAvailable() {
-    return this.getAll().filter(d => d.status === 'available');
+    return this.getAll().filter((d) => d.status === 'available');
   },
 
   /**
    * Get donations by donor
    */
   getByDonor(donorId) {
-    return this.getAll().filter(d => d.donorId === donorId);
-  },
-
-  /**
-   * Get donations matched to a Lalíder
-   */
-  getMatchedToLalider(laliderId) {
-    return this.getAll().filter(d => d.matchedTo === laliderId);
+    return this.getAll().filter((d) => d.donorId === donorId);
   },
 
   /**
    * Create a new donation
    */
   create({ donorId, donorName, category, title, description, condition, country }) {
+    if (!Auth.hasRole(donorId, 'donor')) {
+      throw new Error('Only donors can publish donations.');
+    }
     const donations = this.getAll();
     const donation = {
       id: 'don-' + Date.now(),
@@ -65,7 +63,7 @@ const Donations = {
       country,
       status: 'available',
       createdAt: new Date().toISOString(),
-      image: null
+      image: null,
     };
 
     donations.unshift(donation);
@@ -74,35 +72,38 @@ const Donations = {
     return donation;
   },
 
+  getById(id) {
+    return this.getAll().find((d) => d.id === id) || null;
+  },
+
   /**
-   * Match a donation to a Lalíder
+   * Atualiza campos de uma doação. Usado pelo fluxo de ofertas (Offers);
+   * o match de verdade acontece em Offers.respond().
    */
-  match(donationId, laliderId) {
+  update(id, patch) {
     const donations = this.getAll();
-    const idx = donations.findIndex(d => d.id === donationId);
-    if (idx === -1) return false;
-
-    donations[idx].status = 'matched';
-    donations[idx].matchedTo = laliderId;
-    donations[idx].matchedAt = new Date().toISOString();
-
+    const idx = donations.findIndex((d) => d.id === id);
+    if (idx === -1) return null;
+    donations[idx] = { ...donations[idx], ...patch, updatedAt: new Date().toISOString() };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(donations));
-    return true;
+    return donations[idx];
   },
 
   /**
    * Filter donations
    */
   filter(donations, { category, country, search, condition } = {}) {
-    return donations.filter(d => {
+    return donations.filter((d) => {
       if (category && category !== 'all' && d.category !== category) return false;
       if (country && d.country.toLowerCase() !== country.toLowerCase()) return false;
       if (condition && d.condition !== condition) return false;
       if (search) {
         const q = search.toLowerCase();
-        return d.title.toLowerCase().includes(q) || 
-               d.description.toLowerCase().includes(q) ||
-               d.donorName.toLowerCase().includes(q);
+        return (
+          d.title.toLowerCase().includes(q) ||
+          d.description.toLowerCase().includes(q) ||
+          d.donorName.toLowerCase().includes(q)
+        );
       }
       return true;
     });
@@ -121,20 +122,36 @@ const Donations = {
    * Get open needs
    */
   getOpenNeeds() {
-    return this.getAllNeeds().filter(n => n.status === 'open');
+    return this.getAllNeeds().filter((n) => n.status === 'open');
   },
 
   /**
    * Get needs by Lalíder
    */
   getNeedsByLalider(laliderId) {
-    return this.getAllNeeds().filter(n => n.laliderId === laliderId);
+    return this.getAllNeeds().filter((n) => n.laliderId === laliderId);
+  },
+
+  getNeedById(id) {
+    return this.getAllNeeds().find((n) => n.id === id) || null;
+  },
+
+  updateNeed(id, patch) {
+    const needs = this.getAllNeeds();
+    const idx = needs.findIndex((n) => n.id === id);
+    if (idx === -1) return null;
+    needs[idx] = { ...needs[idx], ...patch, updatedAt: new Date().toISOString() };
+    localStorage.setItem(this.NEEDS_KEY, JSON.stringify(needs));
+    return needs[idx];
   },
 
   /**
    * Create a new need
    */
   createNeed({ laliderId, laliderName, camp, country, category, title, description, urgency }) {
+    if (!Auth.hasRole(laliderId, 'lalider')) {
+      throw new Error('Only verified Lalíderes can create requests.');
+    }
     const needs = this.getAllNeeds();
     const need = {
       id: 'need-' + Date.now(),
@@ -147,7 +164,7 @@ const Donations = {
       description,
       urgency: urgency || 'medium',
       status: 'open',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     needs.unshift(need);
@@ -162,16 +179,18 @@ const Donations = {
   getStats() {
     const donations = this.getAll();
     const needs = this.getAllNeeds();
-    
+
     return {
       totalDonations: donations.length,
-      availableDonations: donations.filter(d => d.status === 'available').length,
-      matchedDonations: donations.filter(d => d.status === 'matched').length,
+      availableDonations: donations.filter((d) => d.status === 'available').length,
+      matchedDonations: donations.filter((d) => d.status === 'matched').length,
+      deliveredDonations: donations.filter((d) => d.status === 'delivered').length,
       totalNeeds: needs.length,
-      openNeeds: needs.filter(n => n.status === 'open').length,
-      countries: [...new Set([...donations.map(d => d.country), ...needs.map(n => n.country)])].length
+      openNeeds: needs.filter((n) => n.status === 'open').length,
+      countries: [...new Set([...donations.map((d) => d.country), ...needs.map((n) => n.country)])]
+        .length,
     };
-  }
+  },
 };
 
 // Initialize
