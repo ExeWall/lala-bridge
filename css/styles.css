@@ -38,9 +38,18 @@
   /* Text */
   --text-1: #1a1a1a;
   --text-2: #4a4a4a;
-  --text-3: #7a7a7a;
+  --text-3: #626262; /* era #7a7a7a; escurecido para contraste WCAG AA (4,5:1) */
   --text-inverse: #ffffff;
   --text-inverse-muted: rgba(255, 255, 255, 0.7);
+
+  /* Texto sobre fundos claros: mesmos tons da marca, escurecidos para
+     atingir contraste 4,5:1 (WCAG 2.1 AA). As cores originais seguem nos
+     fundos, bordas e detalhes decorativos. */
+  --orange-text: #af492d;
+  --gold-text: #836300;
+  --success-text: #237a5d;
+  --warning-text: #94680e;
+  --error-text: #c92c22;
 
   /* Semantic */
   --success: #2d9d78;
@@ -246,7 +255,7 @@ h6 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--orange);
+  color: var(--orange-text);
 }
 
 .eyebrow--gold {
@@ -590,6 +599,15 @@ h6 {
   color: var(--text-1);
 }
 
+/* Botões fantasma no navbar escuro (ex.: 'Entrar' na página inicial) */
+.nav--dark .btn--ghost {
+  color: var(--text-inverse-muted);
+}
+
+.nav--dark .btn--ghost:hover {
+  color: var(--text-inverse);
+}
+
 .btn--sm {
   padding: 10px 20px;
   font-size: 0.75rem;
@@ -693,6 +711,20 @@ h6 {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
+/* Textos secundários legíveis nos cards escuros (antes ficavam cinza-escuro
+   sobre fundo escuro) */
+.card--dark .donation-card__desc,
+.card--dark .donation-card__meta-item,
+.card--dark .donation-card__category-name,
+.card--dark .need-card__camp,
+.card--dark .need-card__name {
+  color: var(--text-inverse-muted);
+}
+
+.card--dark .need-card__name {
+  color: var(--text-inverse);
+}
+
 /* ========================================================================
    Badges
    ======================================================================== */
@@ -710,11 +742,11 @@ h6 {
 
 .badge--gold {
   background: var(--gold-muted);
-  color: var(--gold-dark);
+  color: var(--gold-text);
 }
 .badge--orange {
   background: rgba(251, 105, 65, 0.12);
-  color: var(--orange);
+  color: var(--orange-text);
 }
 .badge--violet {
   background: rgba(60, 53, 222, 0.1);
@@ -722,15 +754,15 @@ h6 {
 }
 .badge--success {
   background: var(--success-bg);
-  color: var(--success);
+  color: var(--success-text);
 }
 .badge--error {
   background: var(--error-bg);
-  color: var(--error);
+  color: var(--error-text);
 }
 .badge--warning {
   background: var(--warning-bg);
-  color: var(--warning);
+  color: var(--warning-text);
 }
 .badge--dark {
   background: var(--dark);
@@ -739,7 +771,7 @@ h6 {
 
 .badge--lalider {
   background: linear-gradient(135deg, var(--gold-muted), rgba(251, 105, 65, 0.1));
-  color: var(--orange-dark);
+  color: var(--orange-text);
 }
 
 .badge--donor {
