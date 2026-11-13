@@ -136,7 +136,7 @@ Objetivo: o produto parece feito para o Brasil e funciona bem no celular.
 - [ ] **LGPD:** página `privacidade.html`, checkbox de consentimento no cadastro, botão "Excluir minha conta e meus dados" e, nos cards públicos, só o primeiro nome com a inicial, UF e turma.
 - [ ] **Acessibilidade (WCAG 2.1 AA):** labels associados, `aria-live` nos toasts, foco preso no modal e fechamento com Esc, contraste verificado e tudo navegável por teclado.
 - [ ] **Mobile-first:** testar o fluxo inteiro em 360px de largura e garantir alvos de toque de pelo menos 44px.
-- [ ] Rever o campo `showerSong` (sugestão: trocar por "Conte um pouco sobre você" ou remover). **Pergunte ao autor.**
+- [x] Rever o campo `showerSong`. **Decisão do autor (13/11/2026): manter.** A música de chuveiro é uma das apresentações tradicionais da LALA.
 
 **Critério de pronto:** Lighthouse com acessibilidade ≥ 90 e performance ≥ 85 no mobile, e o fluxo completo em PT-BR em um celular.
 
@@ -241,6 +241,6 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 ## 8. Decisões que dependem do autor (pergunte antes)
 1. Usar Supabase como backend (recomendado) ou outro.
 2. Qual provedor e modelo de IA usar, e qual o orçamento mensal.
-3. Remover ou substituir o campo `showerSong`.
+3. ~~Remover ou substituir o campo `showerSong`.~~ **Decidido: manter** (é uma das apresentações da LALA).
 4. Manter o nome "LALA Bridge" e o foco na LALA no piloto, ou abrir para outros jovens desde já.
 5. Domínio e plataforma de deploy.
