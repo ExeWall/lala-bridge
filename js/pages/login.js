@@ -27,7 +27,7 @@ function renderDemoAccounts() {
     .map((u) => {
       const role = I18n.t(u.type === 'lalider' ? 'roles.lalider' : 'roles.donor');
       const badge = u.type === 'lalider' ? 'badge--lalider' : 'badge--donor';
-      return `<button type="button" class="btn btn--ghost btn--sm" data-action="demo-login" data-user-id="${App.escapeHTML(u.id)}" style="justify-content: flex-start">
+      return `<button type="button" class="btn btn--ghost btn--sm btn--wrap" data-action="demo-login" data-user-id="${App.escapeHTML(u.id)}" style="justify-content: flex-start">
         <span class="badge ${badge}">${role}</span>
         <span style="margin-left: 8px">${App.escapeHTML(I18n.t('login.demoAs', { name: u.name }))}</span>
       </button>`;

@@ -16,9 +16,9 @@ const I18n = {
   STORAGE_KEY: 'lala_bridge_locale',
   DEFAULT_LOCALE: 'pt-BR',
   SUPPORTED: [
-    { code: 'pt-BR', label: 'Português' },
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Español' },
+    { code: 'pt-BR', label: 'Português', short: 'PT' },
+    { code: 'en', label: 'English', short: 'EN' },
+    { code: 'es', label: 'Español', short: 'ES' },
   ],
 
   locale: 'pt-BR',

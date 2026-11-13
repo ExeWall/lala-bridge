@@ -30,10 +30,12 @@ const App = {
     const select = document.createElement('select');
     select.className = 'nav__lang';
     select.setAttribute('aria-label', I18n.t('nav.language'));
-    I18n.SUPPORTED.forEach(({ code, label }) => {
+    I18n.SUPPORTED.forEach(({ code, label, short }) => {
       const opt = document.createElement('option');
       opt.value = code;
-      opt.textContent = label;
+      // Sigla curta para caber no navbar do celular; o nome completo vai no title.
+      opt.textContent = short;
+      opt.title = label;
       opt.lang = code;
       opt.selected = code === I18n.locale;
       select.appendChild(opt);

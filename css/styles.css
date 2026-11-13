@@ -473,7 +473,8 @@ h6 {
 /* Seletor de idioma */
 .nav__lang {
   margin-left: var(--s-3);
-  min-height: 36px;
+  min-height: 44px;
+  min-width: 64px;
   padding: 4px 8px;
   border: 1px solid var(--border, rgba(0, 0, 0, 0.15));
   border-radius: var(--r-md);
@@ -2024,5 +2025,137 @@ body.no-scroll {
   .reveal {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* O navbar nunca pode ser mais largo que a tela (no celular isso faz o
+   navegador reduzir o zoom da página inteira) */
+.nav__inner {
+  min-width: 0;
+  gap: var(--s-2);
+}
+
+.nav__logo {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .nav__lang {
+    margin-left: auto;
+  }
+}
+
+/* Botão com texto longo que pode quebrar linha (ex.: 'Entrar como demo: …').
+   Sem isso, o texto em nowrap alargava a página no celular. */
+.btn--wrap {
+  white-space: normal;
+  text-align: left;
+  height: auto;
+  min-height: 44px;
+  max-width: 100%;
+}
+
+/* ========================================================================
+   Mobile-first: alvos de toque de pelo menos 44px e nada mais largo que a
+   tela (em 360px, qualquer excesso faz o celular reduzir o zoom da página)
+   ======================================================================== */
+.btn,
+.btn--sm,
+.tag,
+.tab,
+.form-input,
+.form-select {
+  min-height: 44px;
+}
+
+.nav__hamburger {
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Linhas de badges e botões quebram em vez de vazar */
+.card__footer .flex,
+.offer-card .flex,
+.empty-state .flex,
+.my-data .flex {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  /* Menu aberto: as ações (entrar/sair, painel) também aparecem */
+  .nav--menu-open .nav__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--s-8);
+    z-index: 201;
+    padding: 0 var(--s-5);
+  }
+
+  .nav--menu-open .nav__hamburger,
+  .nav--menu-open .nav__lang {
+    position: relative;
+    z-index: 202;
+  }
+
+  .nav__links.mobile-open .nav__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 1rem;
+  }
+
+  .footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* Logo e links soltos (fora de frases) com área de toque maior */
+.nav__logo,
+.auth-card__logo {
+  min-height: 44px;
+}
+
+@media (max-width: 768px) {
+  .link-underline,
+  .auth-card__footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* Checkbox: 24px e a linha inteira (rótulo) também marca */
+.form-check input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+}
+
+.form-check label {
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    white-space: normal;
+    max-width: 100%;
+    text-align: center;
   }
 }
