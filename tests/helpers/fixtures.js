@@ -32,5 +32,5 @@ export function seedUsers(Auth) {
 }
 
 export function loginAs(Auth, user) {
-  Auth._startSession(user);
+  Auth.startSession(user);
 }

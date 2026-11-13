@@ -131,3 +131,79 @@ describe('Auth: modo demo', () => {
     expect(Auth.loginAsDemo('donor-001').success).toBe(false);
   });
 });
+
+describe('Auth: validação e sessão', () => {
+  let Auth;
+  beforeEach(() => {
+    ({ Auth } = loadApp());
+  });
+
+  it('recusa nome vazio, e-mail inválido e senha curta', async () => {
+    const ok = { name: 'D', email: 'd@example.com', password: 'abcdef', country: 'Brazil' };
+    expect((await Auth.registerDonor({ ...ok, name: '  ' })).success).toBe(false);
+    expect((await Auth.registerDonor({ ...ok, email: 'sem-arroba' })).success).toBe(false);
+    expect((await Auth.registerDonor({ ...ok, password: '123' })).success).toBe(false);
+    expect(Auth.getUsers()).toHaveLength(0);
+  });
+
+  it('não cria duas contas quando o mesmo cadastro é enviado em paralelo', async () => {
+    const data = { name: 'D', email: 'd@example.com', password: 'abcdef', country: 'Brazil' };
+    const results = await Promise.all([Auth.registerDonor(data), Auth.registerDonor(data)]);
+    expect(results.filter((r) => r.success)).toHaveLength(1);
+    expect(Auth.getUsers()).toHaveLength(1);
+  });
+
+  it('ignora espaços e caixa no e-mail', async () => {
+    await Auth.registerDonor({
+      name: 'D',
+      email: '  D@Example.com ',
+      password: 'abcdef',
+      country: 'Brazil',
+    });
+    expect(Auth.getUsers()[0].email).toBe('D@Example.com');
+    expect((await Auth.login(' d@example.com ', 'abcdef')).success).toBe(true);
+  });
+
+  it('sessão que aponta para conta inexistente não conta como login', () => {
+    localStorage.setItem(Auth.SESSION_KEY, JSON.stringify({ userId: 'fantasma', type: 'donor' }));
+    expect(Auth.isLoggedIn()).toBe(false);
+    expect(Auth.isDonor()).toBe(false);
+  });
+});
+
+describe('Auth: contas demo em navegador com dados antigos', () => {
+  it('converte as contas demo antigas (com senha em texto puro) e cria as que faltam', () => {
+    localStorage.clear();
+    localStorage.setItem(
+      'lala_bridge_users',
+      JSON.stringify([
+        {
+          id: 'donor-001',
+          type: 'donor',
+          name: 'Tech Corp Foundation',
+          email: 'techcorp@example.com',
+          password: 'demo123',
+        },
+        {
+          id: 'donor-999',
+          type: 'donor',
+          name: 'Real',
+          email: 'real@example.com',
+          passwordHash: 'x',
+          passwordSalt: 'y',
+        },
+      ])
+    );
+    localStorage.setItem(
+      'lala_bridge_needs',
+      JSON.stringify([{ id: 'need-001', laliderId: 'LALA-VLB32-001', status: 'open' }])
+    );
+    const { Auth, Donations } = loadApp({ keepStorage: true, config: { DEMO_MODE: true } });
+    const tech = Auth.getUsers().find((u) => u.id === 'donor-001');
+    expect(tech.password).toBeUndefined();
+    expect(tech.demoLogin).toBe(true);
+    expect(Auth.getUsers().find((u) => u.id === 'donor-999').passwordHash).toBe('x');
+    expect(Auth.getDemoAccounts()).toHaveLength(2);
+    expect(Donations.getNeedById('need-001').laliderId).toBe('lalider-sample-maria');
+  });
+});

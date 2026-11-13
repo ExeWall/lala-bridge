@@ -22,9 +22,24 @@ const Auth = {
    * Inicializa o sistema. No modo demo, cria as contas fictícias se ainda não existirem.
    */
   init() {
-    if (LALA_CONFIG.DEMO_MODE && !localStorage.getItem(this.STORAGE_KEY)) {
-      this.saveUsers(MockDB.demoUsers.map((u) => ({ ...u })));
-    }
+    if (!LALA_CONFIG.DEMO_MODE) return;
+    // Garante as contas demo também em navegadores que já tinham dados de uma
+    // versão anterior (que guardava as contas demo com senha em texto puro).
+    const users = this.getUsers();
+    let changed = false;
+    MockDB.demoUsers.forEach((demo) => {
+      const idx = users.findIndex((u) => u.id === demo.id);
+      if (idx === -1) {
+        if (users.some((u) => u.email?.toLowerCase() === demo.email.toLowerCase())) return;
+        users.push({ ...demo });
+        changed = true;
+      } else if (!users[idx].demo) {
+        users[idx] = { ...users[idx], ...demo };
+        delete users[idx].password;
+        changed = true;
+      }
+    });
+    if (changed) this.saveUsers(users);
   },
 
   /**
@@ -41,11 +56,11 @@ const Auth = {
   loginAsDemo(userId) {
     const user = this.getDemoAccounts().find((u) => u.id === userId);
     if (!user) return { success: false, message: 'Demo account unavailable.' };
-    this._startSession(user);
+    this.startSession(user);
     return { success: true, message: `Demo mode: signed in as ${user.name}.`, user };
   },
 
-  _startSession(user) {
+  startSession(user) {
     const session = {
       userId: user.id,
       type: user.type,
@@ -196,6 +211,28 @@ const Auth = {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
   },
 
+  MIN_PASSWORD_LENGTH: 6,
+
+  /**
+   * Validação básica dos dados de cadastro (os formulários também validam,
+   * mas a camada de dados não deve confiar só no HTML).
+   * @returns {string|null} mensagem de erro ou null
+   */
+  _validateAccount({ name, email, password }) {
+    if (!String(name || '').trim()) return 'Please enter your name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim())) {
+      return 'Please enter a valid email address.';
+    }
+    if (String(password || '').length < this.MIN_PASSWORD_LENGTH) {
+      return `Password must have at least ${this.MIN_PASSWORD_LENGTH} characters.`;
+    }
+    return null;
+  },
+
+  _emailTaken(users, email) {
+    return users.some((u) => u.email?.toLowerCase() === email.toLowerCase());
+  },
+
   /**
    * Register a new Lalíder
    */
@@ -211,15 +248,22 @@ const Auth = {
     areaOfInterest,
     needDescription,
   }) {
-    // Verify the code first
+    const invalid = this._validateAccount({ name, email, password });
+    if (invalid) return { success: false, message: invalid };
+    name = name.trim();
+    email = email.trim();
+
+    // O hash é assíncrono: calcula antes de ler os usuários, para que a
+    // checagem de duplicidade e a gravação aconteçam sem intervalo entre si.
+    const credentials = await this._credentialsFor(password);
+
     const verification = this.verifyLaliderCode(verificationCode, name);
     if (!verification.valid) {
       return { success: false, message: verification.message };
     }
 
-    // Check if email already exists
     const users = this.getUsers();
-    if (users.find((u) => u.email.toLowerCase() === email.toLowerCase())) {
+    if (this._emailTaken(users, email)) {
       return { success: false, message: 'An account with this email already exists.' };
     }
 
@@ -228,7 +272,7 @@ const Auth = {
       type: 'lalider',
       name,
       email,
-      ...(await this._credentialsFor(password)),
+      ...credentials,
       verificationCode: verificationCode.trim().toUpperCase(),
       camp,
       country,
@@ -250,9 +294,15 @@ const Auth = {
    * Register a new Donor
    */
   async registerDonor({ name, email, password, country, organization }) {
-    const users = this.getUsers();
+    const invalid = this._validateAccount({ name, email, password });
+    if (invalid) return { success: false, message: invalid };
+    name = name.trim();
+    email = email.trim();
 
-    if (users.find((u) => u.email.toLowerCase() === email.toLowerCase())) {
+    const credentials = await this._credentialsFor(password);
+
+    const users = this.getUsers();
+    if (this._emailTaken(users, email)) {
       return { success: false, message: 'An account with this email already exists.' };
     }
 
@@ -261,7 +311,7 @@ const Auth = {
       type: 'donor',
       name,
       email,
-      ...(await this._credentialsFor(password)),
+      ...credentials,
       country,
       organization: organization || '',
       createdAt: new Date().toISOString(),
@@ -277,15 +327,28 @@ const Auth = {
    * Login a user
    */
   async login(email, password) {
-    const users = this.getUsers();
-    const user = users.find((u) => u.email.toLowerCase() === String(email).toLowerCase());
+    const wanted = String(email || '')
+      .trim()
+      .toLowerCase();
+    const candidate = this.getUsers().find((u) => u.email?.toLowerCase() === wanted);
+    const hadLegacyPassword = typeof candidate?.password === 'string';
 
-    if (!user || !(await this.verifyPassword(user, password))) {
+    if (!candidate || !(await this.verifyPassword(candidate, password))) {
       return { success: false, message: 'Invalid email or password.' };
     }
-    this.saveUsers(users); // persiste a migração de senha legada, se houver
 
-    this._startSession(user);
+    const user = candidate;
+    if (hadLegacyPassword) {
+      // Persiste a migração da senha legada relendo os dados após o await.
+      const users = this.getUsers();
+      const idx = users.findIndex((u) => u.id === candidate.id);
+      if (idx !== -1) {
+        users[idx] = candidate;
+        this.saveUsers(users);
+      }
+    }
+
+    this.startSession(user);
 
     return { success: true, message: `Welcome back, ${user.name}!`, user };
   },
@@ -320,7 +383,8 @@ const Auth = {
    * Check if user is logged in
    */
   isLoggedIn() {
-    return this.getSession() !== null;
+    // Uma sessão que aponta para uma conta inexistente não conta como login.
+    return this.getCurrentUser() !== null;
   },
 
   /**

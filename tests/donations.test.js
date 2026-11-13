@@ -52,7 +52,7 @@ describe('Donations', () => {
   });
 
   it('o papel vem do cadastro, não da sessão', () => {
-    Auth._startSession(users.lalider);
+    Auth.startSession(users.lalider);
     const session = JSON.parse(localStorage.getItem(Auth.SESSION_KEY));
     session.type = 'donor';
     localStorage.setItem(Auth.SESSION_KEY, JSON.stringify(session));

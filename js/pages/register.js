@@ -136,28 +136,31 @@ async function handleLaliderRegister(e) {
     return;
   }
 
-  const result = await Auth.registerLalider({
-    name: document.getElementById('lalider-name').value,
-    email: document.getElementById('lalider-email').value,
-    password,
-    verificationCode: document.getElementById('lalider-code').value,
-    camp: document.getElementById('lalider-camp').value,
-    country: document.getElementById('lalider-country').value,
-    state: document.getElementById('lalider-state').value,
-    showerSong: document.getElementById('lalider-shower-song').value,
-    areaOfInterest: document.getElementById('lalider-area').value,
-    needDescription: document.getElementById('lalider-need').value,
-  });
+  const submitBtn = document.getElementById('lalider-submit');
+  submitBtn.disabled = true; // evita envio duplo enquanto o hash é calculado
+  const result = await safeRegister(() =>
+    Auth.registerLalider({
+      name: document.getElementById('lalider-name').value,
+      email: document.getElementById('lalider-email').value,
+      password,
+      verificationCode: document.getElementById('lalider-code').value,
+      camp: document.getElementById('lalider-camp').value,
+      country: document.getElementById('lalider-country').value,
+      state: document.getElementById('lalider-state').value,
+      showerSong: document.getElementById('lalider-shower-song').value,
+      areaOfInterest: document.getElementById('lalider-area').value,
+      needDescription: needDesc,
+    })
+  );
 
   if (result.success) {
-    await Auth.login(document.getElementById('lalider-email').value, password);
+    Auth.startSession(result.user);
     App.showToast(result.message, 'success');
     if (needDesc) {
       const cat = MockDB.equipmentCategories.find((c) => c.id === needCategory);
       Donations.createNeed({
         laliderId: result.user.id,
-        laliderName:
-          result.user.name.split(' ')[0] + ' ' + result.user.name.split(' ').pop()[0] + '.',
+        laliderName: App.displayName(result.user),
         camp: result.user.camp,
         country: result.user.country,
         category: needCategory,
@@ -171,6 +174,16 @@ async function handleLaliderRegister(e) {
     }, 1500);
   } else {
     App.showToast(result.message, 'error');
+    submitBtn.disabled = false;
+  }
+}
+
+/** Executa o cadastro e transforma exceções (ex.: crypto indisponível) em mensagem. */
+async function safeRegister(fn) {
+  try {
+    return await fn();
+  } catch (err) {
+    return { success: false, message: err.message };
   }
 }
 
@@ -183,21 +196,26 @@ async function handleDonorRegister(e) {
     return;
   }
 
-  const result = await Auth.registerDonor({
-    name: document.getElementById('donor-name').value,
-    email: document.getElementById('donor-email').value,
-    password,
-    country: document.getElementById('donor-country').value,
-    organization: document.getElementById('donor-org').value,
-  });
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  const result = await safeRegister(() =>
+    Auth.registerDonor({
+      name: document.getElementById('donor-name').value,
+      email: document.getElementById('donor-email').value,
+      password,
+      country: document.getElementById('donor-country').value,
+      organization: document.getElementById('donor-org').value,
+    })
+  );
 
   if (result.success) {
-    await Auth.login(document.getElementById('donor-email').value, password);
+    Auth.startSession(result.user);
     App.showToast(result.message, 'success');
     setTimeout(() => {
       window.location.href = 'dashboard.html';
     }, 1500);
   } else {
     App.showToast(result.message, 'error');
+    submitBtn.disabled = false;
   }
 }

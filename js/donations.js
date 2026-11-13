@@ -45,13 +45,6 @@ const Donations = {
   },
 
   /**
-   * Get donations matched to a Lalíder
-   */
-  getMatchedToLalider(laliderId) {
-    return this.getAll().filter((d) => d.matchedTo === laliderId);
-  },
-
-  /**
    * Create a new donation
    */
   create({ donorId, donorName, category, title, description, condition, country }) {
