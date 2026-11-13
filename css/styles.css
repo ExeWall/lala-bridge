@@ -12,7 +12,8 @@
    - Dark (#1a1a1a) — text and cards
    ======================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+/* Fontes (Montserrat e Source Serif 4) são carregadas por <link> no <head> de
+   cada página, em paralelo com este CSS (antes era @import, que atrasava). */
 
 :root {
   /* Brand Colors — from LALA's actual palette */
@@ -2157,5 +2158,20 @@ body.no-scroll {
     white-space: normal;
     max-width: 100%;
     text-align: center;
+  }
+}
+
+/* Evita salto de layout (CLS): o conteúdo é renderizado depois que o idioma
+   carrega; com altura mínima, o rodapé já começa fora da tela. */
+main {
+  display: block;
+  min-height: 100vh;
+}
+
+/* No celular, o cartão de login/cadastro fica no topo em vez de centralizado
+   na vertical, para não pular quando o bloco de demo aparece. */
+@media (max-width: 768px) {
+  .auth-page {
+    align-items: flex-start;
   }
 }
