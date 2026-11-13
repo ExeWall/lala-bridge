@@ -16,7 +16,7 @@ function fillDemo(email, password) {
   document.getElementById('login-password').value = password;
 }
 
-function handleLogin(e) {
+async function handleLogin(e) {
   e.preventDefault();
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
@@ -26,18 +26,19 @@ function handleLogin(e) {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Logging in...';
 
-  setTimeout(() => {
-    const result = Auth.login(email, password);
-    if (result.success) {
-      App.showToast(result.message, 'success');
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 1000);
-    } else {
-      errorEl.textContent = result.message;
-      errorEl.classList.add('visible');
-      btn.disabled = false;
-      btn.innerHTML = 'Log In';
-    }
-  }, 600);
+  const result = await Auth.login(email, password).catch((err) => ({
+    success: false,
+    message: err.message,
+  }));
+  if (result.success) {
+    App.showToast(result.message, 'success');
+    setTimeout(() => {
+      window.location.href = 'dashboard.html';
+    }, 1000);
+  } else {
+    errorEl.textContent = result.message;
+    errorEl.classList.add('visible');
+    btn.disabled = false;
+    btn.innerHTML = 'Log In';
+  }
 }

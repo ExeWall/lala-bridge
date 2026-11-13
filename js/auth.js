@@ -6,6 +6,12 @@
  *
  * Uses localStorage for the MVP. In production, replace with
  * proper backend authentication (JWT, sessions, etc.)
+ *
+ * ATENÇÃO: o hash de senha abaixo (PBKDF2-SHA256 com salt via crypto.subtle)
+ * é um PALIATIVO para não guardar senhas em texto puro no localStorage.
+ * Isto NÃO é segurança de produção: tudo roda no navegador e qualquer pessoa
+ * com acesso ao dispositivo pode ler ou alterar os dados. A autenticação real
+ * chega na Fase 3 (Supabase Auth).
  */
 
 const Auth = {
@@ -44,6 +50,68 @@ const Auth = {
     }
   },
 
+  PBKDF2_ITERATIONS: 100000,
+
+  // ---- Hash de senha (paliativo, ver aviso no topo) ----
+
+  _bytesToHex(bytes) {
+    return Array.from(new Uint8Array(bytes), (b) => b.toString(16).padStart(2, '0')).join('');
+  },
+
+  generateSalt() {
+    const salt = new Uint8Array(16);
+    crypto.getRandomValues(salt);
+    return this._bytesToHex(salt);
+  },
+
+  /**
+   * Gera o hash PBKDF2-SHA256 de uma senha com o salt informado (hex).
+   * @returns {Promise<string>} hash em hexadecimal
+   */
+  async hashPassword(password, salt) {
+    if (!globalThis.crypto?.subtle) {
+      throw new Error('crypto.subtle indisponível: abra o app via http://localhost ou HTTPS.');
+    }
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, [
+      'deriveBits',
+    ]);
+    const bits = await crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        hash: 'SHA-256',
+        salt: enc.encode(salt),
+        iterations: this.PBKDF2_ITERATIONS,
+      },
+      key,
+      256
+    );
+    return this._bytesToHex(bits);
+  },
+
+  async _credentialsFor(password) {
+    const passwordSalt = this.generateSalt();
+    const passwordHash = await this.hashPassword(password, passwordSalt);
+    return { passwordHash, passwordSalt };
+  },
+
+  /**
+   * Confere a senha. Aceita contas antigas com `password` em texto puro e,
+   * nesse caso, já migra para hash (o chamador deve salvar o usuário).
+   */
+  async verifyPassword(user, password) {
+    if (user.passwordHash && user.passwordSalt) {
+      const hash = await this.hashPassword(password, user.passwordSalt);
+      return hash === user.passwordHash;
+    }
+    if (typeof user.password === 'string' && user.password === password) {
+      Object.assign(user, await this._credentialsFor(password));
+      delete user.password;
+      return true;
+    }
+    return false;
+  },
+
   /**
    * Get all registered users
    */
@@ -61,7 +129,7 @@ const Auth = {
   /**
    * Register a new Lalíder
    */
-  registerLalider({
+  async registerLalider({
     name,
     email,
     password,
@@ -95,7 +163,7 @@ const Auth = {
       type: 'lalider',
       name,
       email,
-      password, // In production, HASH this!
+      ...(await this._credentialsFor(password)),
       verificationCode: verificationCode.toUpperCase(),
       camp,
       country,
@@ -117,7 +185,7 @@ const Auth = {
   /**
    * Register a new Donor
    */
-  registerDonor({ name, email, password, country, organization }) {
+  async registerDonor({ name, email, password, country, organization }) {
     const users = this.getUsers();
 
     if (users.find((u) => u.email.toLowerCase() === email.toLowerCase())) {
@@ -129,7 +197,7 @@ const Auth = {
       type: 'donor',
       name,
       email,
-      password, // In production, HASH this!
+      ...(await this._credentialsFor(password)),
       country,
       organization: organization || '',
       createdAt: new Date().toISOString(),
@@ -144,15 +212,14 @@ const Auth = {
   /**
    * Login a user
    */
-  login(email, password) {
+  async login(email, password) {
     const users = this.getUsers();
-    const user = users.find(
-      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-    );
+    const user = users.find((u) => u.email.toLowerCase() === String(email).toLowerCase());
 
-    if (!user) {
+    if (!user || !(await this.verifyPassword(user, password))) {
       return { success: false, message: 'Invalid email or password.' };
     }
+    this.saveUsers(users); // persiste a migração de senha legada, se houver
 
     // Create session
     const session = {

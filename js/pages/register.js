@@ -107,7 +107,7 @@ function handleCodeInput(value) {
   }, 800);
 }
 
-function handleLaliderRegister(e) {
+async function handleLaliderRegister(e) {
   e.preventDefault();
   if (!codeVerified) {
     App.showToast('Please verify your LALA code first.', 'error');
@@ -121,7 +121,7 @@ function handleLaliderRegister(e) {
     return;
   }
 
-  const result = Auth.registerLalider({
+  const result = await Auth.registerLalider({
     name: document.getElementById('lalider-name').value,
     email: document.getElementById('lalider-email').value,
     password,
@@ -135,7 +135,7 @@ function handleLaliderRegister(e) {
   });
 
   if (result.success) {
-    Auth.login(document.getElementById('lalider-email').value, password);
+    await Auth.login(document.getElementById('lalider-email').value, password);
     App.showToast(result.message, 'success');
     const needDesc = document.getElementById('lalider-need').value;
     if (needDesc) {
@@ -159,7 +159,7 @@ function handleLaliderRegister(e) {
   }
 }
 
-function handleDonorRegister(e) {
+async function handleDonorRegister(e) {
   e.preventDefault();
   const password = document.getElementById('donor-password').value;
   const confirm = document.getElementById('donor-password-confirm').value;
@@ -168,7 +168,7 @@ function handleDonorRegister(e) {
     return;
   }
 
-  const result = Auth.registerDonor({
+  const result = await Auth.registerDonor({
     name: document.getElementById('donor-name').value,
     email: document.getElementById('donor-email').value,
     password,
@@ -177,7 +177,7 @@ function handleDonorRegister(e) {
   });
 
   if (result.success) {
-    Auth.login(document.getElementById('donor-email').value, password);
+    await Auth.login(document.getElementById('donor-email').value, password);
     App.showToast(result.message, 'success');
     setTimeout(() => {
       window.location.href = 'dashboard.html';
