@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('auth-required').style.display = 'block';
     return;
   }
+  if (!Auth.isDonor()) {
+    document.getElementById('donor-only').style.display = 'block';
+    return;
+  }
   document.getElementById('donation-form-container').style.display = 'block';
 
   const grid = document.getElementById('category-grid');
@@ -79,6 +83,10 @@ function handleDonation(e) {
     return;
   }
   const user = Auth.getCurrentUser();
+  if (!Auth.isDonor()) {
+    App.showToast('Only donor accounts can publish donations.', 'error');
+    return;
+  }
   Donations.create({
     donorId: user.id,
     donorName: user.organization || user.name,

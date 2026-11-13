@@ -54,6 +54,9 @@ const Donations = {
    * Create a new donation
    */
   create({ donorId, donorName, category, title, description, condition, country }) {
+    if (!Auth.hasRole(donorId, 'donor')) {
+      throw new Error('Only donors can publish donations.');
+    }
     const donations = this.getAll();
     const donation = {
       id: 'don-' + Date.now(),
@@ -138,6 +141,9 @@ const Donations = {
    * Create a new need
    */
   createNeed({ laliderId, laliderName, camp, country, category, title, description, urgency }) {
+    if (!Auth.hasRole(laliderId, 'lalider')) {
+      throw new Error('Only verified Lalíderes can create requests.');
+    }
     const needs = this.getAllNeeds();
     const need = {
       id: 'need-' + Date.now(),

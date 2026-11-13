@@ -171,6 +171,10 @@ App.registerActions({
 });
 
 function showRequestForm() {
+  if (!Auth.isLalider()) {
+    App.showToast('Only verified Lalíderes can submit requests.', 'error');
+    return;
+  }
   const categoriesHTML = MockDB.equipmentCategories
     .map((c) => `<option value="${c.id}">${c.name}</option>`)
     .join('');
@@ -205,6 +209,10 @@ function showRequestForm() {
 
 function submitRequest() {
   const user = Auth.getCurrentUser();
+  if (!Auth.isLalider()) {
+    App.showToast('Only verified Lalíderes can submit requests.', 'error');
+    return;
+  }
   const category = document.getElementById('request-category').value;
   const title = document.getElementById('request-title').value;
   const desc = document.getElementById('request-desc').value;

@@ -327,16 +327,22 @@ const Auth = {
    * Check if current user is a Lalíder
    */
   isLalider() {
-    const session = this.getSession();
-    return session?.type === 'lalider';
+    return this.getCurrentUser()?.type === 'lalider';
   },
 
   /**
    * Check if current user is a Donor
    */
   isDonor() {
-    const session = this.getSession();
-    return session?.type === 'donor';
+    return this.getCurrentUser()?.type === 'donor';
+  },
+
+  /**
+   * Indica se o usuário com esse id existe e tem o papel informado.
+   * O papel vem do cadastro, não da sessão (que é editável no DevTools).
+   */
+  hasRole(userId, role) {
+    return this.getUsers().some((u) => u.id === userId && u.type === role);
   },
 
   /**
