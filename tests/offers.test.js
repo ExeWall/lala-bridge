@@ -174,3 +174,65 @@ describe('Offers', () => {
     });
   });
 });
+
+describe('Offers.cancel', () => {
+  let Auth, Donations, Offers, users, need, donation;
+
+  beforeEach(() => {
+    ({ Auth, Donations, Offers } = loadApp());
+    users = seedUsers(Auth);
+    need = Donations.createNeed({
+      laliderId: users.lalider.id,
+      laliderName: 'Ana S.',
+      camp: 'VLB32',
+      country: 'Brazil',
+      category: 'laptop',
+      title: 'Notebook',
+      description: 'x',
+    });
+    donation = Donations.create({
+      donorId: users.donor.id,
+      donorName: 'Empresa Teste',
+      category: 'laptop',
+      title: 'Dell',
+      description: 'x',
+      condition: 'good',
+      country: 'Brazil',
+    });
+  });
+
+  const offerWithBoth = () =>
+    Offers.offerHelp({ donorId: users.donor.id, needId: need.id, donationId: donation.id }).offer;
+
+  it('quem enviou pode retirar uma oferta pendente; quem recebeu, não', () => {
+    const offer = offerWithBoth();
+    expect(Offers.cancel(offer.id, users.lalider.id).success).toBe(false);
+    expect(Offers.cancel(offer.id, users.donor2.id).success).toBe(false);
+    expect(Offers.cancel(offer.id, users.donor.id).success).toBe(true);
+    expect(Offers.getById(offer.id)).toMatchObject({
+      status: 'declined',
+      closedReason: 'withdrawn',
+    });
+    // Depois de retirar, o doador pode ofertar de novo.
+    expect(Offers.offerHelp({ donorId: users.donor.id, needId: need.id }).success).toBe(true);
+  });
+
+  it('cancelar um match aceito devolve doação e pedido e esconde os contatos', () => {
+    const offer = offerWithBoth();
+    Offers.respond(offer.id, users.lalider.id, 'accept');
+    expect(Offers.cancel(offer.id, users.lalider.id).success).toBe(true);
+
+    expect(Offers.getById(offer.id).closedReason).toBe('cancelled');
+    expect(Donations.getById(donation.id)).toMatchObject({ status: 'available', matchedTo: null });
+    expect(Donations.getNeedById(need.id).status).toBe('open');
+    expect(Offers.getContact(Offers.getById(offer.id), users.lalider.id)).toBeNull();
+  });
+
+  it('não cancela oferta já entregue', () => {
+    const offer = offerWithBoth();
+    Offers.respond(offer.id, users.lalider.id, 'accept');
+    Offers.markDelivered(offer.id, users.donor.id);
+    expect(Offers.cancel(offer.id, users.donor.id).success).toBe(false);
+    expect(Donations.getById(donation.id).status).toBe('delivered');
+  });
+});

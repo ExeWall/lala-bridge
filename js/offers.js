@@ -7,6 +7,9 @@
  *   - Lalíder → "Request" em uma doação: initiatedBy = 'lalider'.
  *
  * Ciclo de vida: pending → accepted | declined; accepted → delivered.
+ * Uma oferta pendente pode ser retirada por quem enviou, e um match aceito
+ * pode ser cancelado por qualquer parte (ambos viram 'declined', com o
+ * motivo em closedReason: declined | superseded | withdrawn | cancelled).
  * Quem recebe a oferta decide (humano no circuito). Os contatos das duas
  * partes só são revelados depois que a oferta é aceita.
  *
@@ -260,6 +263,60 @@ const Offers = {
       Donations.updateNeed(offer.needId, { status: 'delivered', deliveredAt: now });
     }
     return { success: true, message: 'Delivery confirmed. Thank you!', offer: updated };
+  },
+
+  /**
+   * Desfaz uma oferta:
+   *   - pendente: quem enviou pode retirar (closedReason: 'withdrawn');
+   *   - aceita: qualquer uma das partes pode cancelar o match, e a doação
+   *     volta a 'available' e o pedido a 'open' (closedReason: 'cancelled').
+   * Ofertas entregues ou já recusadas não mudam.
+   */
+  cancel(offerId, actorId) {
+    const offer = this.getById(offerId);
+    if (!offer) return this._fail('Offer not found.');
+    const isParty = offer.donorId === actorId || offer.laliderId === actorId;
+    if (!isParty) return this._fail('Only the people in this offer can cancel it.');
+
+    if (offer.status === 'pending') {
+      if (this.getRecipientId(offer) === actorId) {
+        return this._fail('Use decline to answer an offer you received.');
+      }
+      const updated = this._update(offerId, { status: 'declined', closedReason: 'withdrawn' });
+      return { success: true, message: 'Offer withdrawn.', offer: updated };
+    }
+
+    if (offer.status === 'accepted') {
+      const updated = this._update(offerId, {
+        status: 'declined',
+        closedReason: 'cancelled',
+        cancelledBy: actorId,
+      });
+      if (offer.donationId) {
+        Donations.update(offer.donationId, {
+          status: 'available',
+          matchedTo: null,
+          matchedAt: null,
+          offerId: null,
+        });
+      }
+      if (offer.needId) {
+        Donations.updateNeed(offer.needId, {
+          status: 'open',
+          matchedDonorId: null,
+          matchedDonationId: null,
+          matchedAt: null,
+          offerId: null,
+        });
+      }
+      return {
+        success: true,
+        message: 'Match cancelled. The items are available again.',
+        offer: updated,
+      };
+    }
+
+    return this._fail('This offer can no longer be cancelled.');
   },
 
   /**
