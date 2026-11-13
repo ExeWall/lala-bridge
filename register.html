@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register — LALA Bridge</title>
+    <title data-i18n="register.metaTitle">Criar conta — LALA Bridge</title>
     <meta
+      data-i18n-attr="content:register.subtitle"
       name="description"
-      content="Create your LALA Bridge account. Register as a Lalíder with your verification code or as a donor to start making a difference."
+      content="Faça parte da comunidade e comece a gerar impacto"
     />
     <link rel="stylesheet" href="css/styles.css" />
     <link
@@ -23,14 +24,14 @@
           LALA Bridge
         </a>
         <div class="nav__links">
-          <a href="index.html" class="nav__link">Home</a>
-          <a href="browse.html" class="nav__link">Browse</a>
-          <a href="donate.html" class="nav__link">Donate</a>
+          <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
+          <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
+          <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
         </div>
         <div class="nav__actions">
-          <a href="login.html" class="btn btn--ghost">Log In</a>
+          <a href="login.html" class="btn btn--ghost" data-i18n="nav.login">Entrar</a>
         </div>
-        <button class="nav__hamburger" aria-label="Menu">
+        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -44,17 +45,31 @@
             <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">B</div>
             LALA Bridge
           </a>
-          <h1 class="auth-card__title">Create Your Account</h1>
-          <p class="auth-card__subtitle">Join the community and start making an impact</p>
+          <h1 class="auth-card__title" data-i18n="register.heading">Crie sua conta</h1>
+          <p class="auth-card__subtitle" data-i18n="register.subtitle">
+            Faça parte da comunidade e comece a gerar impacto
+          </p>
         </div>
 
         <!-- Role Tabs -->
         <div class="tabs" style="margin-bottom: var(--s-6)">
-          <button class="tab active" data-tab="lalider" id="tab-lalider" data-action="switch-tab">
+          <button
+            class="tab active"
+            data-tab="lalider"
+            id="tab-lalider"
+            data-action="switch-tab"
+            data-i18n="register.tabLalider"
+          >
             Lalíder
           </button>
-          <button class="tab" data-tab="donor" id="tab-donor" data-action="switch-tab">
-            Donor
+          <button
+            class="tab"
+            data-tab="donor"
+            id="tab-donor"
+            data-action="switch-tab"
+            data-i18n="register.tabDonor"
+          >
+            Doador
           </button>
         </div>
 
@@ -63,124 +78,162 @@
           <form id="lalider-form">
             <!-- Verification Code -->
             <div class="verification-widget" id="verification-widget">
-              <div class="verification-widget__label">LALA Verification Code</div>
+              <div class="verification-widget__label" data-i18n="register.code">
+                Código de verificação LALA
+              </div>
               <input
+                data-i18n-attr="placeholder:register.codePlaceholder"
                 type="text"
                 class="form-input form-input--code"
                 id="lalider-code"
-                placeholder="e.g. LALA-VLB32-001"
+                placeholder="ex.: LALA-VLB32-001"
                 required
                 autocomplete="off"
               />
               <div class="verification-widget__status" id="code-status"></div>
-              <p class="form-hint">
-                Enter the verification code provided by LALA. This confirms your identity as a
-                Lalíder.
+              <p class="form-hint" data-i18n="register.codeHint">
+                Informe o código fornecido pela LALA. Ele confirma que você é Lalíder.
               </p>
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Full Name</label>
+              <label class="form-label form-label--required" data-i18n="register.fullName"
+                >Nome completo</label
+              >
               <input
+                data-i18n-attr="placeholder:register.fullNamePlaceholder"
                 type="text"
                 class="form-input"
                 id="lalider-name"
-                placeholder="Your full name"
+                placeholder="Seu nome completo"
                 required
               />
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Email</label>
+              <label class="form-label form-label--required" data-i18n="register.email"
+                >E-mail</label
+              >
               <input
+                data-i18n-attr="placeholder:login.emailPlaceholder"
                 type="email"
                 class="form-input"
                 id="lalider-email"
-                placeholder="you@example.com"
+                placeholder="voce@exemplo.com"
                 required
               />
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
               <div class="form-group">
-                <label class="form-label form-label--required">Camp / Cohort</label>
+                <label class="form-label form-label--required" data-i18n="register.camp"
+                  >Turma (camp)</label
+                >
                 <select class="form-select" id="lalider-camp" required>
-                  <option value="">Select your camp</option>
+                  <option value="" data-i18n="register.selectCamp">Selecione sua turma</option>
                 </select>
-                <p class="form-hint">VLB = Virtual, BLB = In-person</p>
+                <p class="form-hint" data-i18n="register.campHint">
+                  VLB = virtual, BLB = presencial
+                </p>
               </div>
               <div class="form-group">
-                <label class="form-label form-label--required">Country</label>
+                <label class="form-label form-label--required" data-i18n="location.country"
+                  >País</label
+                >
                 <select class="form-select" id="lalider-country" required>
-                  <option value="">Select country</option>
+                  <option value="" data-i18n="location.selectCountry">Selecione o país</option>
                 </select>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">State / Region</label>
+              <label class="form-label" data-i18n="location.region">Estado / Região</label>
               <input
+                data-i18n-attr="placeholder:location.regionPlaceholder"
                 type="text"
                 class="form-input"
                 id="lalider-state"
-                placeholder="e.g. São Paulo, CDMX, Bogotá"
+                placeholder="ex.: Antioquia, Jalisco"
               />
             </div>
 
             <div class="form-group">
-              <label class="form-label">Favorite Shower Song</label>
+              <label class="form-label" data-i18n="register.showerSong"
+                >Música de chuveiro favorita</label
+              >
               <input
+                data-i18n-attr="placeholder:register.showerSongPlaceholder"
                 type="text"
                 class="form-input"
                 id="lalider-shower-song"
-                placeholder="What song do you sing in the shower?"
+                placeholder="Que música você canta no chuveiro?"
               />
-              <p class="form-hint">Just a fun way to know you better!</p>
+              <p class="form-hint" data-i18n="register.showerSongHint">
+                Uma tradição das apresentações da LALA!
+              </p>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Area of Interest</label>
+              <label class="form-label" data-i18n="register.area">Área de interesse</label>
               <select class="form-select" id="lalider-area">
-                <option value="">Select area</option>
+                <option value="" data-i18n="register.selectArea">Selecione a área</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="lalider-need-category">What do you need most?</label>
+              <label
+                class="form-label"
+                for="lalider-need-category"
+                data-i18n="register.needCategory"
+                >Do que você mais precisa?</label
+              >
               <select class="form-select" id="lalider-need-category">
-                <option value="">Select equipment (optional)</option>
+                <option value="" data-i18n="register.selectNeedCategory">
+                  Selecione o equipamento (opcional)
+                </option>
               </select>
-              <p class="form-hint">Required if you describe a need below.</p>
+              <p class="form-hint" data-i18n="register.needCategoryHint">
+                Obrigatório se você descrever uma necessidade abaixo.
+              </p>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Description of Your Need</label>
+              <label class="form-label" data-i18n="register.needDescription"
+                >Descreva sua necessidade</label
+              >
               <textarea
+                data-i18n-attr="placeholder:register.needDescriptionPlaceholder"
                 class="form-textarea"
                 id="lalider-need"
-                placeholder="Tell us what equipment you need and why. This helps donors understand your situation and match with you."
+                placeholder="Conte qual equipamento você precisa e por quê. Isso ajuda os doadores a entender sua situação."
               ></textarea>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
               <div class="form-group">
-                <label class="form-label form-label--required">Password</label>
+                <label class="form-label form-label--required" data-i18n="register.password"
+                  >Senha</label
+                >
                 <input
+                  data-i18n-attr="placeholder:register.passwordPlaceholder"
                   type="password"
                   class="form-input"
                   id="lalider-password"
-                  placeholder="Min. 6 characters"
+                  placeholder="Mín. 6 caracteres"
                   required
                   minlength="6"
                 />
               </div>
               <div class="form-group">
-                <label class="form-label form-label--required">Confirm Password</label>
+                <label class="form-label form-label--required" data-i18n="register.confirmPassword"
+                  >Confirme a senha</label
+                >
                 <input
+                  data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
                   type="password"
                   class="form-input"
                   id="lalider-password-confirm"
-                  placeholder="Repeat password"
+                  placeholder="Repita a senha"
                   required
                   minlength="6"
                 />
@@ -192,8 +245,9 @@
               class="btn btn--primary btn--lg btn--full"
               id="lalider-submit"
               disabled
+              data-i18n="register.submitLalider"
             >
-              Register as Lalíder
+              Cadastrar como Lalíder
             </button>
           </form>
         </div>
@@ -202,42 +256,55 @@
         <div class="tab-content" id="form-donor">
           <form id="donor-form">
             <div class="form-group">
-              <label class="form-label form-label--required">Full Name</label>
+              <label class="form-label form-label--required" data-i18n="register.fullName"
+                >Nome completo</label
+              >
               <input
+                data-i18n-attr="placeholder:register.fullNamePlaceholder"
                 type="text"
                 class="form-input"
                 id="donor-name"
-                placeholder="Your full name"
+                placeholder="Seu nome completo"
                 required
               />
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Email</label>
+              <label class="form-label form-label--required" data-i18n="register.email"
+                >E-mail</label
+              >
               <input
+                data-i18n-attr="placeholder:login.emailPlaceholder"
                 type="email"
                 class="form-input"
                 id="donor-email"
-                placeholder="you@example.com"
+                placeholder="voce@exemplo.com"
                 required
               />
             </div>
 
             <div class="form-group">
-              <label class="form-label">Company / Organization</label>
+              <label class="form-label" data-i18n="register.organization"
+                >Empresa / organização</label
+              >
               <input
+                data-i18n-attr="placeholder:register.organizationPlaceholder"
                 type="text"
                 class="form-input"
                 id="donor-org"
-                placeholder="Optional — your company or org"
+                placeholder="Opcional — sua empresa ou organização"
               />
-              <p class="form-hint">If donating on behalf of a company</p>
+              <p class="form-hint" data-i18n="register.organizationHint">
+                Se for doar em nome de uma empresa
+              </p>
             </div>
 
             <div class="form-group">
-              <label class="form-label form-label--required">Country</label>
+              <label class="form-label form-label--required" data-i18n="location.country"
+                >País</label
+              >
               <select class="form-select" id="donor-country" required>
-                <option value="">Select country</option>
+                <option value="" data-i18n="location.selectCountry">Selecione o país</option>
                 <option value="United States">United States</option>
                 <option value="Canada">Canada</option>
                 <option value="United Kingdom">United Kingdom</option>
@@ -252,23 +319,29 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
               <div class="form-group">
-                <label class="form-label form-label--required">Password</label>
+                <label class="form-label form-label--required" data-i18n="register.password"
+                  >Senha</label
+                >
                 <input
+                  data-i18n-attr="placeholder:register.passwordPlaceholder"
                   type="password"
                   class="form-input"
                   id="donor-password"
-                  placeholder="Min. 6 characters"
+                  placeholder="Mín. 6 caracteres"
                   required
                   minlength="6"
                 />
               </div>
               <div class="form-group">
-                <label class="form-label form-label--required">Confirm Password</label>
+                <label class="form-label form-label--required" data-i18n="register.confirmPassword"
+                  >Confirme a senha</label
+                >
                 <input
+                  data-i18n-attr="placeholder:register.confirmPasswordPlaceholder"
                   type="password"
                   class="form-input"
                   id="donor-password-confirm"
-                  placeholder="Repeat password"
+                  placeholder="Repita a senha"
                   required
                   minlength="6"
                 />
@@ -279,20 +352,25 @@
               class="card card--flat"
               style="margin-bottom: var(--s-5); padding: var(--s-4); background: var(--cream)"
             >
-              <p class="text-sm text-muted">
-                <strong>As a donor</strong>, you can list equipment for donation and browse
-                Lalíderes' needs. You cannot request or receive donations.
+              <p class="text-sm text-muted" data-i18n="register.donorNote">
+                Como doador, você pode publicar equipamentos e ver os pedidos dos Lalíderes.
+                Doadores não pedem nem recebem doações.
               </p>
             </div>
 
-            <button type="submit" class="btn btn--primary btn--lg btn--full">
-              Register as Donor
+            <button
+              type="submit"
+              class="btn btn--primary btn--lg btn--full"
+              data-i18n="register.submitDonor"
+            >
+              Cadastrar como doador
             </button>
           </form>
         </div>
 
         <div class="auth-card__footer">
-          Already have an account? <a href="login.html">Log in</a>
+          <span data-i18n="register.haveAccount">Já tem conta?</span>
+          <a href="login.html" data-i18n="register.login">Entre</a>
         </div>
       </div>
     </div>

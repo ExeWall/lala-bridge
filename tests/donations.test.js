@@ -37,7 +37,7 @@ describe('Donations', () => {
   });
 
   it('Lalíder não pode publicar doação', () => {
-    expect(() => Donations.create(donation(users.lalider.id))).toThrow(/donors/i);
+    expect(() => Donations.create(donation(users.lalider.id))).toThrow(/doadores/i);
     expect(Donations.getAll()).toHaveLength(0);
   });
 

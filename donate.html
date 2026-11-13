@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Donate Equipment — LALA Bridge</title>
+    <title data-i18n="donate.metaTitle">Doar equipamento — LALA Bridge</title>
     <meta
+      data-i18n-attr="content:donate.desc"
       name="description"
-      content="Donate your laptop, phone, or study equipment to a verified Lalíder from the Latin American Leadership Academy."
+      content="Publique seu equipamento e ajude um Lalíder a ter as ferramentas de que precisa para aprender e liderar."
     />
     <link rel="stylesheet" href="css/styles.css" />
     <link
@@ -22,13 +23,13 @@
           LALA Bridge
         </a>
         <div class="nav__links">
-          <a href="index.html" class="nav__link">Home</a>
-          <a href="browse.html" class="nav__link">Browse</a>
-          <a href="donate.html" class="nav__link active">Donate</a>
-          <a href="dashboard.html" class="nav__link">Dashboard</a>
+          <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
+          <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
+          <a href="donate.html" class="nav__link active" data-i18n="nav.donate">Doar</a>
+          <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
         </div>
         <div class="nav__actions"></div>
-        <button class="nav__hamburger" aria-label="Menu">
+        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -36,10 +37,13 @@
 
     <div class="page-header">
       <div class="container">
-        <p class="eyebrow" style="margin-bottom: var(--s-3)">Make a Difference</p>
-        <h1 class="page-header__title">Donate Equipment</h1>
-        <p class="page-header__desc">
-          List your equipment and help a Lalíder access the tools they need to learn and lead.
+        <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="donate.eyebrow">
+          Faça a diferença
+        </p>
+        <h1 class="page-header__title" data-i18n="donate.title">Doar equipamento</h1>
+        <p class="page-header__desc" data-i18n="donate.desc">
+          Publique seu equipamento e ajude um Lalíder a ter as ferramentas de que precisa para
+          aprender e liderar.
         </p>
       </div>
     </div>
@@ -48,11 +52,18 @@
       <div id="auth-required" style="display: none">
         <div class="empty-state card">
           <div class="empty-state__icon">—</div>
-          <h3 class="empty-state__title">Login Required</h3>
-          <p class="empty-state__desc">You need to be logged in to create a donation.</p>
+          <h3 class="empty-state__title" data-i18n="donate.loginTitle">É preciso entrar</h3>
+          <p class="empty-state__desc" data-i18n="donate.loginDesc">
+            Entre na sua conta para publicar uma doação.
+          </p>
           <div class="flex items-center justify-center gap-4">
-            <a href="login.html" class="btn btn--outline">Log In</a>
-            <a href="register.html?type=donor" class="btn btn--primary">Register as Donor</a>
+            <a href="login.html" class="btn btn--outline" data-i18n="nav.login">Entrar</a>
+            <a
+              href="register.html?type=donor"
+              class="btn btn--primary"
+              data-i18n="donate.registerDonor"
+              >Cadastrar como doador</a
+            >
           </div>
         </div>
       </div>
@@ -60,14 +71,18 @@
       <div id="donor-only" style="display: none">
         <div class="empty-state card">
           <div class="empty-state__icon">—</div>
-          <h3 class="empty-state__title">Donor Accounts Only</h3>
-          <p class="empty-state__desc">
-            Only donor accounts can publish donations. As a Lalíder, you can submit a request or ask
-            for an available donation.
+          <h3 class="empty-state__title" data-i18n="donate.donorOnlyTitle">
+            Somente para doadores
+          </h3>
+          <p class="empty-state__desc" data-i18n="donate.donorOnlyDesc">
+            Só contas de doador publicam doações. Como Lalíder, você pode fazer um pedido ou
+            solicitar uma doação disponível.
           </p>
           <div class="flex items-center justify-center gap-4">
-            <a href="browse.html" class="btn btn--outline">Browse Donations</a>
-            <a href="dashboard.html" class="btn btn--primary">Go to Dashboard</a>
+            <a href="browse.html" class="btn btn--outline" data-i18n="donate.browse">Ver doações</a>
+            <a href="dashboard.html" class="btn btn--primary" data-i18n="donate.goDashboard"
+              >Ir para o painel</a
+            >
           </div>
         </div>
       </div>
@@ -78,7 +93,8 @@
             <label
               class="form-label form-label--required"
               style="font-size: 0.9rem; margin-bottom: var(--s-4)"
-              >What are you donating?</label
+              data-i18n="donate.what"
+              >O que você está doando?</label
             >
             <div
               id="category-grid"
@@ -92,23 +108,31 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label form-label--required">Title</label>
+            <label class="form-label form-label--required" data-i18n="donate.titleLabel"
+              >Título</label
+            >
             <input
+              data-i18n-attr="placeholder:donate.titlePlaceholder"
               type="text"
               class="form-input"
               id="donation-title"
-              placeholder="e.g. Dell Inspiron 15 — 8GB RAM, 256GB SSD"
+              placeholder="ex.: Dell Inspiron 15 — 8GB RAM, SSD 256GB"
               required
             />
-            <p class="form-hint">Be specific — include brand, model, and key specs</p>
+            <p class="form-hint" data-i18n="donate.titleHint">
+              Seja específico: marca, modelo e principais configurações
+            </p>
           </div>
 
           <div class="form-group">
-            <label class="form-label form-label--required">Description</label>
+            <label class="form-label form-label--required" data-i18n="donate.description"
+              >Descrição</label
+            >
             <textarea
+              data-i18n-attr="placeholder:donate.descriptionPlaceholder"
               class="form-textarea"
               id="donation-desc"
-              placeholder="Describe the item in detail. Include condition notes, what's included (charger, case, etc.), and any relevant info."
+              placeholder="Descreva o item: estado, o que acompanha (carregador, capa...) e outras informações úteis."
               required
               style="min-height: 120px"
             ></textarea>
@@ -116,32 +140,55 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
             <div class="form-group">
-              <label class="form-label form-label--required">Condition</label>
+              <label class="form-label form-label--required" data-i18n="donate.condition"
+                >Estado de conservação</label
+              >
               <select class="form-select" id="donation-condition" required>
-                <option value="">Select condition</option>
+                <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label form-label--required">Your Location</label>
+              <label class="form-label form-label--required" data-i18n="donate.location"
+                >Sua localização</label
+              >
               <input
+                data-i18n-attr="placeholder:donate.locationPlaceholder"
                 type="text"
                 class="form-input"
                 id="donation-location"
-                placeholder="City, Country"
+                placeholder="Cidade, país"
                 required
               />
             </div>
           </div>
 
           <div id="donation-preview" style="display: none; margin-bottom: var(--s-5)">
-            <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2)">Preview</p>
+            <p
+              class="text-xs"
+              style="margin-bottom: var(--s-3); color: var(--text-2)"
+              data-i18n="donate.previewLabel"
+            >
+              Pré-visualização
+            </p>
             <div id="preview-card"></div>
           </div>
 
           <div class="flex gap-4" style="flex-wrap: wrap">
-            <button type="button" class="btn btn--outline" data-action="preview">Preview</button>
-            <button type="submit" class="btn btn--primary btn--lg" style="flex: 1">
-              Publish Donation
+            <button
+              type="button"
+              class="btn btn--outline"
+              data-action="preview"
+              data-i18n="donate.preview"
+            >
+              Pré-visualização
+            </button>
+            <button
+              type="submit"
+              class="btn btn--primary btn--lg"
+              style="flex: 1"
+              data-i18n="donate.publish"
+            >
+              Publicar doação
             </button>
           </div>
         </form>
@@ -151,8 +198,8 @@
     <footer class="footer">
       <div class="container">
         <div class="footer__bottom">
-          <p class="footer__copyright">
-            &copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.
+          <p class="footer__copyright" data-i18n="footer.copyright">
+            © 2026 LALA Bridge. Uma iniciativa comunitária de Lalíderes, para Lalíderes.
           </p>
         </div>
       </div>

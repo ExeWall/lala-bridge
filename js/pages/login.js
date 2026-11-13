@@ -25,11 +25,11 @@ function renderDemoAccounts() {
   if (!accounts.length) return;
   document.getElementById('demo-accounts').innerHTML = accounts
     .map((u) => {
-      const role = u.type === 'lalider' ? 'Lalíder' : 'Donor';
+      const role = I18n.t(u.type === 'lalider' ? 'roles.lalider' : 'roles.donor');
       const badge = u.type === 'lalider' ? 'badge--lalider' : 'badge--donor';
       return `<button type="button" class="btn btn--ghost btn--sm" data-action="demo-login" data-user-id="${App.escapeHTML(u.id)}" style="justify-content: flex-start">
         <span class="badge ${badge}">${role}</span>
-        <span style="margin-left: 8px">Enter as demo: ${App.escapeHTML(u.name)}</span>
+        <span style="margin-left: 8px">${App.escapeHTML(I18n.t('login.demoAs', { name: u.name }))}</span>
       </button>`;
     })
     .join('');
@@ -44,7 +44,7 @@ async function handleLogin(e) {
   const btn = document.getElementById('login-btn');
 
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Logging in...';
+  btn.innerHTML = `<span class="spinner" aria-hidden="true"></span> ${App.escapeHTML(I18n.t('login.loading'))}`;
 
   const result = await Auth.login(email, password).catch((err) => ({
     success: false,
@@ -59,6 +59,6 @@ async function handleLogin(e) {
     errorEl.textContent = result.message;
     errorEl.classList.add('visible');
     btn.disabled = false;
-    btn.innerHTML = 'Log In';
+    btn.textContent = I18n.t('login.submit');
   }
 }

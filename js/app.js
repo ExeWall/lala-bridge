@@ -16,7 +16,30 @@ const App = {
     this.initScrollReveal();
     this.initMobileMenu();
     this.updateNavbarAuth();
+    this.initLanguageSelector();
     this.initDemoNotice();
+  },
+
+  /**
+   * Seletor de idioma no navbar (fica visível também no celular).
+   */
+  initLanguageSelector() {
+    const inner = document.querySelector('.nav__inner');
+    if (!inner || inner.querySelector('.nav__lang')) return;
+    const select = document.createElement('select');
+    select.className = 'nav__lang';
+    select.setAttribute('aria-label', I18n.t('nav.language'));
+    I18n.SUPPORTED.forEach(({ code, label }) => {
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = label;
+      opt.lang = code;
+      opt.selected = code === I18n.locale;
+      select.appendChild(opt);
+    });
+    select.addEventListener('change', () => I18n.setLocale(select.value));
+    const hamburger = inner.querySelector('.nav__hamburger');
+    inner.insertBefore(select, hamburger || null);
   },
 
   /**
@@ -27,7 +50,7 @@ const App = {
     const notice = document.createElement('div');
     notice.className = 'demo-notice';
     notice.setAttribute('role', 'note');
-    notice.textContent = 'Demo: fictitious data, stored only in this browser.';
+    notice.textContent = I18n.t('demo.notice');
     document.body.appendChild(notice);
   },
 
@@ -118,23 +141,23 @@ const App = {
       const user = Auth.getCurrentUser();
       const typeBadge =
         user?.type === 'lalider'
-          ? '<span class="badge badge--lalider">Lalíder</span>'
-          : '<span class="badge badge--donor">Donor</span>';
+          ? `<span class="badge badge--lalider">${I18n.t('roles.lalider')}</span>`
+          : `<span class="badge badge--donor">${I18n.t('roles.donor')}</span>`;
 
       const pending = user ? Offers.getPendingFor(user.id).length : 0;
       const pendingBadge = pending
-        ? ` <span class="badge badge--error" aria-label="${pending} offers waiting for your answer">${pending}</span>`
+        ? ` <span class="badge badge--error" aria-label="${this.escapeHTML(I18n.t('nav.pendingOffers', { count: pending }))}">${pending}</span>`
         : '';
 
       actionsContainer.innerHTML = `
         ${typeBadge}
-        <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard${pendingBadge}</a>
-        <button class="btn btn--ghost btn--sm" id="logout-btn" data-action="logout">Log out</button>
+        <a href="dashboard.html" class="btn btn--ghost btn--sm">${I18n.t('nav.dashboard')}${pendingBadge}</a>
+        <button type="button" class="btn btn--ghost btn--sm" id="logout-btn" data-action="logout">${I18n.t('nav.logout')}</button>
       `;
     } else {
       actionsContainer.innerHTML = `
-        <a href="login.html" class="btn btn--ghost btn--sm">Log In</a>
-        <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
+        <a href="login.html" class="btn btn--ghost btn--sm">${I18n.t('nav.login')}</a>
+        <a href="register.html" class="btn btn--primary btn--sm">${I18n.t('nav.getStarted')}</a>
       `;
     }
   },
@@ -186,7 +209,7 @@ const App = {
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.floor(start + (target - start) * eased);
-        counter.textContent = current.toLocaleString() + suffix;
+        counter.textContent = I18n.formatNumber(current) + suffix;
 
         if (progress < 1) {
           requestAnimationFrame(update);
@@ -248,7 +271,7 @@ const App = {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'toast__close';
     closeBtn.type = 'button';
-    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.setAttribute('aria-label', I18n.t('common.close'));
     closeBtn.innerHTML = '&times;';
     closeBtn.addEventListener('click', () => toast.remove());
 
@@ -282,7 +305,7 @@ const App = {
         <h3 class="modal__title">${App.escapeHTML(title)}</h3>
         <div class="modal__body">${body}</div>
         <div class="modal__actions">
-          <button type="button" class="btn btn--ghost" data-action="close-modal">Cancel</button>
+          <button type="button" class="btn btn--ghost" data-action="close-modal">${App.escapeHTML(I18n.t('common.cancel'))}</button>
         </div>
       </div>
     `;
@@ -316,32 +339,48 @@ const App = {
   // Utility Helpers
   // =========================================================================
 
+  /** Data relativa no idioma ativo ("hoje", "há 3 dias"...). */
   formatDate(dateStr) {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return I18n.formatRelativeDate(dateStr);
   },
 
+  /** Categoria com nome e descrição traduzidos. */
   getCategory(id) {
-    return (
-      MockDB.equipmentCategories.find((c) => c.id === id) || {
-        id: 'other',
-        name: 'Other',
-        icon: '',
-      }
-    );
+    const cat = MockDB.equipmentCategories.find((c) => c.id === id) || { id: 'other', icon: '' };
+    return {
+      ...cat,
+      name: I18n.t(`categories.${cat.id}.name`),
+      description: I18n.t(`categories.${cat.id}.description`),
+    };
   },
 
   getCondition(id) {
-    return MockDB.conditions.find((c) => c.id === id) || { id: 'unknown', label: 'Unknown' };
+    const known = MockDB.conditions.some((c) => c.id === id);
+    const key = known ? id : 'unknown';
+    return {
+      id: key,
+      label: I18n.t(`conditions.${key}.label`),
+      description: known ? I18n.t(`conditions.${key}.description`) : '',
+    };
+  },
+
+  /**
+   * Localização curta e pública: "Recife/PE" no Brasil, "Cidade, Estado,
+   * País" nos demais. Aceita usuários, doações e pedidos.
+   */
+  formatLocation({ country, state, city } = {}) {
+    if (country === 'BR') {
+      if (city && state) return `${city}/${state}`;
+      return state || city || I18n.countryName('BR');
+    }
+    return [city, state, I18n.countryName(country)].filter(Boolean).join(', ');
+  },
+
+  /** Nome da área de interesse no idioma ativo (aceita id ou texto antigo). */
+  areaName(value) {
+    if (!value) return '';
+    const key = `areas.${value}`;
+    return I18n.has(key) ? I18n.t(key) : value;
   },
 
   getInitials(name) {
@@ -368,8 +407,8 @@ const App = {
     let action = '';
     if (viewer?.type === 'lalider' && donation.status === 'available') {
       action = Offers.findPendingFrom(viewer.id, { donationId: donation.id })
-        ? '<button type="button" class="btn btn--outline btn--sm" disabled>Requested</button>'
-        : `<button type="button" class="btn btn--primary btn--sm" data-action="request-donation" data-donation-id="${e(donation.id)}">Request</button>`;
+        ? `<button type="button" class="btn btn--outline btn--sm" disabled>${I18n.t('card.requested')}</button>`
+        : `<button type="button" class="btn btn--primary btn--sm" data-action="request-donation" data-donation-id="${e(donation.id)}">${I18n.t('card.request')}</button>`;
     }
 
     return `
@@ -404,13 +443,13 @@ const App = {
     let needAction = '';
     if (viewer?.type === 'donor' && need.status === 'open') {
       needAction = Offers.findPendingFrom(viewer.id, { needId: need.id })
-        ? '<button type="button" class="btn btn--outline btn--sm" disabled>Offer sent</button>'
-        : `<button type="button" class="btn btn--primary btn--sm" data-action="offer-help" data-need-id="${e(need.id)}">Offer to Help</button>`;
+        ? `<button type="button" class="btn btn--outline btn--sm" disabled>${I18n.t('card.offerSent')}</button>`
+        : `<button type="button" class="btn btn--primary btn--sm" data-action="offer-help" data-need-id="${e(need.id)}">${I18n.t('card.offerHelp')}</button>`;
     }
     const urgencyBadge = {
-      high: '<span class="badge badge--error">High Priority</span>',
-      medium: '<span class="badge badge--warning">Medium</span>',
-      low: '<span class="badge badge--success">Low</span>',
+      high: `<span class="badge badge--error">${I18n.t('urgency.high')}</span>`,
+      medium: `<span class="badge badge--warning">${I18n.t('urgency.medium')}</span>`,
+      low: `<span class="badge badge--success">${I18n.t('urgency.low')}</span>`,
     };
 
     return `
@@ -438,21 +477,22 @@ const App = {
   },
 
   renderStatusBadge(status) {
-    const badges = {
-      available: '<span class="badge badge--success">Available</span>',
-      open: '<span class="badge badge--success">Open</span>',
-      pending: '<span class="badge badge--warning">Pending</span>',
-      matched: '<span class="badge badge--warning">Matched</span>',
-      accepted: '<span class="badge badge--warning">Accepted</span>',
-      declined: '<span class="badge badge--error">Declined</span>',
-      delivered: '<span class="badge badge--gold">Delivered</span>',
+    const variants = {
+      available: 'success',
+      open: 'success',
+      pending: 'warning',
+      matched: 'warning',
+      accepted: 'warning',
+      declined: 'error',
+      delivered: 'gold',
     };
-    return badges[status] || '';
+    if (!variants[status]) return '';
+    return `<span class="badge badge--${variants[status]}">${I18n.t(`status.${status}`)}</span>`;
   },
 
   /** Nome exibido publicamente: Lalíder vira "Ana S."; doador, organização ou nome. */
   displayName(user) {
-    if (!user) return 'Unknown';
+    if (!user) return I18n.t('common.unknown');
     if (user.type === 'lalider') {
       const parts = String(user.name || '')
         .trim()
@@ -464,9 +504,9 @@ const App = {
 
   _messageField(id, placeholder) {
     return `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
-      <label class="form-label" for="${id}">Message (optional)</label>
+      <label class="form-label" for="${id}">${I18n.t('offer.messageLabel')}</label>
       <textarea class="form-textarea" id="${id}" maxlength="500" placeholder="${this.escapeHTML(placeholder)}"></textarea>
-      <p class="form-hint">Do not share phone numbers or addresses here. Contact details are shown to both sides only after the offer is accepted.</p>
+      <p class="form-hint">${I18n.t('offer.messageHint')}</p>
     </div>`;
   },
 
@@ -476,7 +516,7 @@ const App = {
     const user = Auth.getCurrentUser();
     if (!need || !user) return;
     if (user.type !== 'donor') {
-      this.showToast('Only donors can offer help.', 'error');
+      this.showToast(I18n.t('offers.onlyDonors'), 'error');
       return;
     }
 
@@ -485,24 +525,24 @@ const App = {
     const suggested = myDonations.find((d) => d.category === need.category);
     const donationSelect = myDonations.length
       ? `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
-          <label class="form-label" for="offer-donation">Link one of your donations (optional)</label>
+          <label class="form-label" for="offer-donation">${I18n.t('offer.linkDonation')}</label>
           <select class="form-select" id="offer-donation">
-            <option value="">No specific listing</option>
+            <option value="">${I18n.t('offer.noListing')}</option>
             ${myDonations.map((d) => `<option value="${e(d.id)}" ${d.id === suggested?.id ? 'selected' : ''}>${e(d.title)}</option>`).join('')}
           </select>
         </div>`
       : '';
 
     this.showModal(
-      `Help ${need.laliderName}`,
-      `<p>You're offering to help with:</p>
+      I18n.t('offer.helpTitle', { name: need.laliderName }),
+      `<p>${I18n.t('offer.helpIntro')}</p>
        <p><strong>${e(need.title)}</strong></p>
        <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(need.description)}</p>
        ${donationSelect}
-       ${this._messageField('offer-message', 'Tell the Lalíder how you can help')}`,
+       ${this._messageField('offer-message', I18n.t('offer.helpPlaceholder'))}`,
       [
         {
-          label: 'Send Offer',
+          label: I18n.t('offer.send'),
           class: 'btn--primary',
           onClick: () =>
             this._submitOffer(() =>
@@ -524,7 +564,7 @@ const App = {
     const user = Auth.getCurrentUser();
     if (!donation || !user) return;
     if (user.type !== 'lalider') {
-      this.showToast('Only verified Lalíderes can request donations.', 'error');
+      this.showToast(I18n.t('offers.onlyLalideres'), 'error');
       return;
     }
 
@@ -533,23 +573,23 @@ const App = {
     const suggested = myNeeds.find((n) => n.category === donation.category);
     const needSelect = myNeeds.length
       ? `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
-          <label class="form-label" for="request-need">Which of your requests does it answer? (optional)</label>
+          <label class="form-label" for="request-need">${I18n.t('offer.whichNeed')}</label>
           <select class="form-select" id="request-need">
-            <option value="">None</option>
+            <option value="">${I18n.t('offer.noNeed')}</option>
             ${myNeeds.map((n) => `<option value="${e(n.id)}" ${n.id === suggested?.id ? 'selected' : ''}>${e(n.title)}</option>`).join('')}
           </select>
         </div>`
       : '';
 
     this.showModal(
-      'Request this donation',
+      I18n.t('offer.requestTitle'),
       `<p><strong>${e(donation.title)}</strong></p>
        <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(donation.description)}</p>
        ${needSelect}
-       ${this._messageField('request-message', 'Tell the donor how this would help you')}`,
+       ${this._messageField('request-message', I18n.t('offer.requestPlaceholder'))}`,
       [
         {
-          label: 'Send Request',
+          label: I18n.t('offer.sendRequest'),
           class: 'btn--primary',
           onClick: () =>
             this._submitOffer(() =>
@@ -589,20 +629,24 @@ const App = {
     const other = Auth.getUsers().find((u) => u.id === otherId);
     const isRecipient = Offers.getRecipientId(offer) === viewer.id;
 
-    let direction;
-    if (offer.initiatedBy === 'donor') {
-      direction = isRecipient
-        ? `${this.displayName(other)} offered to help`
-        : `You offered help to ${this.displayName(other)}`;
-    } else {
-      direction = isRecipient
-        ? `${this.displayName(other)} asked for your donation`
-        : `You asked ${this.displayName(other)} for a donation`;
-    }
+    const directionKey =
+      offer.initiatedBy === 'donor'
+        ? isRecipient
+          ? 'offerCard.offeredYou'
+          : 'offerCard.youOffered'
+        : isRecipient
+          ? 'offerCard.askedYou'
+          : 'offerCard.youAsked';
+    const direction = I18n.t(directionKey, { name: this.displayName(other) });
+    const t = (key) => I18n.t(key);
 
     const items = [
-      donation ? `<p class="text-sm"><strong>Donation:</strong> ${e(donation.title)}</p>` : '',
-      need ? `<p class="text-sm"><strong>Request:</strong> ${e(need.title)}</p>` : '',
+      donation
+        ? `<p class="text-sm"><strong>${t('offerCard.donation')}</strong> ${e(donation.title)}</p>`
+        : '',
+      need
+        ? `<p class="text-sm"><strong>${t('offerCard.request')}</strong> ${e(need.title)}</p>`
+        : '',
     ].join('');
 
     const message = offer.message
@@ -612,7 +656,7 @@ const App = {
     const contact = Offers.getContact(offer, viewer.id);
     const contactHTML = contact
       ? `<div class="card card--flat" style="margin-top: var(--s-3); padding: var(--s-3);">
-          <p class="text-xs" style="color: var(--text-2);">Contact</p>
+          <p class="text-xs" style="color: var(--text-2);">${t('offerCard.contact')}</p>
           <p class="text-sm"><strong>${e(contact.name)}</strong>${contact.organization ? ` · ${e(contact.organization)}` : ''}</p>
           <p class="text-sm"><a href="mailto:${e(contact.email)}">${e(contact.email)}</a></p>
         </div>`
@@ -621,19 +665,19 @@ const App = {
     let actions = '';
     if (offer.status === 'pending' && isRecipient) {
       actions = `
-        <button type="button" class="btn btn--ghost btn--sm" data-action="decline-offer" data-offer-id="${e(offer.id)}">Decline</button>
-        <button type="button" class="btn btn--primary btn--sm" data-action="accept-offer" data-offer-id="${e(offer.id)}">Accept</button>`;
+        <button type="button" class="btn btn--ghost btn--sm" data-action="decline-offer" data-offer-id="${e(offer.id)}">${t('offerCard.decline')}</button>
+        <button type="button" class="btn btn--primary btn--sm" data-action="accept-offer" data-offer-id="${e(offer.id)}">${t('offerCard.accept')}</button>`;
     } else if (offer.status === 'pending') {
-      actions = `<span class="text-sm text-muted">Waiting for an answer</span>
-        <button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">Withdraw</button>`;
+      actions = `<span class="text-sm text-muted">${t('offerCard.waiting')}</span>
+        <button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">${t('offerCard.withdraw')}</button>`;
     } else if (offer.status === 'accepted') {
-      actions = `<button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">Cancel match</button>
-        <button type="button" class="btn btn--primary btn--sm" data-action="deliver-offer" data-offer-id="${e(offer.id)}">Mark as delivered</button>`;
+      actions = `<button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">${t('offerCard.cancelMatch')}</button>
+        <button type="button" class="btn btn--primary btn--sm" data-action="deliver-offer" data-offer-id="${e(offer.id)}">${t('offerCard.markDelivered')}</button>`;
     } else if (offer.status === 'declined') {
       const reasons = {
-        superseded: 'Closed: matched with someone else',
-        withdrawn: 'Withdrawn by the sender',
-        cancelled: 'Match cancelled',
+        superseded: t('offerCard.reasonSuperseded'),
+        withdrawn: t('offerCard.reasonWithdrawn'),
+        cancelled: t('offerCard.reasonCancelled'),
       };
       const reason = reasons[offer.closedReason];
       actions = reason ? `<span class="text-sm text-muted">${reason}</span>` : '';
@@ -675,11 +719,11 @@ App.registerActions({
   'decline-offer': (el) =>
     App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'decline')),
   'cancel-offer': (el) => {
-    if (!window.confirm('Are you sure? This cannot be undone.')) return;
+    if (!window.confirm(I18n.t('offerCard.confirmCancel'))) return;
     App._offerAction((user) => Offers.cancel(el.dataset.offerId, user.id));
   },
   'deliver-offer': (el) => {
-    if (!window.confirm('Confirm that this item was delivered?')) return;
+    if (!window.confirm(I18n.t('offerCard.confirmDelivered'))) return;
     App._offerAction((user) => Offers.markDelivered(el.dataset.offerId, user.id));
   },
 });

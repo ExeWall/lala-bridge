@@ -80,7 +80,7 @@ describe('Auth: verificação do código LALA', () => {
   it('recusa nome diferente do registrado', () => {
     const res = Auth.verifyLaliderCode('LALA-VLB32-003', 'Outra Pessoa');
     expect(res.valid).toBe(false);
-    expect(res.message).toMatch(/name/i);
+    expect(res.message).toMatch(/nome/i);
   });
 
   it('permite pular a checagem de nome na verificação ao digitar', () => {

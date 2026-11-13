@@ -7,7 +7,8 @@ App.ready(() => {
   MockDB.camps.forEach((camp) => {
     const opt = document.createElement('option');
     opt.value = camp;
-    opt.textContent = camp + (camp.startsWith('VLB') ? ' (Virtual)' : ' (In-person)');
+    const mode = I18n.t(camp.startsWith('VLB') ? 'camp.virtual' : 'camp.inPerson');
+    opt.textContent = `${camp} (${mode})`;
     campSelect.appendChild(opt);
   });
 
@@ -31,7 +32,7 @@ App.ready(() => {
   MockDB.equipmentCategories.forEach((cat) => {
     const opt = document.createElement('option');
     opt.value = cat.id;
-    opt.textContent = cat.name;
+    opt.textContent = App.getCategory(cat.id).name;
     needCategorySelect.appendChild(opt);
   });
 
@@ -39,7 +40,7 @@ App.ready(() => {
   MockDB.areasOfInterest.forEach((area) => {
     const opt = document.createElement('option');
     opt.value = area;
-    opt.textContent = area;
+    opt.textContent = App.areaName(area);
     areaSelect.appendChild(opt);
   });
 
@@ -84,7 +85,7 @@ function handleCodeInput(value) {
   }
 
   widget.className = 'verification-widget verifying';
-  status.innerHTML = '<span class="spinner"></span> <span>Verifying code...</span>';
+  status.innerHTML = `<span class="spinner" aria-hidden="true"></span> <span>${App.escapeHTML(I18n.t('register.verifying'))}</span>`;
 
   clearTimeout(window._codeTimeout);
   window._codeTimeout = setTimeout(() => {
@@ -93,8 +94,7 @@ function handleCodeInput(value) {
     if (result.valid) {
       widget.className = 'verification-widget verified';
       input.className = 'form-input form-input--code form-input--success';
-      status.innerHTML =
-        '<span style="color: var(--success); font-weight: 600;">Code found. Enter your full name as registered with LALA.</span>';
+      status.innerHTML = `<span style="color: var(--success); font-weight: 600;">${App.escapeHTML(I18n.t('register.codeFound'))}</span>`;
       submitBtn.disabled = false;
       codeVerified = true;
 
@@ -118,21 +118,21 @@ function handleCodeInput(value) {
 async function handleLaliderRegister(e) {
   e.preventDefault();
   if (!codeVerified) {
-    App.showToast('Please verify your LALA code first.', 'error');
+    App.showToast(I18n.t('register.verifyFirst'), 'error');
     return;
   }
 
   const password = document.getElementById('lalider-password').value;
   const confirm = document.getElementById('lalider-password-confirm').value;
   if (password !== confirm) {
-    App.showToast('Passwords do not match.', 'error');
+    App.showToast(I18n.t('register.passwordMismatch'), 'error');
     return;
   }
 
   const needDesc = document.getElementById('lalider-need').value.trim();
   const needCategory = document.getElementById('lalider-need-category').value;
   if (needDesc && !needCategory) {
-    App.showToast('Please choose the equipment category for your need.', 'error');
+    App.showToast(I18n.t('register.chooseCategory'), 'error');
     return;
   }
 
@@ -157,14 +157,13 @@ async function handleLaliderRegister(e) {
     Auth.startSession(result.user);
     App.showToast(result.message, 'success');
     if (needDesc) {
-      const cat = MockDB.equipmentCategories.find((c) => c.id === needCategory);
       Donations.createNeed({
         laliderId: result.user.id,
         laliderName: App.displayName(result.user),
         camp: result.user.camp,
         country: result.user.country,
         category: needCategory,
-        title: `${cat ? cat.name : 'Equipment'} needed for studies`,
+        title: I18n.t('register.needTitle', { category: App.getCategory(needCategory).name }),
         description: needDesc,
         urgency: 'medium',
       });
@@ -192,7 +191,7 @@ async function handleDonorRegister(e) {
   const password = document.getElementById('donor-password').value;
   const confirm = document.getElementById('donor-password-confirm').value;
   if (password !== confirm) {
-    App.showToast('Passwords do not match.', 'error');
+    App.showToast(I18n.t('register.passwordMismatch'), 'error');
     return;
   }
 

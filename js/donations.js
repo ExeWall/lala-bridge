@@ -49,7 +49,7 @@ const Donations = {
    */
   create({ donorId, donorName, category, title, description, condition, country }) {
     if (!Auth.hasRole(donorId, 'donor')) {
-      throw new Error('Only donors can publish donations.');
+      throw new Error(I18n.t('donations.onlyDonors'));
     }
     const donations = this.getAll();
     const donation = {
@@ -148,9 +148,20 @@ const Donations = {
   /**
    * Create a new need
    */
-  createNeed({ laliderId, laliderName, camp, country, category, title, description, urgency }) {
+  createNeed({
+    laliderId,
+    laliderName,
+    camp,
+    country,
+    state = '',
+    city = '',
+    category,
+    title,
+    description,
+    urgency,
+  }) {
     if (!Auth.hasRole(laliderId, 'lalider')) {
-      throw new Error('Only verified Lalíderes can create requests.');
+      throw new Error(I18n.t('donations.onlyLalideres'));
     }
     const needs = this.getAllNeeds();
     const need = {
@@ -159,6 +170,8 @@ const Donations = {
       laliderName,
       camp,
       country,
+      state,
+      city,
       category,
       title,
       description,

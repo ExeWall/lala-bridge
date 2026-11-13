@@ -2,13 +2,11 @@
  * LALA Bridge — script da página dashboard.html
  */
 
+const t = (key, params) => I18n.t(key, params);
+const esc = (value) => App.escapeHTML(value);
+
 App.ready(() => {
   if (!Auth.requireAuth()) return;
-  if (!Auth.getCurrentUser()) {
-    Auth.logout();
-    window.location.href = 'login.html';
-    return;
-  }
   App.onDataChange = renderDashboard;
   renderDashboard();
 });
@@ -23,13 +21,13 @@ function renderDashboard() {
 function statCard(icon, color, value, label) {
   return `
     <div class="card stat-card">
-      <div class="stat-card__icon stat-card__icon--${color}">${icon}</div>
-      <div><div class="stat-card__value">${value}</div><div class="stat-card__label">${label}</div></div>
+      <div class="stat-card__icon stat-card__icon--${color}" aria-hidden="true">${icon}</div>
+      <div><div class="stat-card__value">${I18n.formatNumber(value)}</div><div class="stat-card__label">${esc(label)}</div></div>
     </div>`;
 }
 
 function section(title, bodyHTML) {
-  return `<div style="margin-bottom: var(--s-7);"><h2 class="h-3" style="margin-bottom: var(--s-5);">${title}</h2>${bodyHTML}</div>`;
+  return `<section style="margin-bottom: var(--s-7);"><h2 class="h-3" style="margin-bottom: var(--s-5);">${esc(title)}</h2>${bodyHTML}</section>`;
 }
 
 function grid(itemsHTML) {
@@ -38,11 +36,15 @@ function grid(itemsHTML) {
 
 function emptyState(title, desc, actionHTML = '') {
   return `<div class="empty-state card card--flat">
-    <div class="empty-state__icon">—</div>
-    <h3 class="empty-state__title">${title}</h3>
-    <p class="empty-state__desc">${desc}</p>
+    <div class="empty-state__icon" aria-hidden="true">—</div>
+    <h3 class="empty-state__title">${esc(title)}</h3>
+    <p class="empty-state__desc">${esc(desc)}</p>
     ${actionHTML}
   </div>`;
+}
+
+function viewAllLink(href, label) {
+  return `<div style="margin-top: var(--s-5);"><a href="${href}" class="link-underline">${esc(label)}</a></div>`;
 }
 
 /**
@@ -60,12 +62,25 @@ function renderOffersSections(user) {
   const cards = (list) => grid(list.map((o) => App.renderOfferCard(o, user)));
 
   let html = '';
-  if (waiting.length)
-    html += section(`Waiting for your answer (${waiting.length})`, cards(waiting));
-  if (active.length) html += section('Active matches', cards(active));
-  if (sent.length) html += section('Sent by you', cards(sent));
-  if (history.length) html += section('History', cards(history));
+  if (waiting.length) {
+    html += section(t('dashboard.sectionWaiting', { count: waiting.length }), cards(waiting));
+  }
+  if (active.length) html += section(t('dashboard.sectionActive'), cards(active));
+  if (sent.length) html += section(t('dashboard.sectionSent'), cards(sent));
+  if (history.length) html += section(t('dashboard.sectionHistory'), cards(history));
   return html;
+}
+
+function welcomeHeader(user, badgeClass, badgeLabel, subtitleHTML, extraHTML = '') {
+  return `
+    <div>
+      <h1 class="dashboard__welcome">
+        ${esc(t('dashboard.welcome', { name: user.name.split(' ')[0] }))}
+        <span class="badge ${badgeClass}" style="margin-left: 8px; vertical-align: middle;">${esc(badgeLabel)}</span>
+      </h1>
+      <p class="dashboard__subtitle">${subtitleHTML}</p>
+      ${extraHTML}
+    </div>`;
 }
 
 function renderLaliderDashboard(user) {
@@ -75,56 +90,58 @@ function renderLaliderDashboard(user) {
     ['accepted', 'delivered'].includes(o.status)
   );
   const available = Donations.getAvailable();
-  const e = (v) => App.escapeHTML(v);
 
-  document.getElementById('dashboard-header').innerHTML = `
-    <div>
-      <div class="dashboard__welcome">
-        Welcome, ${e(user.name.split(' ')[0])}
-        <span class="badge badge--lalider" style="margin-left: 8px; vertical-align: middle;">Verified Lalíder</span>
-      </div>
-      <p class="dashboard__subtitle">
-        ${e(user.camp)} &middot; ${e(user.country)}${user.state ? ', ' + e(user.state) : ''} &middot; ${e(user.areaOfInterest || 'LALA Community')}
-      </p>
-      ${user.showerSong ? `<p class="text-sm text-muted" style="margin-top: 4px;">Shower song: "${e(user.showerSong)}"</p>` : ''}
-    </div>
-  `;
+  const subtitle = [
+    esc(user.camp),
+    esc(App.formatLocation(user)),
+    esc(App.areaName(user.areaOfInterest) || t('dashboard.community')),
+  ]
+    .filter(Boolean)
+    .join(' &middot; ');
+  const song = user.showerSong
+    ? `<p class="text-sm text-muted" style="margin-top: 4px;">${esc(t('dashboard.showerSong', { song: user.showerSong }))}</p>`
+    : '';
+
+  document.getElementById('dashboard-header').innerHTML = welcomeHeader(
+    user,
+    'badge--lalider',
+    t('dashboard.verifiedLalider'),
+    subtitle,
+    song
+  );
 
   document.getElementById('dashboard-stats').innerHTML = [
-    statCard('&#9776;', 'gold', myNeeds.length, 'My Requests'),
-    statCard('&#10003;', 'success', received.length, 'Donations Received'),
-    statCard('&#9679;', 'violet', available.length, 'Available Donations'),
-    statCard('&#9673;', 'orange', stats.countries, 'Countries Active'),
+    statCard('&#9776;', 'gold', myNeeds.length, t('dashboard.statMyRequests')),
+    statCard('&#10003;', 'success', received.length, t('dashboard.statReceived')),
+    statCard('&#9679;', 'violet', available.length, t('dashboard.statAvailable')),
+    statCard('&#9673;', 'orange', stats.countries, t('dashboard.statCountries')),
   ].join('');
 
   document.getElementById('dashboard-actions').innerHTML = `
     <div class="flex gap-4" style="flex-wrap: wrap;">
-      <a href="browse.html" class="btn btn--primary">Browse Available Donations</a>
-      <button type="button" class="btn btn--outline" data-action="new-request">Submit a New Request</button>
+      <a href="browse.html" class="btn btn--primary">${esc(t('dashboard.browseDonations'))}</a>
+      <button type="button" class="btn btn--outline" data-action="new-request">${esc(t('dashboard.newRequest'))}</button>
     </div>
   `;
 
   let html = renderOffersSections(user);
 
   html += section(
-    'My Requests',
+    t('dashboard.sectionMyRequests'),
     myNeeds.length
       ? grid(myNeeds.map((n) => App.renderNeedCard(n)))
       : emptyState(
-          'No Requests Yet',
-          'Submit a request describing the equipment you need. Donors will see it and can offer to help.',
-          '<button type="button" class="btn btn--primary" data-action="new-request">Submit a Request</button>'
+          t('dashboard.noRequestsTitle'),
+          t('dashboard.noRequestsDesc'),
+          `<button type="button" class="btn btn--primary" data-action="new-request">${esc(t('dashboard.noRequestsButton'))}</button>`
         )
   );
 
   let availableHTML = available.length
     ? grid(available.slice(0, 4).map((d) => App.renderDonationCard(d)))
-    : emptyState('No Donations Available', 'New donations will show up here.');
-  if (available.length > 4) {
-    availableHTML +=
-      '<div style="margin-top: var(--s-5);"><a href="browse.html" class="link-underline">View all</a></div>';
-  }
-  html += section('Available Donations', availableHTML);
+    : emptyState(t('dashboard.noAvailableTitle'), t('dashboard.noAvailableDesc'));
+  if (available.length > 4) availableHTML += viewAllLink('browse.html', t('dashboard.viewAll'));
+  html += section(t('dashboard.sectionAvailable'), availableHTML);
 
   document.getElementById('dashboard-content').innerHTML = html;
 }
@@ -133,60 +150,60 @@ function renderDonorDashboard(user) {
   const stats = Donations.getStats();
   const myDonations = Donations.getByDonor(user.id);
   const openNeeds = Donations.getOpenNeeds();
-  const e = (v) => App.escapeHTML(v);
 
-  document.getElementById('dashboard-header').innerHTML = `
-    <div>
-      <div class="dashboard__welcome">
-        Welcome, ${e(user.name.split(' ')[0])}
-        <span class="badge badge--donor" style="margin-left: 8px; vertical-align: middle;">Donor</span>
-      </div>
-      <p class="dashboard__subtitle">
-        ${user.organization ? e(user.organization) + ' &middot; ' : ''}${e(user.country)} &middot; Thank you for your generosity
-      </p>
-    </div>
-  `;
+  const subtitle = [
+    esc(user.organization),
+    esc(App.formatLocation(user)),
+    esc(t('dashboard.donorThanks')),
+  ]
+    .filter(Boolean)
+    .join(' &middot; ');
+  document.getElementById('dashboard-header').innerHTML = welcomeHeader(
+    user,
+    'badge--donor',
+    t('roles.donor'),
+    subtitle
+  );
 
   document.getElementById('dashboard-stats').innerHTML = [
-    statCard('&#9679;', 'gold', myDonations.length, 'My Donations'),
+    statCard('&#9679;', 'gold', myDonations.length, t('dashboard.statMyDonations')),
     statCard(
       '&#10003;',
       'success',
       myDonations.filter((d) => ['matched', 'delivered'].includes(d.status)).length,
-      'Matched'
+      t('dashboard.statMatched')
     ),
-    statCard('&#9776;', 'violet', openNeeds.length, 'Open Requests'),
-    statCard('&#9673;', 'orange', stats.countries, 'Countries Active'),
+    statCard('&#9776;', 'violet', openNeeds.length, t('dashboard.statOpenRequests')),
+    statCard('&#9673;', 'orange', stats.countries, t('dashboard.statCountries')),
   ].join('');
 
   document.getElementById('dashboard-actions').innerHTML = `
     <div class="flex gap-4" style="flex-wrap: wrap;">
-      <a href="donate.html" class="btn btn--primary">Create New Donation</a>
-      <a href="browse.html?view=needs" class="btn btn--outline">View Lalíder Requests</a>
+      <a href="donate.html" class="btn btn--primary">${esc(t('dashboard.createDonation'))}</a>
+      <a href="browse.html?view=needs" class="btn btn--outline">${esc(t('dashboard.viewRequests'))}</a>
     </div>
   `;
 
   let html = renderOffersSections(user);
 
   html += section(
-    'My Donations',
+    t('dashboard.sectionMyDonations'),
     myDonations.length
       ? grid(myDonations.map((d) => App.renderDonationCard(d)))
       : emptyState(
-          'No Donations Yet',
-          "List equipment you'd like to donate. Lalíderes are waiting for your help.",
-          '<a href="donate.html" class="btn btn--primary">Create Your First Donation</a>'
+          t('dashboard.noDonationsTitle'),
+          t('dashboard.noDonationsDesc'),
+          `<a href="donate.html" class="btn btn--primary">${esc(t('dashboard.noDonationsButton'))}</a>`
         )
   );
 
   let needsHTML = openNeeds.length
     ? grid(openNeeds.slice(0, 4).map((n) => App.renderNeedCard(n)))
-    : emptyState('No Open Requests', 'New requests from Lalíderes will show up here.');
+    : emptyState(t('dashboard.noOpenTitle'), t('dashboard.noOpenDesc'));
   if (openNeeds.length > 4) {
-    needsHTML +=
-      '<div style="margin-top: var(--s-5);"><a href="browse.html?view=needs" class="link-underline">View all requests</a></div>';
+    needsHTML += viewAllLink('browse.html?view=needs', t('dashboard.viewAllRequests'));
   }
-  html += section('Lalíderes Need Your Help', needsHTML);
+  html += section(t('dashboard.sectionNeedHelp'), needsHTML);
 
   document.getElementById('dashboard-content').innerHTML = html;
 }
@@ -197,53 +214,52 @@ App.registerActions({
 
 function showRequestForm() {
   if (!Auth.isLalider()) {
-    App.showToast('Only verified Lalíderes can submit requests.', 'error');
+    App.showToast(t('request.onlyLalideres'), 'error');
     return;
   }
   const categoriesHTML = MockDB.equipmentCategories
-    .map((c) => `<option value="${App.escapeHTML(c.id)}">${App.escapeHTML(c.name)}</option>`)
+    .map((c) => `<option value="${esc(c.id)}">${esc(App.getCategory(c.id).name)}</option>`)
+    .join('');
+  const urgencyHTML = ['medium', 'high', 'low']
+    .map((u) => `<option value="${u}">${esc(t(`urgency.option.${u}`))}</option>`)
     .join('');
 
   App.showModal(
-    'Submit Equipment Request',
+    t('request.modalTitle'),
     `<form id="request-form" style="text-align: left;">
     <div class="form-group">
-      <label class="form-label form-label--required">Category</label>
-      <select class="form-select" id="request-category" required><option value="">Select category</option>${categoriesHTML}</select>
+      <label class="form-label form-label--required" for="request-category">${esc(t('request.category'))}</label>
+      <select class="form-select" id="request-category" required><option value="">${esc(t('request.selectCategory'))}</option>${categoriesHTML}</select>
     </div>
     <div class="form-group">
-      <label class="form-label form-label--required">Title</label>
-      <input type="text" class="form-input" id="request-title" placeholder="e.g. Need a laptop for university" required>
+      <label class="form-label form-label--required" for="request-title">${esc(t('request.titleLabel'))}</label>
+      <input type="text" class="form-input" id="request-title" maxlength="120" placeholder="${esc(t('request.titlePlaceholder'))}" required>
     </div>
     <div class="form-group">
-      <label class="form-label form-label--required">Description</label>
-      <textarea class="form-textarea" id="request-desc" placeholder="Describe what you need and why..." required></textarea>
+      <label class="form-label form-label--required" for="request-desc">${esc(t('request.description'))}</label>
+      <textarea class="form-textarea" id="request-desc" maxlength="1000" placeholder="${esc(t('request.descriptionPlaceholder'))}" required></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">Priority Level</label>
-      <select class="form-select" id="request-urgency">
-        <option value="medium">Medium</option>
-        <option value="high">High — Urgently needed</option>
-        <option value="low">Low — No rush</option>
-      </select>
+      <label class="form-label" for="request-urgency">${esc(t('request.priority'))}</label>
+      <select class="form-select" id="request-urgency">${urgencyHTML}</select>
     </div>
   </form>`,
-    [{ label: 'Submit Request', class: 'btn--primary', onClick: submitRequest }]
+    [{ label: t('request.submit'), class: 'btn--primary', onClick: submitRequest }]
   );
 }
 
 function submitRequest() {
   const user = Auth.getCurrentUser();
   if (!Auth.isLalider()) {
-    App.showToast('Only verified Lalíderes can submit requests.', 'error');
+    App.showToast(t('request.onlyLalideres'), 'error');
     return;
   }
   const category = document.getElementById('request-category').value;
-  const title = document.getElementById('request-title').value;
-  const desc = document.getElementById('request-desc').value;
+  const title = document.getElementById('request-title').value.trim();
+  const desc = document.getElementById('request-desc').value.trim();
   const urgency = document.getElementById('request-urgency').value;
   if (!category || !title || !desc) {
-    App.showToast('Please fill in all required fields.', 'error');
+    App.showToast(t('request.fillRequired'), 'error');
     return;
   }
 
@@ -252,6 +268,8 @@ function submitRequest() {
     laliderName: App.displayName(user),
     camp: user.camp,
     country: user.country,
+    state: user.state,
+    city: user.city,
     category,
     title,
     description: desc,
@@ -259,6 +277,6 @@ function submitRequest() {
   });
 
   App.closeModal();
-  App.showToast('Request submitted successfully! Donors can now see your request.', 'success');
+  App.showToast(t('request.submitted'), 'success');
   App.refresh();
 }

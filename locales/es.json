@@ -1,1 +1,485 @@
-{}
+{
+  "app": {
+    "name": "LALA Bridge"
+  },
+  "nav": {
+    "home": "Inicio",
+    "browse": "Explorar",
+    "donate": "Donar",
+    "dashboard": "Panel",
+    "login": "Iniciar sesión",
+    "getStarted": "Empezar",
+    "logout": "Cerrar sesión",
+    "menu": "Abrir menú",
+    "language": "Idioma",
+    "skip": "Saltar al contenido",
+    "pendingOffers": {
+      "one": "{count} oferta esperando tu respuesta",
+      "other": "{count} ofertas esperando tu respuesta"
+    }
+  },
+  "roles": {
+    "donor": "Donante",
+    "lalider": "Lalíder"
+  },
+  "footer": {
+    "desc": "Conectamos donantes con Lalíderes verificados de la Latin American Leadership Academy para que ningún joven deje de estudiar por falta de equipo.",
+    "platform": "Plataforma",
+    "browseDonations": "Ver donaciones",
+    "requests": "Pedidos de Lalíderes",
+    "makeDonation": "Hacer una donación",
+    "community": "Comunidad",
+    "aboutLala": "Sobre LALA",
+    "howItWorks": "Cómo funciona",
+    "source": "Código abierto en GitHub",
+    "privacy": "Política de Privacidad",
+    "copyright": "© 2026 LALA Bridge. Una iniciativa comunitaria de Lalíderes, para Lalíderes."
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "unknown": "Desconocido",
+    "optional": "opcional",
+    "required": "obligatorio"
+  },
+  "demo": {
+    "notice": "Demostración: datos ficticios, guardados solo en este navegador."
+  },
+  "categories": {
+    "laptop": {
+      "name": "Laptop / Notebook",
+      "description": "Laptops, notebooks y Chromebooks"
+    },
+    "phone": {
+      "name": "Celular / Tablet",
+      "description": "Celulares y tablets"
+    },
+    "headphones": {
+      "name": "Audífonos / Audio",
+      "description": "Audífonos, auriculares y micrófonos"
+    },
+    "monitor": {
+      "name": "Monitor",
+      "description": "Monitores y pantallas externas"
+    },
+    "peripherals": {
+      "name": "Periféricos",
+      "description": "Teclados, ratones y cámaras web"
+    },
+    "books": {
+      "name": "Libros / Material de estudio",
+      "description": "Libros, cursos y suscripciones"
+    },
+    "other": {
+      "name": "Otro",
+      "description": "Otros equipos de estudio o trabajo"
+    }
+  },
+  "conditions": {
+    "new": {
+      "label": "Nuevo",
+      "description": "Sin uso, todavía en su empaque"
+    },
+    "like-new": {
+      "label": "Como nuevo",
+      "description": "Poco uso, excelente estado"
+    },
+    "good": {
+      "label": "Bueno",
+      "description": "Usado, bien cuidado y funcionando"
+    },
+    "fair": {
+      "label": "Regular",
+      "description": "Tiene señales de uso, pero funciona bien"
+    },
+    "unknown": {
+      "label": "No informado"
+    }
+  },
+  "urgency": {
+    "high": "Alta prioridad",
+    "medium": "Media",
+    "low": "Baja",
+    "option": {
+      "high": "Alta — lo necesito con urgencia",
+      "medium": "Media",
+      "low": "Baja — sin prisa"
+    }
+  },
+  "status": {
+    "available": "Disponible",
+    "open": "Abierto",
+    "pending": "Pendiente",
+    "matched": "Con match",
+    "accepted": "Aceptada",
+    "declined": "Rechazada",
+    "delivered": "Entregado"
+  },
+  "areas": {
+    "tech": "Tecnología y desarrollo de software",
+    "business": "Negocios y emprendimiento",
+    "education": "Educación y enseñanza",
+    "health": "Salud y medicina",
+    "environment": "Medio ambiente y sostenibilidad",
+    "social": "Impacto social y ONG",
+    "arts": "Artes y diseño",
+    "engineering": "Ingeniería",
+    "law": "Derecho y políticas públicas",
+    "data": "Ciencia de datos e IA",
+    "communications": "Comunicación y marketing",
+    "finance": "Finanzas y economía"
+  },
+  "camp": {
+    "virtual": "Virtual",
+    "inPerson": "Presencial"
+  },
+  "location": {
+    "country": "País",
+    "selectCountry": "Selecciona el país",
+    "uf": "Estado",
+    "selectUf": "Selecciona el estado",
+    "region": "Estado / Región",
+    "regionPlaceholder": "p. ej.: Antioquia, Jalisco",
+    "city": "Ciudad",
+    "cityPlaceholder": "p. ej.: Recife"
+  },
+  "index": {
+    "metaTitle": "LALA Bridge — equipos para que los Lalíderes estudien",
+    "metaDescription": "LALA Bridge conecta donantes con Lalíderes verificados de la Latin American Leadership Academy. Dona laptops, celulares y otros equipos de estudio."
+  },
+  "hero": {
+    "eyebrow": "Latin American Leadership Academy",
+    "title1": "Construye puentes.",
+    "title2": "Impulsa a un Lalíder.",
+    "desc": "Conéctate con Lalíderes verificados y dona las herramientas que necesitan para estudiar, trabajar y liderar. Cada equipo donado abre una puerta.",
+    "ctaDonate": "Quiero donar",
+    "ctaLalider": "Soy Lalíder",
+    "metricAvailable": "Donaciones disponibles",
+    "metricOpen": "Pedidos abiertos",
+    "metricDelivered": "Equipos entregados"
+  },
+  "how": {
+    "eyebrow": "Cómo funciona",
+    "title1": "Tres pasos para",
+    "title2": "generar impacto.",
+    "desc": "Ya sea que dones o recibas, el proceso es simple, seguro y basado en la confianza.",
+    "step1": {
+      "title": "Crea tu cuenta",
+      "desc": "Los donantes se registran libremente. Los Lalíderes confirman su identidad con su código de verificación de LALA."
+    },
+    "step2": {
+      "title": "Conéctate",
+      "desc": "Los donantes publican equipos y los Lalíderes publican lo que necesitan. Un lado ofrece y el otro acepta."
+    },
+    "step3": {
+      "title": "Dona y transforma",
+      "desc": "Con el match aceptado, ambos lados ven los contactos para coordinar la entrega."
+    }
+  },
+  "why": {
+    "eyebrow": "Confianza e impacto",
+    "title": "Por qué LALA Bridge",
+    "verified": {
+      "title": "Identidad verificada",
+      "desc": "Cada Lalíder informa su código de verificación de LALA y su nombre registrado. Solo miembros reales de la comunidad."
+    },
+    "network": {
+      "title": "Hecho para Brasil",
+      "desc": "El piloto empieza con la red LALA en Brasil, pensado para quien solo accede a internet desde el celular."
+    },
+    "matching": {
+      "title": "Match con confirmación",
+      "desc": "Los donantes ofrecen ayuda, los Lalíderes piden donaciones y quien recibe la oferta decide. Nada pasa sin que una persona lo confirme."
+    },
+    "equipment": {
+      "title": "Cualquier equipo",
+      "desc": "Laptops, celulares, audífonos, libros, monitores: todo lo que ayuda a un Lalíder a estudiar y trabajar mejor."
+    },
+    "privacy": {
+      "title": "Privacidad por defecto",
+      "desc": "En las páginas públicas solo aparecen el primer nombre, el estado y la generación. Los contactos solo se muestran después de aceptar."
+    },
+    "community": {
+      "title": "Hecho por la comunidad",
+      "desc": "Código abierto, hecho por Lalíderes, para Lalíderes. Cualquier ONG puede usarlo y adaptarlo."
+    }
+  },
+  "open": {
+    "eyebrow": "Los Lalíderes necesitan tu ayuda",
+    "title": "Pedidos abiertos",
+    "desc": "Estos Lalíderes verificados esperan equipos para seguir estudiando y liderando.",
+    "viewAll": "Ver todos los pedidos",
+    "empty": "No hay pedidos abiertos por ahora."
+  },
+  "cta": {
+    "eyebrow": "Participa",
+    "title1": "¿Listo para",
+    "title2": "hacer la diferencia?",
+    "desc": "Ya sea que des o recibas, eres parte de algo más grande.",
+    "donor": "Quiero ser donante",
+    "lalider": "Registrarme como Lalíder"
+  },
+  "login": {
+    "metaTitle": "Iniciar sesión — LALA Bridge",
+    "heading": "Bienvenido de nuevo",
+    "subtitle": "Inicia sesión para continuar tu camino de impacto",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Tu contraseña",
+    "submit": "Iniciar sesión",
+    "loading": "Entrando...",
+    "noAccount": "¿No tienes cuenta?",
+    "create": "Crea una",
+    "demoTitle": "Modo demostración",
+    "demoAs": "Entrar como demo: {name}",
+    "demoHint": "Cuentas ficticias guardadas solo en este navegador. Ningún dato real."
+  },
+  "register": {
+    "metaTitle": "Crear cuenta — LALA Bridge",
+    "heading": "Crea tu cuenta",
+    "subtitle": "Únete a la comunidad y empieza a generar impacto",
+    "tabLalider": "Lalíder",
+    "tabDonor": "Donante",
+    "code": "Código de verificación LALA",
+    "codePlaceholder": "p. ej.: LALA-VLB32-001",
+    "codeHint": "Ingresa el código que te dio LALA. Confirma que eres Lalíder.",
+    "verifying": "Verificando código...",
+    "codeFound": "Código encontrado. Ingresa tu nombre completo como está registrado en LALA.",
+    "fullName": "Nombre completo",
+    "fullNamePlaceholder": "Tu nombre completo",
+    "email": "Correo electrónico",
+    "camp": "Generación (camp)",
+    "selectCamp": "Selecciona tu generación",
+    "campHint": "VLB = virtual, BLB = presencial",
+    "showerSong": "Canción favorita para la ducha",
+    "showerSongPlaceholder": "¿Qué canción cantas en la ducha?",
+    "showerSongHint": "¡Una tradición de las presentaciones de LALA!",
+    "area": "Área de interés",
+    "selectArea": "Selecciona el área",
+    "needCategory": "¿Qué es lo que más necesitas?",
+    "selectNeedCategory": "Selecciona el equipo (opcional)",
+    "needCategoryHint": "Obligatorio si describes una necesidad abajo.",
+    "needDescription": "Describe tu necesidad",
+    "needDescriptionPlaceholder": "Cuéntanos qué equipo necesitas y por qué. Esto ayuda a los donantes a entender tu situación.",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Mín. 6 caracteres",
+    "confirmPassword": "Confirma la contraseña",
+    "confirmPasswordPlaceholder": "Repite la contraseña",
+    "submitLalider": "Registrarme como Lalíder",
+    "organization": "Empresa / organización",
+    "organizationPlaceholder": "Opcional — tu empresa u organización",
+    "organizationHint": "Si donas en nombre de una empresa",
+    "donorNote": "Como donante, puedes publicar equipos y ver los pedidos de los Lalíderes. Los donantes no piden ni reciben donaciones.",
+    "submitDonor": "Registrarme como donante",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "login": "Inicia sesión",
+    "verifyFirst": "Primero verifica tu código LALA.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "chooseCategory": "Elige la categoría del equipo que necesitas.",
+    "needTitle": "{category} para los estudios"
+  },
+  "auth": {
+    "invalidCode": "Código de verificación inválido. Revisa tu código e inténtalo de nuevo.",
+    "codeUsed": "Este código de verificación ya se usó para crear una cuenta.",
+    "nameMismatch": "El nombre no coincide con el registrado para este código. Usa tu nombre completo como está registrado en LALA.",
+    "codeVerified": "¡Código verificado! ¡Bienvenido, Lalíder!",
+    "nameRequired": "Ingresa tu nombre.",
+    "emailInvalid": "Ingresa un correo válido.",
+    "passwordShort": "La contraseña debe tener al menos {min} caracteres.",
+    "emailTaken": "Ya existe una cuenta con este correo.",
+    "welcomeLalider": "¡Bienvenido a LALA Bridge! 🎉",
+    "welcomeDonor": "¡Bienvenido! Gracias por tu generosidad 💝",
+    "invalidLogin": "Correo o contraseña inválidos.",
+    "welcomeBack": "¡Qué bueno verte de nuevo, {name}!",
+    "demoUnavailable": "Cuenta de demostración no disponible.",
+    "demoSignedIn": "Modo demo: entraste como {name}.",
+    "cryptoUnavailable": "Tu navegador bloqueó la criptografía. Abre la app por http://localhost o HTTPS."
+  },
+  "donate": {
+    "metaTitle": "Donar equipo — LALA Bridge",
+    "eyebrow": "Haz la diferencia",
+    "title": "Donar equipo",
+    "desc": "Publica tu equipo y ayuda a un Lalíder a tener las herramientas que necesita para aprender y liderar.",
+    "loginTitle": "Debes iniciar sesión",
+    "loginDesc": "Inicia sesión para publicar una donación.",
+    "registerDonor": "Registrarme como donante",
+    "donorOnlyTitle": "Solo para donantes",
+    "donorOnlyDesc": "Solo las cuentas de donante publican donaciones. Como Lalíder, puedes hacer un pedido o solicitar una donación disponible.",
+    "browse": "Ver donaciones",
+    "goDashboard": "Ir al panel",
+    "what": "¿Qué estás donando?",
+    "titleLabel": "Título",
+    "titlePlaceholder": "p. ej.: Dell Inspiron 15 — 8GB RAM, SSD 256GB",
+    "titleHint": "Sé específico: marca, modelo y especificaciones principales",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe el artículo: estado, qué incluye (cargador, funda...) y otra información útil.",
+    "condition": "Estado de conservación",
+    "selectCondition": "Selecciona el estado",
+    "location": "Tu ubicación",
+    "locationPlaceholder": "Ciudad, país",
+    "preview": "Vista previa",
+    "previewLabel": "Vista previa",
+    "publish": "Publicar donación",
+    "fillToPreview": "Completa al menos la categoría y el título para ver la vista previa.",
+    "selectCategory": "Selecciona una categoría.",
+    "onlyDonors": "Solo las cuentas de donante pueden publicar donaciones.",
+    "published": "¡Donación publicada! Los Lalíderes ya pueden verla.",
+    "noDescription": "Sin descripción."
+  },
+  "donations": {
+    "onlyDonors": "Solo los donantes pueden publicar donaciones.",
+    "onlyLalideres": "Solo los Lalíderes verificados pueden crear pedidos."
+  },
+  "browse": {
+    "metaTitle": "Explorar — LALA Bridge",
+    "eyebrow": "Explorar",
+    "title": "Explora y conecta",
+    "desc": "Mira las donaciones disponibles y los pedidos de los Lalíderes.",
+    "tabDonations": "Donaciones",
+    "tabNeeds": "Pedidos",
+    "searchDonations": "Buscar donaciones...",
+    "searchNeeds": "Buscar pedidos...",
+    "filterAll": "Todos",
+    "filterHigh": "Alta",
+    "filterMedium": "Media",
+    "filterLow": "Baja",
+    "filterCategory": "Filtrar por categoría",
+    "filterUrgency": "Filtrar por prioridad",
+    "donationsCount": {
+      "one": "{count} donación disponible",
+      "other": "{count} donaciones disponibles"
+    },
+    "needsCount": {
+      "one": "{count} pedido abierto",
+      "other": "{count} pedidos abiertos"
+    },
+    "emptyDonationsTitle": "No se encontraron donaciones",
+    "emptyNeedsTitle": "No se encontraron pedidos",
+    "emptyDesc": "Prueba a cambiar los filtros o la búsqueda.",
+    "ctaTitle": "¿Quieres ayudar?",
+    "ctaDesc": "Regístrate para donar o, si eres Lalíder, para pedir equipos.",
+    "ctaDonor": "Registrarme como donante",
+    "ctaLalider": "Soy Lalíder"
+  },
+  "dashboard": {
+    "metaTitle": "Panel — LALA Bridge",
+    "welcome": "Hola, {name}",
+    "verifiedLalider": "Lalíder verificado",
+    "community": "Comunidad LALA",
+    "showerSong": "Canción de la ducha: “{song}”",
+    "donorThanks": "Gracias por tu generosidad",
+    "statMyRequests": "Mis pedidos",
+    "statReceived": "Donaciones recibidas",
+    "statAvailable": "Donaciones disponibles",
+    "statCountries": "Países activos",
+    "statMyDonations": "Mis donaciones",
+    "statMatched": "Con match",
+    "statOpenRequests": "Pedidos abiertos",
+    "browseDonations": "Ver donaciones disponibles",
+    "newRequest": "Hacer un nuevo pedido",
+    "createDonation": "Publicar nueva donación",
+    "viewRequests": "Ver pedidos de los Lalíderes",
+    "sectionWaiting": "Esperando tu respuesta ({count})",
+    "sectionActive": "Matches activos",
+    "sectionSent": "Enviadas por ti",
+    "sectionHistory": "Historial",
+    "sectionMyRequests": "Mis pedidos",
+    "sectionAvailable": "Donaciones disponibles",
+    "sectionMyDonations": "Mis donaciones",
+    "sectionNeedHelp": "Los Lalíderes necesitan tu ayuda",
+    "viewAll": "Ver todas",
+    "viewAllRequests": "Ver todos los pedidos",
+    "noRequestsTitle": "Aún no hay pedidos",
+    "noRequestsDesc": "Describe el equipo que necesitas. Los donantes lo verán y podrán ofrecer ayuda.",
+    "noRequestsButton": "Hacer un pedido",
+    "noAvailableTitle": "No hay donaciones disponibles",
+    "noAvailableDesc": "Las nuevas donaciones aparecerán aquí.",
+    "noDonationsTitle": "Aún no hay donaciones",
+    "noDonationsDesc": "Publica un equipo que quieras donar. Hay Lalíderes esperando tu ayuda.",
+    "noDonationsButton": "Publicar mi primera donación",
+    "noOpenTitle": "No hay pedidos abiertos",
+    "noOpenDesc": "Los nuevos pedidos de Lalíderes aparecerán aquí."
+  },
+  "request": {
+    "modalTitle": "Nuevo pedido de equipo",
+    "category": "Categoría",
+    "selectCategory": "Selecciona la categoría",
+    "titleLabel": "Título",
+    "titlePlaceholder": "p. ej.: Necesito una laptop para la universidad",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Cuenta qué necesitas y por qué...",
+    "priority": "Prioridad",
+    "submit": "Enviar pedido",
+    "fillRequired": "Completa todos los campos obligatorios.",
+    "onlyLalideres": "Solo los Lalíderes verificados pueden hacer pedidos.",
+    "submitted": "¡Pedido enviado! Los donantes ya pueden verlo."
+  },
+  "card": {
+    "offerHelp": "Ofrecer ayuda",
+    "offerSent": "Oferta enviada",
+    "request": "Solicitar",
+    "requested": "Solicitado"
+  },
+  "offer": {
+    "helpTitle": "Ayudar a {name}",
+    "helpIntro": "Estás ofreciendo ayuda para:",
+    "linkDonation": "Vincular una de tus donaciones (opcional)",
+    "noListing": "Ninguna donación específica",
+    "messageLabel": "Mensaje (opcional)",
+    "messageHint": "No compartas teléfono ni dirección aquí. Los contactos aparecen para ambos lados solo después de aceptar la oferta.",
+    "helpPlaceholder": "Cuéntale al Lalíder cómo puedes ayudar",
+    "send": "Enviar oferta",
+    "requestTitle": "Solicitar esta donación",
+    "whichNeed": "¿Qué pedido tuyo atiende? (opcional)",
+    "noNeed": "Ninguno",
+    "requestPlaceholder": "Cuéntale al donante cómo te ayudaría",
+    "sendRequest": "Enviar solicitud"
+  },
+  "offerCard": {
+    "offeredYou": "{name} ofreció ayuda",
+    "youOffered": "Ofreciste ayuda a {name}",
+    "askedYou": "{name} pidió tu donación",
+    "youAsked": "Pediste una donación a {name}",
+    "donation": "Donación:",
+    "request": "Pedido:",
+    "contact": "Contacto",
+    "decline": "Rechazar",
+    "accept": "Aceptar",
+    "waiting": "Esperando respuesta",
+    "withdraw": "Retirar",
+    "cancelMatch": "Cancelar match",
+    "markDelivered": "Marcar como entregado",
+    "reasonSuperseded": "Cerrada: el artículo fue para otra persona",
+    "reasonWithdrawn": "Retirada por quien la envió",
+    "reasonCancelled": "Match cancelado",
+    "confirmCancel": "¿Seguro? Esto no se puede deshacer.",
+    "confirmDelivered": "¿Confirmas que el artículo fue entregado?"
+  },
+  "offers": {
+    "onlyDonors": "Solo los donantes pueden ofrecer ayuda.",
+    "needNotFound": "Pedido no encontrado.",
+    "needClosed": "Este pedido ya no está abierto.",
+    "donationNotFound": "Donación no encontrada.",
+    "donationUnavailable": "Esta donación ya no está disponible.",
+    "duplicateOffer": "Ya tienes una oferta pendiente para este pedido.",
+    "sent": "¡Oferta enviada! El Lalíder la verá en su panel.",
+    "onlyLalideres": "Solo los Lalíderes verificados pueden solicitar donaciones.",
+    "duplicateRequest": "Ya solicitaste esta donación.",
+    "requestSent": "¡Solicitud enviada! El donante la verá en su panel.",
+    "notFound": "Oferta no encontrada.",
+    "alreadyAnswered": "Esta oferta ya fue respondida.",
+    "onlyRecipient": "Solo quien recibió la oferta puede responderla.",
+    "declined": "Oferta rechazada.",
+    "invalidDecision": "Decisión inválida.",
+    "accepted": "¡Oferta aceptada! Ahora pueden ver el contacto del otro.",
+    "onlyPartiesDeliver": "Solo las personas de este match pueden confirmar la entrega.",
+    "onlyAcceptedDeliver": "Solo las ofertas aceptadas pueden marcarse como entregadas.",
+    "delivered": "Entrega confirmada. ¡Gracias!",
+    "onlyPartiesCancel": "Solo las personas de esta oferta pueden cancelarla.",
+    "useDecline": "Usa \"Rechazar\" para responder a una oferta que recibiste.",
+    "withdrawn": "Oferta retirada.",
+    "matchCancelled": "Match cancelado. Los artículos vuelven a estar disponibles.",
+    "cannotCancel": "Esta oferta ya no se puede cancelar."
+  }
+}

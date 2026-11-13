@@ -8,11 +8,11 @@ let currentUrgencyFilter = 'all';
 App.ready(() => {
   const cf = document.getElementById('category-filters');
   cf.innerHTML =
-    '<button class="tag active" data-action="filter-category" data-category="all">All</button>' +
+    `<button type="button" class="tag active" data-action="filter-category" data-category="all" aria-pressed="true">${App.escapeHTML(I18n.t('browse.filterAll'))}</button>` +
     MockDB.equipmentCategories
       .map(
         (cat) =>
-          `<button class="tag" data-action="filter-category" data-category="${App.escapeHTML(cat.id)}">${App.escapeHTML(cat.name)}</button>`
+          `<button type="button" class="tag" data-action="filter-category" data-category="${App.escapeHTML(cat.id)}" aria-pressed="false">${App.escapeHTML(App.getCategory(cat.id).name)}</button>`
       )
       .join('');
 
@@ -68,8 +68,9 @@ function renderDonations() {
   });
   const grid = document.getElementById('donations-grid');
   const empty = document.getElementById('donations-empty');
-  document.getElementById('donations-count').textContent =
-    donations.length + ' donation' + (donations.length !== 1 ? 's' : '') + ' available';
+  document.getElementById('donations-count').textContent = I18n.t('browse.donationsCount', {
+    count: donations.length,
+  });
   if (donations.length > 0) {
     grid.innerHTML = donations.map((d) => App.renderDonationCard(d)).join('');
     grid.style.display = 'grid';
@@ -96,8 +97,9 @@ function renderNeeds() {
   }
   const grid = document.getElementById('needs-grid');
   const empty = document.getElementById('needs-empty');
-  document.getElementById('needs-count').textContent =
-    needs.length + ' request' + (needs.length !== 1 ? 's' : '') + ' open';
+  document.getElementById('needs-count').textContent = I18n.t('browse.needsCount', {
+    count: needs.length,
+  });
   if (needs.length > 0) {
     grid.innerHTML = needs.map((n) => App.renderNeedCard(n)).join('');
     grid.style.display = 'grid';

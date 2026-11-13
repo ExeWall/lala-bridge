@@ -461,6 +461,29 @@ h6 {
   gap: var(--s-3);
 }
 
+/* Seletor de idioma */
+.nav__lang {
+  margin-left: var(--s-3);
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.15));
+  border-radius: var(--r-md);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.nav--dark .nav__lang {
+  color: var(--text-inverse);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.nav--dark .nav__lang option {
+  color: var(--text-1);
+}
+
 /* Mobile */
 .nav__hamburger {
   display: none;

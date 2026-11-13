@@ -116,18 +116,19 @@ const Offers = {
    * precisa ser uma doação disponível do próprio doador.
    */
   offerHelp({ donorId, needId, donationId = null, message = '' }) {
-    if (!Auth.hasRole(donorId, 'donor')) return this._fail('Only donors can offer help.');
+    if (!Auth.hasRole(donorId, 'donor')) return this._fail(I18n.t('offers.onlyDonors'));
     const need = Donations.getNeedById(needId);
-    if (!need) return this._fail('Request not found.');
-    if (need.status !== 'open') return this._fail('This request is no longer open.');
+    if (!need) return this._fail(I18n.t('offers.needNotFound'));
+    if (need.status !== 'open') return this._fail(I18n.t('offers.needClosed'));
 
     if (donationId) {
       const donation = Donations.getById(donationId);
-      if (!donation || donation.donorId !== donorId) return this._fail('Donation not found.');
-      if (donation.status !== 'available') return this._fail('This donation is not available.');
+      if (!donation || donation.donorId !== donorId)
+        return this._fail(I18n.t('offers.donationNotFound'));
+      if (donation.status !== 'available') return this._fail(I18n.t('offers.donationUnavailable'));
     }
     if (this.findPendingFrom(donorId, { needId })) {
-      return this._fail('You already have a pending offer for this request.');
+      return this._fail(I18n.t('offers.duplicateOffer'));
     }
 
     const offer = this._create({
@@ -138,7 +139,7 @@ const Offers = {
       initiatedBy: 'donor',
       message: String(message || '').trim(),
     });
-    return { success: true, message: 'Your offer has been sent! The Lalíder will see it.', offer };
+    return { success: true, message: I18n.t('offers.sent'), offer };
   },
 
   /**
@@ -147,19 +148,19 @@ const Offers = {
    */
   requestDonation({ laliderId, donationId, needId = null, message = '' }) {
     if (!Auth.hasRole(laliderId, 'lalider')) {
-      return this._fail('Only verified Lalíderes can request donations.');
+      return this._fail(I18n.t('offers.onlyLalideres'));
     }
     const donation = Donations.getById(donationId);
-    if (!donation) return this._fail('Donation not found.');
-    if (donation.status !== 'available') return this._fail('This donation is not available.');
+    if (!donation) return this._fail(I18n.t('offers.donationNotFound'));
+    if (donation.status !== 'available') return this._fail(I18n.t('offers.donationUnavailable'));
 
     if (needId) {
       const need = Donations.getNeedById(needId);
-      if (!need || need.laliderId !== laliderId) return this._fail('Request not found.');
-      if (need.status !== 'open') return this._fail('This request is no longer open.');
+      if (!need || need.laliderId !== laliderId) return this._fail(I18n.t('offers.needNotFound'));
+      if (need.status !== 'open') return this._fail(I18n.t('offers.needClosed'));
     }
     if (this.findPendingFrom(laliderId, { donationId })) {
-      return this._fail('You already asked for this donation.');
+      return this._fail(I18n.t('offers.duplicateRequest'));
     }
 
     const offer = this._create({
@@ -170,7 +171,7 @@ const Offers = {
       initiatedBy: 'lalider',
       message: String(message || '').trim(),
     });
-    return { success: true, message: 'Request sent! The donor will see it.', offer };
+    return { success: true, message: I18n.t('offers.requestSent'), offer };
   },
 
   /**
@@ -180,25 +181,25 @@ const Offers = {
    */
   respond(offerId, actorId, decision) {
     const offer = this.getById(offerId);
-    if (!offer) return this._fail('Offer not found.');
-    if (offer.status !== 'pending') return this._fail('This offer was already answered.');
+    if (!offer) return this._fail(I18n.t('offers.notFound'));
+    if (offer.status !== 'pending') return this._fail(I18n.t('offers.alreadyAnswered'));
     if (this.getRecipientId(offer) !== actorId) {
-      return this._fail('Only the person who received this offer can answer it.');
+      return this._fail(I18n.t('offers.onlyRecipient'));
     }
 
     if (decision === 'decline') {
       const updated = this._update(offerId, { status: 'declined', closedReason: 'declined' });
-      return { success: true, message: 'Offer declined.', offer: updated };
+      return { success: true, message: I18n.t('offers.declined'), offer: updated };
     }
-    if (decision !== 'accept') return this._fail('Invalid decision.');
+    if (decision !== 'accept') return this._fail(I18n.t('offers.invalidDecision'));
 
     const need = offer.needId ? Donations.getNeedById(offer.needId) : null;
     const donation = offer.donationId ? Donations.getById(offer.donationId) : null;
     if (offer.needId && (!need || need.status !== 'open')) {
-      return this._fail('This request is no longer open.');
+      return this._fail(I18n.t('offers.needClosed'));
     }
     if (offer.donationId && (!donation || donation.status !== 'available')) {
-      return this._fail('This donation is no longer available.');
+      return this._fail(I18n.t('offers.donationUnavailable'));
     }
 
     const now = new Date().toISOString();
@@ -236,7 +237,7 @@ const Offers = {
 
     return {
       success: true,
-      message: 'Offer accepted! You can now see each other’s contact details.',
+      message: I18n.t('offers.accepted'),
       offer: updated,
     };
   },
@@ -244,11 +245,11 @@ const Offers = {
   /** Qualquer uma das partes marca a oferta aceita como entregue. */
   markDelivered(offerId, actorId) {
     const offer = this.getById(offerId);
-    if (!offer) return this._fail('Offer not found.');
+    if (!offer) return this._fail(I18n.t('offers.notFound'));
     if (offer.donorId !== actorId && offer.laliderId !== actorId) {
-      return this._fail('Only the people in this match can confirm the delivery.');
+      return this._fail(I18n.t('offers.onlyPartiesDeliver'));
     }
-    if (offer.status !== 'accepted') return this._fail('Only accepted offers can be delivered.');
+    if (offer.status !== 'accepted') return this._fail(I18n.t('offers.onlyAcceptedDeliver'));
 
     const now = new Date().toISOString();
     const updated = this._update(offerId, {
@@ -262,7 +263,7 @@ const Offers = {
     if (offer.needId) {
       Donations.updateNeed(offer.needId, { status: 'delivered', deliveredAt: now });
     }
-    return { success: true, message: 'Delivery confirmed. Thank you!', offer: updated };
+    return { success: true, message: I18n.t('offers.delivered'), offer: updated };
   },
 
   /**
@@ -274,16 +275,16 @@ const Offers = {
    */
   cancel(offerId, actorId) {
     const offer = this.getById(offerId);
-    if (!offer) return this._fail('Offer not found.');
+    if (!offer) return this._fail(I18n.t('offers.notFound'));
     const isParty = offer.donorId === actorId || offer.laliderId === actorId;
-    if (!isParty) return this._fail('Only the people in this offer can cancel it.');
+    if (!isParty) return this._fail(I18n.t('offers.onlyPartiesCancel'));
 
     if (offer.status === 'pending') {
       if (this.getRecipientId(offer) === actorId) {
-        return this._fail('Use decline to answer an offer you received.');
+        return this._fail(I18n.t('offers.useDecline'));
       }
       const updated = this._update(offerId, { status: 'declined', closedReason: 'withdrawn' });
-      return { success: true, message: 'Offer withdrawn.', offer: updated };
+      return { success: true, message: I18n.t('offers.withdrawn'), offer: updated };
     }
 
     if (offer.status === 'accepted') {
@@ -311,12 +312,12 @@ const Offers = {
       }
       return {
         success: true,
-        message: 'Match cancelled. The items are available again.',
+        message: I18n.t('offers.matchCancelled'),
         offer: updated,
       };
     }
 
-    return this._fail('This offer can no longer be cancelled.');
+    return this._fail(I18n.t('offers.cannotCancel'));
   },
 
   /**

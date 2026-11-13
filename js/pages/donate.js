@@ -19,7 +19,7 @@ App.ready(() => {
   grid.innerHTML = MockDB.equipmentCategories
     .map(
       (cat) =>
-        `<button type="button" class="tag" data-action="select-category" data-category="${App.escapeHTML(cat.id)}">${App.escapeHTML(cat.name)}</button>`
+        `<button type="button" class="tag" data-action="select-category" data-category="${App.escapeHTML(cat.id)}" aria-pressed="false">${App.escapeHTML(App.getCategory(cat.id).name)}</button>`
     )
     .join('');
 
@@ -27,7 +27,8 @@ App.ready(() => {
   MockDB.conditions.forEach((c) => {
     const opt = document.createElement('option');
     opt.value = c.id;
-    opt.textContent = c.label + ' — ' + c.description;
+    const cond = App.getCondition(c.id);
+    opt.textContent = `${cond.label} — ${cond.description}`;
     condSelect.appendChild(opt);
   });
 
@@ -53,7 +54,7 @@ function selectCategory(id) {
 function showPreview() {
   const title = document.getElementById('donation-title').value;
   if (!selectedCategory || !title) {
-    App.showToast('Fill in at least the category and title to preview.', 'warning');
+    App.showToast(I18n.t('donate.fillToPreview'), 'warning');
     return;
   }
   const user = Auth.getCurrentUser();
@@ -63,7 +64,7 @@ function showPreview() {
     donorName: user.name,
     category: selectedCategory,
     title,
-    description: document.getElementById('donation-desc').value || 'No description provided.',
+    description: document.getElementById('donation-desc').value || I18n.t('donate.noDescription'),
     condition: document.getElementById('donation-condition').value || 'good',
     country: document.getElementById('donation-location').value || user.country || 'Unknown',
     status: 'available',
@@ -79,12 +80,12 @@ function showPreview() {
 function handleDonation(e) {
   e.preventDefault();
   if (!selectedCategory) {
-    App.showToast('Please select a category.', 'error');
+    App.showToast(I18n.t('donate.selectCategory'), 'error');
     return;
   }
   const user = Auth.getCurrentUser();
   if (!Auth.isDonor()) {
-    App.showToast('Only donor accounts can publish donations.', 'error');
+    App.showToast(I18n.t('donate.onlyDonors'), 'error');
     return;
   }
   Donations.create({
@@ -96,7 +97,7 @@ function handleDonation(e) {
     condition: document.getElementById('donation-condition').value,
     country: document.getElementById('donation-location').value,
   });
-  App.showToast('Donation published successfully! Lalíderes can now see it.', 'success');
+  App.showToast(I18n.t('donate.published'), 'success');
   setTimeout(() => {
     window.location.href = 'dashboard.html';
   }, 2000);

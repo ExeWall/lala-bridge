@@ -55,9 +55,9 @@ const Auth = {
    */
   loginAsDemo(userId) {
     const user = this.getDemoAccounts().find((u) => u.id === userId);
-    if (!user) return { success: false, message: 'Demo account unavailable.' };
+    if (!user) return { success: false, message: I18n.t('auth.demoUnavailable') };
     this.startSession(user);
-    return { success: true, message: `Demo mode: signed in as ${user.name}.`, user };
+    return { success: true, message: I18n.t('auth.demoSignedIn', { name: user.name }), user };
   },
 
   startSession(user) {
@@ -91,7 +91,7 @@ const Auth = {
    */
   async hashPassword(password, salt) {
     if (!globalThis.crypto?.subtle) {
-      throw new Error('crypto.subtle indisponível: abra o app via http://localhost ou HTTPS.');
+      throw new Error(I18n.t('auth.cryptoUnavailable'));
     }
     const enc = new TextEncoder();
     const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, [
@@ -171,28 +171,27 @@ const Auth = {
     if (!entry) {
       return {
         valid: false,
-        message: 'Invalid verification code. Please check your Lalíder ID and try again.',
+        message: I18n.t('auth.invalidCode'),
       };
     }
 
     if (this.isCodeRegistered(normalized)) {
       return {
         valid: false,
-        message: 'This verification code has already been used to create an account.',
+        message: I18n.t('auth.codeUsed'),
       };
     }
 
     if (checkName && this.normalizeName(name) !== this.normalizeName(entry.name)) {
       return {
         valid: false,
-        message:
-          'The name does not match the one registered for this code. Use your full name as registered with LALA.',
+        message: I18n.t('auth.nameMismatch'),
       };
     }
 
     return {
       valid: true,
-      message: 'Code verified successfully! Welcome, Lalíder! 🎉',
+      message: I18n.t('auth.codeVerified'),
       data: {
         code: entry.code,
         camp: entry.camp,
@@ -225,12 +224,12 @@ const Auth = {
    * @returns {string|null} mensagem de erro ou null
    */
   _validateAccount({ name, email, password }) {
-    if (!String(name || '').trim()) return 'Please enter your name.';
+    if (!String(name || '').trim()) return I18n.t('auth.nameRequired');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim())) {
-      return 'Please enter a valid email address.';
+      return I18n.t('auth.emailInvalid');
     }
     if (String(password || '').length < this.MIN_PASSWORD_LENGTH) {
-      return `Password must have at least ${this.MIN_PASSWORD_LENGTH} characters.`;
+      return I18n.t('auth.passwordShort', { min: this.MIN_PASSWORD_LENGTH });
     }
     return null;
   },
@@ -273,7 +272,7 @@ const Auth = {
 
     const users = this.getUsers();
     if (this._emailTaken(users, email)) {
-      return { success: false, message: 'An account with this email already exists.' };
+      return { success: false, message: I18n.t('auth.emailTaken') };
     }
 
     const user = {
@@ -296,7 +295,7 @@ const Auth = {
     users.push(user);
     this.saveUsers(users);
 
-    return { success: true, message: 'Welcome to LALA Bridge! 🎉', user };
+    return { success: true, message: I18n.t('auth.welcomeLalider'), user };
   },
 
   /**
@@ -312,7 +311,7 @@ const Auth = {
 
     const users = this.getUsers();
     if (this._emailTaken(users, email)) {
-      return { success: false, message: 'An account with this email already exists.' };
+      return { success: false, message: I18n.t('auth.emailTaken') };
     }
 
     const user = {
@@ -329,7 +328,7 @@ const Auth = {
     users.push(user);
     this.saveUsers(users);
 
-    return { success: true, message: 'Welcome, generous donor! 💝', user };
+    return { success: true, message: I18n.t('auth.welcomeDonor'), user };
   },
 
   /**
@@ -343,7 +342,7 @@ const Auth = {
     const hadLegacyPassword = typeof candidate?.password === 'string';
 
     if (!candidate || !(await this.verifyPassword(candidate, password))) {
-      return { success: false, message: 'Invalid email or password.' };
+      return { success: false, message: I18n.t('auth.invalidLogin') };
     }
 
     const user = candidate;
@@ -359,7 +358,7 @@ const Auth = {
 
     this.startSession(user);
 
-    return { success: true, message: `Welcome back, ${user.name}!`, user };
+    return { success: true, message: I18n.t('auth.welcomeBack', { name: user.name }), user };
   },
 
   /**

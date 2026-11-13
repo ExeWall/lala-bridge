@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Browse — LALA Bridge</title>
+    <title data-i18n="browse.metaTitle">Explorar — LALA Bridge</title>
     <meta
+      data-i18n-attr="content:browse.desc"
       name="description"
-      content="Browse available donations and Lalíder requests on LALA Bridge."
+      content="Veja as doações disponíveis e os pedidos dos Lalíderes."
     />
     <link rel="stylesheet" href="css/styles.css" />
     <link
@@ -22,13 +23,13 @@
           LALA Bridge
         </a>
         <div class="nav__links">
-          <a href="index.html" class="nav__link">Home</a>
-          <a href="browse.html" class="nav__link active">Browse</a>
-          <a href="donate.html" class="nav__link">Donate</a>
-          <a href="dashboard.html" class="nav__link">Dashboard</a>
+          <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
+          <a href="browse.html" class="nav__link active" data-i18n="nav.browse">Explorar</a>
+          <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
+          <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
         </div>
         <div class="nav__actions"></div>
-        <button class="nav__hamburger" aria-label="Menu">
+        <button data-i18n-attr="aria-label:nav.menu" class="nav__hamburger" aria-label="Abrir menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -36,10 +37,10 @@
 
     <div class="page-header">
       <div class="container">
-        <p class="eyebrow" style="margin-bottom: var(--s-3)">Explore</p>
-        <h1 class="page-header__title">Browse & Connect</h1>
-        <p class="page-header__desc">
-          Explore available donations and Lalíder requests. Find your perfect match.
+        <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="browse.eyebrow">Explorar</p>
+        <h1 class="page-header__title" data-i18n="browse.title">Explore e conecte</h1>
+        <p class="page-header__desc" data-i18n="browse.desc">
+          Veja as doações disponíveis e os pedidos dos Lalíderes.
         </p>
       </div>
     </div>
@@ -51,11 +52,18 @@
           id="tab-donations"
           data-action="switch-view"
           data-view="donations"
+          data-i18n="browse.tabDonations"
         >
-          Donations
+          Doações
         </button>
-        <button class="tab" id="tab-needs" data-action="switch-view" data-view="needs">
-          Requests
+        <button
+          class="tab"
+          id="tab-needs"
+          data-action="switch-view"
+          data-view="needs"
+          data-i18n="browse.tabNeeds"
+        >
+          Pedidos
         </button>
       </div>
 
@@ -65,10 +73,11 @@
           <div class="filter-bar__search">
             <span class="filter-bar__search-icon">&#x1F50D;</span>
             <input
+              data-i18n-attr="placeholder:browse.searchDonations"
               type="text"
               class="form-input"
               id="search-donations"
-              placeholder="Search donations..."
+              placeholder="Buscar doações..."
             />
           </div>
           <div class="filter-bar__tags" id="category-filters"></div>
@@ -78,8 +87,12 @@
         <div id="donations-empty" style="display: none">
           <div class="empty-state">
             <div class="empty-state__icon">—</div>
-            <h3 class="empty-state__title">No Donations Found</h3>
-            <p class="empty-state__desc">Try adjusting your filters or search terms.</p>
+            <h3 class="empty-state__title" data-i18n="browse.emptyDonationsTitle">
+              Nenhuma doação encontrada
+            </h3>
+            <p class="empty-state__desc" data-i18n="browse.emptyDesc">
+              Tente mudar os filtros ou a busca.
+            </p>
           </div>
         </div>
       </div>
@@ -90,17 +103,46 @@
           <div class="filter-bar__search">
             <span class="filter-bar__search-icon">&#x1F50D;</span>
             <input
+              data-i18n-attr="placeholder:browse.searchNeeds"
               type="text"
               class="form-input"
               id="search-needs"
-              placeholder="Search requests..."
+              placeholder="Buscar pedidos..."
             />
           </div>
           <div class="filter-bar__tags" id="urgency-filters">
-            <button class="tag active" data-urgency="all" data-action="filter-urgency">All</button>
-            <button class="tag" data-urgency="high" data-action="filter-urgency">High</button>
-            <button class="tag" data-urgency="medium" data-action="filter-urgency">Medium</button>
-            <button class="tag" data-urgency="low" data-action="filter-urgency">Low</button>
+            <button
+              class="tag active"
+              data-urgency="all"
+              data-action="filter-urgency"
+              data-i18n="browse.filterAll"
+            >
+              Todos
+            </button>
+            <button
+              class="tag"
+              data-urgency="high"
+              data-action="filter-urgency"
+              data-i18n="browse.filterHigh"
+            >
+              Alta
+            </button>
+            <button
+              class="tag"
+              data-urgency="medium"
+              data-action="filter-urgency"
+              data-i18n="browse.filterMedium"
+            >
+              Média
+            </button>
+            <button
+              class="tag"
+              data-urgency="low"
+              data-action="filter-urgency"
+              data-i18n="browse.filterLow"
+            >
+              Baixa
+            </button>
           </div>
         </div>
         <p class="text-sm text-muted" id="needs-count" style="margin-bottom: var(--s-5)"></p>
@@ -108,21 +150,34 @@
         <div id="needs-empty" style="display: none">
           <div class="empty-state">
             <div class="empty-state__icon">—</div>
-            <h3 class="empty-state__title">No Requests Found</h3>
-            <p class="empty-state__desc">Try adjusting your filters or search terms.</p>
+            <h3 class="empty-state__title" data-i18n="browse.emptyNeedsTitle">
+              Nenhum pedido encontrado
+            </h3>
+            <p class="empty-state__desc" data-i18n="browse.emptyDesc">
+              Tente mudar os filtros ou a busca.
+            </p>
           </div>
         </div>
       </div>
 
       <div id="browse-cta" style="display: none; margin-top: var(--s-7)">
         <div class="card text-center" style="padding: var(--s-7)">
-          <h3 class="h-3" style="margin-bottom: var(--s-2)">Want to Help?</h3>
-          <p class="text-muted" style="margin-bottom: var(--s-5)">
-            Sign up to start donating or register as a Lalíder to request equipment.
+          <h3 class="h-3" style="margin-bottom: var(--s-2)" data-i18n="browse.ctaTitle">
+            Quer ajudar?
+          </h3>
+          <p class="text-muted" style="margin-bottom: var(--s-5)" data-i18n="browse.ctaDesc">
+            Cadastre-se para doar ou, se você é Lalíder, para pedir equipamentos.
           </p>
           <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap">
-            <a href="register.html?type=donor" class="btn btn--primary">Register as Donor</a>
-            <a href="register.html?type=lalider" class="btn btn--outline">I'm a Lalíder</a>
+            <a href="register.html?type=donor" class="btn btn--primary" data-i18n="browse.ctaDonor"
+              >Cadastrar como doador</a
+            >
+            <a
+              href="register.html?type=lalider"
+              class="btn btn--outline"
+              data-i18n="browse.ctaLalider"
+              >Sou Lalíder</a
+            >
           </div>
         </div>
       </div>
@@ -131,8 +186,8 @@
     <footer class="footer">
       <div class="container">
         <div class="footer__bottom">
-          <p class="footer__copyright">
-            &copy; 2026 LALA Bridge. A community initiative by Lalíderes, for Lalíderes.
+          <p class="footer__copyright" data-i18n="footer.copyright">
+            © 2026 LALA Bridge. Uma iniciativa comunitária de Lalíderes, para Lalíderes.
           </p>
         </div>
       </div>
