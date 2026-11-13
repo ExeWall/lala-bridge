@@ -15,6 +15,19 @@ const App = {
     this.initScrollReveal();
     this.initMobileMenu();
     this.updateNavbarAuth();
+    this.initDemoNotice();
+  },
+
+  /**
+   * No modo demo, avisa que os dados são fictícios e ficam só no navegador.
+   */
+  initDemoNotice() {
+    if (!LALA_CONFIG.DEMO_MODE || document.querySelector('.demo-notice')) return;
+    const notice = document.createElement('div');
+    notice.className = 'demo-notice';
+    notice.setAttribute('role', 'note');
+    notice.textContent = 'Demo: fictitious data, stored only in this browser.';
+    document.body.appendChild(notice);
   },
 
   // =========================================================================
@@ -593,11 +606,19 @@ const App = {
         <button type="button" class="btn btn--ghost btn--sm" data-action="decline-offer" data-offer-id="${e(offer.id)}">Decline</button>
         <button type="button" class="btn btn--primary btn--sm" data-action="accept-offer" data-offer-id="${e(offer.id)}">Accept</button>`;
     } else if (offer.status === 'pending') {
-      actions = '<span class="text-sm text-muted">Waiting for an answer</span>';
+      actions = `<span class="text-sm text-muted">Waiting for an answer</span>
+        <button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">Withdraw</button>`;
     } else if (offer.status === 'accepted') {
-      actions = `<button type="button" class="btn btn--primary btn--sm" data-action="deliver-offer" data-offer-id="${e(offer.id)}">Mark as delivered</button>`;
-    } else if (offer.closedReason === 'superseded') {
-      actions = '<span class="text-sm text-muted">Closed: matched with someone else</span>';
+      actions = `<button type="button" class="btn btn--ghost btn--sm" data-action="cancel-offer" data-offer-id="${e(offer.id)}">Cancel match</button>
+        <button type="button" class="btn btn--primary btn--sm" data-action="deliver-offer" data-offer-id="${e(offer.id)}">Mark as delivered</button>`;
+    } else if (offer.status === 'declined') {
+      const reasons = {
+        superseded: 'Closed: matched with someone else',
+        withdrawn: 'Withdrawn by the sender',
+        cancelled: 'Match cancelled',
+      };
+      const reason = reasons[offer.closedReason];
+      actions = reason ? `<span class="text-sm text-muted">${reason}</span>` : '';
     }
 
     return `
@@ -635,6 +656,10 @@ App.registerActions({
     App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'accept')),
   'decline-offer': (el) =>
     App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'decline')),
+  'cancel-offer': (el) => {
+    if (!window.confirm('Are you sure? This cannot be undone.')) return;
+    App._offerAction((user) => Offers.cancel(el.dataset.offerId, user.id));
+  },
   'deliver-offer': (el) => {
     if (!window.confirm('Confirm that this item was delivered?')) return;
     App._offerAction((user) => Offers.markDelivered(el.dataset.offerId, user.id));
