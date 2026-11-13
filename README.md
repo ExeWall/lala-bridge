@@ -30,7 +30,9 @@ npm run dev
 
 ## 🌐 Deploy
 
-The site is static, so it runs on GitHub Pages. `.github/workflows/deploy.yml` publishes it on every push to `master`, after lint and tests pass. One-time setup: **Settings → Pages → Source: GitHub Actions**. The demo then lives at `https://exewall.github.io/lala-bridge/`.
+The site is static and is deployed on **Vercel** (`vercel.json`). Vercel runs lint, tests and `npm run build`, then serves `dist/`. Every push to `master` goes to production and every pull request gets a preview URL.
+
+One-time setup: on [vercel.com](https://vercel.com), **Add New → Project → Import** `ExeWall/lala-bridge` and click **Deploy** (no settings to change; `vercel.json` has them).
 
 ## 🔄 How matching works
 
