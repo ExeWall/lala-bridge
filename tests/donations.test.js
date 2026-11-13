@@ -98,3 +98,11 @@ describe('Donations', () => {
     });
   });
 });
+
+describe('ids', () => {
+  it('são únicos mesmo quando criados no mesmo milissegundo', () => {
+    const { newId } = loadApp();
+    const ids = new Set(Array.from({ length: 500 }, () => newId('don')));
+    expect(ids.size).toBe(500);
+  });
+});

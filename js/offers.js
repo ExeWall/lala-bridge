@@ -50,8 +50,7 @@ const Offers = {
   },
 
   _newId() {
-    const rand = Math.random().toString(36).slice(2, 8);
-    return `offer-${Date.now()}-${rand}`;
+    return newId('offer');
   },
 
   getById(id) {

@@ -10,6 +10,7 @@ export const SCRIPTS = [
   'js/auth.js',
   'js/donations.js',
   'js/offers.js',
+  'js/privacy.js',
   'js/migrations.js',
   'js/app.js',
 ];
@@ -46,11 +47,13 @@ export function loadApp({ keepStorage = false, config, locale = 'pt-BR' } = {}) 
 
   const names = [
     'LALA_CONFIG',
+    'newId',
     'I18n',
     'MockDB',
     'Auth',
     'Donations',
     'Offers',
+    'Privacy',
     'Migrations',
     'App',
   ];

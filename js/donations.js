@@ -63,7 +63,7 @@ const Donations = {
     }
     const donations = this.getAll();
     const donation = {
-      id: 'don-' + Date.now(),
+      id: newId('don'),
       donorId,
       donorName,
       category,
@@ -178,7 +178,7 @@ const Donations = {
     }
     const needs = this.getAllNeeds();
     const need = {
-      id: 'need-' + Date.now(),
+      id: newId('need'),
       laliderId,
       laliderName,
       camp,

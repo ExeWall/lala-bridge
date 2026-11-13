@@ -16,3 +16,17 @@ const LALA_CONFIG = Object.freeze({
 });
 
 window.LALA_CONFIG = LALA_CONFIG;
+
+/**
+ * Gera um id único com prefixo (ex.: 'don-1731461234567-k3j9x2a1').
+ * Usa crypto.randomUUID quando disponível; o horário ajuda a ordenar.
+ */
+function newId(prefix) {
+  const rand =
+    globalThis.crypto && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID().replace(/-/g, '').slice(0, 12)
+      : Math.random().toString(36).slice(2, 14);
+  return `${prefix}-${Date.now()}-${rand}`;
+}
+
+window.newId = newId;
