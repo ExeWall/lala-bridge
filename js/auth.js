@@ -193,7 +193,13 @@ const Auth = {
     return {
       valid: true,
       message: 'Code verified successfully! Welcome, Lalíder! 🎉',
-      data: { code: entry.code, camp: entry.camp, country: entry.country },
+      data: {
+        code: entry.code,
+        camp: entry.camp,
+        country: entry.country,
+        // O nome oficial só é devolvido a quem já provou que o conhece.
+        ...(checkName ? { registeredName: entry.name } : {}),
+      },
     };
   },
 
@@ -261,6 +267,9 @@ const Auth = {
     if (!verification.valid) {
       return { success: false, message: verification.message };
     }
+
+    // Guarda o nome com a grafia registrada na LALA (acentos e maiúsculas).
+    name = verification.data.registeredName;
 
     const users = this.getUsers();
     if (this._emailTaken(users, email)) {

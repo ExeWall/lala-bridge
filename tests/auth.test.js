@@ -88,8 +88,9 @@ describe('Auth: verificação do código LALA', () => {
   });
 
   it('impede reutilizar um código já cadastrado, mesmo após recarregar', async () => {
-    const first = await Auth.registerLalider({ ...base, name: 'Ana Beatriz Silva' });
+    const first = await Auth.registerLalider({ ...base, name: 'ana beatriz silva' });
     expect(first.success).toBe(true);
+    expect(first.user.name).toBe('Ana Beatriz Silva'); // grafia registrada
 
     // Simula recarregar a página: novas instâncias, mesmo localStorage.
     ({ Auth } = loadApp({ keepStorage: true }));
