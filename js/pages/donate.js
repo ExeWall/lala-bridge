@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   grid.innerHTML = MockDB.equipmentCategories
     .map(
       (cat) =>
-        `<button type="button" class="tag" data-category="${cat.id}" onclick="selectCategory('${cat.id}')">${cat.name}</button>`
+        `<button type="button" class="tag" data-action="select-category" data-category="${App.escapeHTML(cat.id)}">${App.escapeHTML(cat.name)}</button>`
     )
     .join('');
 
@@ -27,8 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     condSelect.appendChild(opt);
   });
 
+  document.getElementById('donation-form').addEventListener('submit', handleDonation);
+
   const user = Auth.getCurrentUser();
   if (user.country) document.getElementById('donation-location').value = user.country;
+});
+
+App.registerActions({
+  'select-category': (el) => selectCategory(el.dataset.category),
+  preview: () => showPreview(),
 });
 
 function selectCategory(id) {

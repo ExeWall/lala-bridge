@@ -46,10 +46,17 @@
 
     <div class="container" style="padding-bottom: var(--s-9)">
       <div class="tabs" style="margin-bottom: var(--s-6); max-width: 360px">
-        <button class="tab active" id="tab-donations" onclick="switchView('donations')">
+        <button
+          class="tab active"
+          id="tab-donations"
+          data-action="switch-view"
+          data-view="donations"
+        >
           Donations
         </button>
-        <button class="tab" id="tab-needs" onclick="switchView('needs')">Requests</button>
+        <button class="tab" id="tab-needs" data-action="switch-view" data-view="needs">
+          Requests
+        </button>
       </div>
 
       <!-- Donations View -->
@@ -62,7 +69,6 @@
               class="form-input"
               id="search-donations"
               placeholder="Search donations..."
-              oninput="filterDonations()"
             />
           </div>
           <div class="filter-bar__tags" id="category-filters"></div>
@@ -88,18 +94,13 @@
               class="form-input"
               id="search-needs"
               placeholder="Search requests..."
-              oninput="filterNeeds()"
             />
           </div>
           <div class="filter-bar__tags" id="urgency-filters">
-            <button class="tag active" data-urgency="all" onclick="setUrgencyFilter('all')">
-              All
-            </button>
-            <button class="tag" data-urgency="high" onclick="setUrgencyFilter('high')">High</button>
-            <button class="tag" data-urgency="medium" onclick="setUrgencyFilter('medium')">
-              Medium
-            </button>
-            <button class="tag" data-urgency="low" onclick="setUrgencyFilter('low')">Low</button>
+            <button class="tag active" data-urgency="all" data-action="filter-urgency">All</button>
+            <button class="tag" data-urgency="high" data-action="filter-urgency">High</button>
+            <button class="tag" data-urgency="medium" data-action="filter-urgency">Medium</button>
+            <button class="tag" data-urgency="low" data-action="filter-urgency">Low</button>
           </div>
         </div>
         <p class="text-sm text-muted" id="needs-count" style="margin-bottom: var(--s-5)"></p>

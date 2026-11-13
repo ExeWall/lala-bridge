@@ -58,12 +58,7 @@
       </div>
 
       <div id="donation-form-container" style="display: none">
-        <form
-          id="donation-form"
-          class="card"
-          style="padding: var(--s-7)"
-          onsubmit="handleDonation(event)"
-        >
+        <form id="donation-form" class="card" style="padding: var(--s-7)">
           <div class="form-group">
             <label
               class="form-label form-label--required"
@@ -129,7 +124,7 @@
           </div>
 
           <div class="flex gap-4" style="flex-wrap: wrap">
-            <button type="button" class="btn btn--outline" onclick="showPreview()">Preview</button>
+            <button type="button" class="btn btn--outline" data-action="preview">Preview</button>
             <button type="submit" class="btn btn--primary btn--lg" style="flex: 1">
               Publish Donation
             </button>

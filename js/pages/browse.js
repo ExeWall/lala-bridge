@@ -8,13 +8,16 @@ let currentUrgencyFilter = 'all';
 document.addEventListener('DOMContentLoaded', () => {
   const cf = document.getElementById('category-filters');
   cf.innerHTML =
-    '<button class="tag active" data-category="all" onclick="setCategoryFilter(\'all\')">All</button>' +
+    '<button class="tag active" data-action="filter-category" data-category="all">All</button>' +
     MockDB.equipmentCategories
       .map(
         (cat) =>
-          `<button class="tag" data-category="${cat.id}" onclick="setCategoryFilter('${cat.id}')">${cat.name}</button>`
+          `<button class="tag" data-action="filter-category" data-category="${App.escapeHTML(cat.id)}">${App.escapeHTML(cat.name)}</button>`
       )
       .join('');
+
+  document.getElementById('search-donations').addEventListener('input', renderDonations);
+  document.getElementById('search-needs').addEventListener('input', renderNeeds);
 
   renderDonations();
   renderNeeds();
@@ -47,12 +50,11 @@ function setUrgencyFilter(urgency) {
   renderNeeds();
 }
 
-function filterDonations() {
-  renderDonations();
-}
-function filterNeeds() {
-  renderNeeds();
-}
+App.registerActions({
+  'switch-view': (el) => switchView(el.dataset.view),
+  'filter-category': (el) => setCategoryFilter(el.dataset.category),
+  'filter-urgency': (el) => setUrgencyFilter(el.dataset.urgency),
+});
 
 function renderDonations() {
   const search = document.getElementById('search-donations').value;

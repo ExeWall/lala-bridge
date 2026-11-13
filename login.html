@@ -46,7 +46,7 @@
           <p class="auth-card__subtitle">Log in to continue your impact journey</p>
         </div>
 
-        <form id="login-form" onsubmit="handleLogin(event)">
+        <form id="login-form">
           <div class="form-group">
             <label class="form-label form-label--required">Email</label>
             <input
@@ -84,7 +84,8 @@
           <div style="display: flex; flex-direction: column; gap: var(--s-2)">
             <button
               class="btn btn--ghost btn--sm"
-              onclick="fillDemo('techcorp@example.com', 'demo123')"
+              data-action="fill-demo"
+              data-email="techcorp@example.com"
               style="justify-content: flex-start"
             >
               <span class="badge badge--donor">Donor</span>
@@ -92,7 +93,8 @@
             </button>
             <button
               class="btn btn--ghost btn--sm"
-              onclick="fillDemo('sarah@example.com', 'demo123')"
+              data-action="fill-demo"
+              data-email="sarah@example.com"
               style="justify-content: flex-start"
             >
               <span class="badge badge--donor">Donor</span>

@@ -35,10 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     areaSelect.appendChild(opt);
   });
 
+  document
+    .getElementById('lalider-code')
+    .addEventListener('input', (e) => handleCodeInput(e.target.value));
+  document.getElementById('lalider-form').addEventListener('submit', handleLaliderRegister);
+  document.getElementById('donor-form').addEventListener('submit', handleDonorRegister);
+
   const params = new URLSearchParams(window.location.search);
   if (params.get('type') === 'donor') switchTab('donor');
 
   if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
+});
+
+App.registerActions({
+  'switch-tab': (el) => switchTab(el.dataset.tab),
 });
 
 function switchTab(tab) {

@@ -50,22 +50,17 @@
 
         <!-- Role Tabs -->
         <div class="tabs" style="margin-bottom: var(--s-6)">
-          <button
-            class="tab active"
-            data-tab="lalider"
-            id="tab-lalider"
-            onclick="switchTab('lalider')"
-          >
+          <button class="tab active" data-tab="lalider" id="tab-lalider" data-action="switch-tab">
             Lalíder
           </button>
-          <button class="tab" data-tab="donor" id="tab-donor" onclick="switchTab('donor')">
+          <button class="tab" data-tab="donor" id="tab-donor" data-action="switch-tab">
             Donor
           </button>
         </div>
 
         <!-- Lalíder Registration Form -->
         <div class="tab-content active" id="form-lalider">
-          <form id="lalider-form" onsubmit="handleLaliderRegister(event)">
+          <form id="lalider-form">
             <!-- Verification Code -->
             <div class="verification-widget" id="verification-widget">
               <div class="verification-widget__label">LALA Verification Code</div>
@@ -76,7 +71,6 @@
                 placeholder="e.g. LALA-VLB32-001"
                 required
                 autocomplete="off"
-                oninput="handleCodeInput(this.value)"
               />
               <div class="verification-widget__status" id="code-status"></div>
               <p class="form-hint">
@@ -198,7 +192,7 @@
 
         <!-- Donor Registration Form -->
         <div class="tab-content" id="form-donor">
-          <form id="donor-form" onsubmit="handleDonorRegister(event)">
+          <form id="donor-form">
             <div class="form-group">
               <label class="form-label form-label--required">Full Name</label>
               <input

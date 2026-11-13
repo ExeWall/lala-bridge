@@ -10,10 +10,39 @@ const App = {
    * Initialize the app — call on every page
    */
   init() {
+    this.initActions();
     this.initNavbar();
     this.initScrollReveal();
     this.initMobileMenu();
     this.updateNavbarAuth();
+  },
+
+  // =========================================================================
+  // Roteador de ações (substitui onclick="..." em string)
+  // =========================================================================
+
+  actions: {},
+
+  /**
+   * Registra handlers para elementos com `data-action="nome"`.
+   * O handler recebe (elemento, evento).
+   */
+  registerActions(map) {
+    Object.assign(this.actions, map);
+  },
+
+  initActions() {
+    if (document.__lalaActionHandler) {
+      document.removeEventListener('click', document.__lalaActionHandler);
+    }
+    const handler = (event) => {
+      const el = event.target.closest?.('[data-action]');
+      if (!el || el.disabled) return;
+      const action = this.actions[el.dataset.action];
+      if (action) action(el, event);
+    };
+    document.__lalaActionHandler = handler;
+    document.addEventListener('click', handler);
   },
 
   // =========================================================================
@@ -64,7 +93,7 @@ const App = {
       actionsContainer.innerHTML = `
         ${typeBadge}
         <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard</a>
-        <button class="btn btn--ghost btn--sm" id="logout-btn" onclick="App.handleLogout()">Log out</button>
+        <button class="btn btn--ghost btn--sm" id="logout-btn" data-action="logout">Log out</button>
       `;
     } else {
       actionsContainer.innerHTML = `
@@ -212,23 +241,25 @@ const App = {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
 
-    const actionsHTML = actions
-      .map(
-        (a) =>
-          `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${App.escapeHTML(a.label)}</button>`
-      )
-      .join('');
-
     overlay.innerHTML = `
       <div class="modal">
         <h3 class="modal__title">${App.escapeHTML(title)}</h3>
         <div class="modal__body">${body}</div>
         <div class="modal__actions">
-          <button class="btn btn--ghost" onclick="App.closeModal()">Cancel</button>
-          ${actionsHTML}
+          <button type="button" class="btn btn--ghost" data-action="close-modal">Cancel</button>
         </div>
       </div>
     `;
+
+    const actionsContainer = overlay.querySelector('.modal__actions');
+    actions.forEach((a) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `btn ${a.class || 'btn--outline'}`;
+      btn.textContent = a.label;
+      if (typeof a.onClick === 'function') btn.addEventListener('click', (ev) => a.onClick(ev));
+      actionsContainer.appendChild(btn);
+    });
 
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) App.closeModal();
@@ -351,7 +382,7 @@ const App = {
         <p class="donation-card__desc">${e(need.description)}</p>
         <div class="card__footer">
           <span class="donation-card__meta-item">${this.formatDate(need.createdAt)}</span>
-          ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" onclick="App.showMatchModal('${e(need.id)}')">Offer to Help</button>` : ''}
+          ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" data-action="offer-help" data-need-id="${e(need.id)}">Offer to Help</button>` : ''}
         </div>
       </div>
     `;
@@ -368,7 +399,7 @@ const App = {
        <p><strong>${e(need.title)}</strong></p>
        <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(need.description)}</p>
        <p style="margin-top: var(--s-4);">This will notify the Lalíder that you want to help. They'll receive your contact information to coordinate the donation.</p>`,
-      [{ label: 'Confirm Offer', class: 'btn--primary', onclick: `App.confirmMatch('${needId}')` }]
+      [{ label: 'Confirm Offer', class: 'btn--primary', onClick: () => this.confirmMatch(needId) }]
     );
   },
 
@@ -377,6 +408,12 @@ const App = {
     this.showToast('Your offer has been sent! The Lalíder will be notified.', 'success');
   },
 };
+
+App.registerActions({
+  logout: () => App.handleLogout(),
+  'close-modal': () => App.closeModal(),
+  'offer-help': (el) => App.showMatchModal(el.dataset.needId),
+});
 
 // Initialize App on DOM ready
 document.addEventListener('DOMContentLoaded', () => {

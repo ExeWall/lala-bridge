@@ -55,7 +55,7 @@ function renderLaliderDashboard(user) {
   document.getElementById('dashboard-actions').innerHTML = `
   <div class="flex gap-4" style="flex-wrap: wrap;">
     <a href="browse.html" class="btn btn--primary">Browse Available Donations</a>
-    <button class="btn btn--outline" onclick="showRequestForm()">Submit a New Request</button>
+    <button class="btn btn--outline" data-action="new-request">Submit a New Request</button>
   </div>
 `;
 
@@ -69,7 +69,7 @@ function renderLaliderDashboard(user) {
     <div class="empty-state__icon">—</div>
     <h3 class="empty-state__title">No Requests Yet</h3>
     <p class="empty-state__desc">Submit a request describing the equipment you need. Donors will see it and can offer to help.</p>
-    <button class="btn btn--primary" onclick="showRequestForm()">Submit a Request</button>
+    <button class="btn btn--primary" data-action="new-request">Submit a Request</button>
   </div>`;
   }
   html += '</div>';
@@ -166,6 +166,10 @@ function renderDonorDashboard(user) {
   document.getElementById('dashboard-content').innerHTML = html;
 }
 
+App.registerActions({
+  'new-request': () => showRequestForm(),
+});
+
 function showRequestForm() {
   const categoriesHTML = MockDB.equipmentCategories
     .map((c) => `<option value="${c.id}">${c.name}</option>`)
@@ -195,7 +199,7 @@ function showRequestForm() {
       </select>
     </div>
   </form>`,
-    [{ label: 'Submit Request', class: 'btn--primary', onclick: 'submitRequest()' }]
+    [{ label: 'Submit Request', class: 'btn--primary', onClick: submitRequest }]
   );
 }
 

@@ -4,6 +4,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
+  document.getElementById('login-form').addEventListener('submit', handleLogin);
+});
+
+App.registerActions({
+  'fill-demo': (el) => fillDemo(el.dataset.email, 'demo123'),
 });
 
 function fillDemo(email, password) {
