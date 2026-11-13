@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     donorCountrySelect.appendChild(opt);
   });
 
+  const needCategorySelect = document.getElementById('lalider-need-category');
+  MockDB.equipmentCategories.forEach((cat) => {
+    const opt = document.createElement('option');
+    opt.value = cat.id;
+    opt.textContent = cat.name;
+    needCategorySelect.appendChild(opt);
+  });
+
   const areaSelect = document.getElementById('lalider-area');
   MockDB.areasOfInterest.forEach((area) => {
     const opt = document.createElement('option');
@@ -121,6 +129,13 @@ async function handleLaliderRegister(e) {
     return;
   }
 
+  const needDesc = document.getElementById('lalider-need').value.trim();
+  const needCategory = document.getElementById('lalider-need-category').value;
+  if (needDesc && !needCategory) {
+    App.showToast('Please choose the equipment category for your need.', 'error');
+    return;
+  }
+
   const result = await Auth.registerLalider({
     name: document.getElementById('lalider-name').value,
     email: document.getElementById('lalider-email').value,
@@ -137,16 +152,16 @@ async function handleLaliderRegister(e) {
   if (result.success) {
     await Auth.login(document.getElementById('lalider-email').value, password);
     App.showToast(result.message, 'success');
-    const needDesc = document.getElementById('lalider-need').value;
     if (needDesc) {
+      const cat = MockDB.equipmentCategories.find((c) => c.id === needCategory);
       Donations.createNeed({
         laliderId: result.user.id,
         laliderName:
           result.user.name.split(' ')[0] + ' ' + result.user.name.split(' ').pop()[0] + '.',
         camp: result.user.camp,
         country: result.user.country,
-        category: 'laptop',
-        title: 'Equipment needed for studies',
+        category: needCategory,
+        title: `${cat ? cat.name : 'Equipment'} needed for studies`,
         description: needDesc,
         urgency: 'medium',
       });
