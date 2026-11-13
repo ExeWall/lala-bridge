@@ -19,35 +19,41 @@ const Auth = {
   SESSION_KEY: 'lala_bridge_session',
 
   /**
-   * Initialize the auth system
+   * Inicializa o sistema. No modo demo, cria as contas fictícias se ainda não existirem.
    */
   init() {
-    // Seed with some demo users if empty
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      const demoUsers = [
-        {
-          id: 'donor-001',
-          type: 'donor',
-          name: 'Tech Corp Foundation',
-          email: 'techcorp@example.com',
-          password: 'demo123',
-          country: 'United States',
-          organization: 'Tech Corp',
-          createdAt: '2026-09-01T00:00:00Z',
-        },
-        {
-          id: 'donor-002',
-          type: 'donor',
-          name: 'Sarah Mitchell',
-          email: 'sarah@example.com',
-          password: 'demo123',
-          country: 'Canada',
-          organization: '',
-          createdAt: '2026-09-05T00:00:00Z',
-        },
-      ];
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(demoUsers));
+    if (LALA_CONFIG.DEMO_MODE && !localStorage.getItem(this.STORAGE_KEY)) {
+      this.saveUsers(MockDB.demoUsers.map((u) => ({ ...u })));
     }
+  },
+
+  /**
+   * Contas que podem entrar pelo botão "Entrar como demo".
+   */
+  getDemoAccounts() {
+    if (!LALA_CONFIG.DEMO_MODE) return [];
+    return this.getUsers().filter((u) => u.demo && u.demoLogin);
+  },
+
+  /**
+   * Entra como uma conta demo, sem senha. Só funciona com DEMO_MODE ativo.
+   */
+  loginAsDemo(userId) {
+    const user = this.getDemoAccounts().find((u) => u.id === userId);
+    if (!user) return { success: false, message: 'Demo account unavailable.' };
+    this._startSession(user);
+    return { success: true, message: `Demo mode: signed in as ${user.name}.`, user };
+  },
+
+  _startSession(user) {
+    const session = {
+      userId: user.id,
+      type: user.type,
+      name: user.name,
+      email: user.email,
+      loginAt: new Date().toISOString(),
+    };
+    localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
   },
 
   PBKDF2_ITERATIONS: 100000,
@@ -279,16 +285,7 @@ const Auth = {
     }
     this.saveUsers(users); // persiste a migração de senha legada, se houver
 
-    // Create session
-    const session = {
-      userId: user.id,
-      type: user.type,
-      name: user.name,
-      email: user.email,
-      loginAt: new Date().toISOString(),
-    };
-
-    localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+    this._startSession(user);
 
     return { success: true, message: `Welcome back, ${user.name}!`, user };
   },

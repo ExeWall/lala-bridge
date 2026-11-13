@@ -75,34 +75,22 @@
         </form>
 
         <div
+          id="demo-login"
           class="card card--flat"
-          style="margin-top: var(--s-6); padding: var(--s-4); background: var(--cream)"
+          style="
+            display: none;
+            margin-top: var(--s-6);
+            padding: var(--s-4);
+            background: var(--cream);
+          "
         >
-          <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2)">
-            Demo Accounts
-          </p>
-          <div style="display: flex; flex-direction: column; gap: var(--s-2)">
-            <button
-              class="btn btn--ghost btn--sm"
-              data-action="fill-demo"
-              data-email="techcorp@example.com"
-              style="justify-content: flex-start"
-            >
-              <span class="badge badge--donor">Donor</span>
-              <span style="margin-left: 8px">techcorp@example.com</span>
-            </button>
-            <button
-              class="btn btn--ghost btn--sm"
-              data-action="fill-demo"
-              data-email="sarah@example.com"
-              style="justify-content: flex-start"
-            >
-              <span class="badge badge--donor">Donor</span>
-              <span style="margin-left: 8px">sarah@example.com</span>
-            </button>
-          </div>
+          <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2)">Demo mode</p>
+          <div
+            id="demo-accounts"
+            style="display: flex; flex-direction: column; gap: var(--s-2)"
+          ></div>
           <p class="form-hint" style="margin-top: var(--s-3)">
-            Register as a Lalíder first to see the Lalíder dashboard.
+            Fictitious accounts stored only in this browser. No real data.
           </p>
         </div>
 
@@ -112,6 +100,7 @@
       </div>
     </div>
 
+    <script src="js/config.js"></script>
     <script src="js/mock-data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/donations.js"></script>

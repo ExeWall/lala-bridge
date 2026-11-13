@@ -16,15 +16,16 @@ export const SCRIPTS = [
 /**
  * Carrega os scripts clássicos do app em um escopo novo e devolve os módulos.
  * Cada chamada cria instâncias novas; o localStorage é limpo antes, a menos
- * que `keepStorage` seja true (útil para testar migrações).
+ * que `keepStorage` seja true (útil para testar migrações). `config` sobrescreve
+ * LALA_CONFIG (o padrão nos testes é DEMO_MODE: false).
  */
 export function loadApp({ keepStorage = false, config } = {}) {
   if (!globalThis.crypto?.subtle) {
     Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
   }
   if (!keepStorage) localStorage.clear();
-  if (config) window.LALA_CONFIG_OVERRIDE = config;
-  else delete window.LALA_CONFIG_OVERRIDE;
+  // Por padrão os testes rodam sem dados de exemplo (DEMO_MODE desligado).
+  window.LALA_CONFIG_OVERRIDE = { DEMO_MODE: false, ...config };
 
   const code = SCRIPTS.map((file) => resolve(process.cwd(), file))
     .filter((path) => existsSync(path))

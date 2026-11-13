@@ -108,3 +108,26 @@ describe('Auth: verificação do código LALA', () => {
     expect(Auth.getUsers().some((u) => u.email === base.email)).toBe(false);
   });
 });
+
+describe('Auth: modo demo', () => {
+  it('com DEMO_MODE ativo, cria contas demo e permite entrar sem senha', () => {
+    const { Auth } = loadApp({ config: { DEMO_MODE: true } });
+    const accounts = Auth.getDemoAccounts();
+    expect(accounts.map((u) => u.type).sort()).toEqual(['donor', 'lalider']);
+    expect(Auth.loginAsDemo(accounts[0].id).success).toBe(true);
+    expect(Auth.getCurrentUser().id).toBe(accounts[0].id);
+  });
+
+  it('contas demo não aceitam login por senha', async () => {
+    const { Auth } = loadApp({ config: { DEMO_MODE: true } });
+    expect((await Auth.login('techcorp@example.com', 'demo123')).success).toBe(false);
+  });
+
+  it('com DEMO_MODE desligado, não há dados de exemplo nem login demo', () => {
+    const { Auth, Donations } = loadApp({ config: { DEMO_MODE: false } });
+    expect(Auth.getUsers()).toEqual([]);
+    expect(Donations.getAll()).toEqual([]);
+    expect(Auth.getDemoAccounts()).toEqual([]);
+    expect(Auth.loginAsDemo('donor-001').success).toBe(false);
+  });
+});

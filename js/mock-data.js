@@ -101,6 +101,49 @@ const MockDB = {
   ],
 
   /**
+   * Contas fictícias usadas só no modo demo (LALA_CONFIG.DEMO_MODE).
+   * Não têm senha: só podem ser acessadas pelo botão "Entrar como demo".
+   */
+  demoUsers: [
+    {
+      id: 'donor-001',
+      type: 'donor',
+      name: 'Tech Corp Foundation',
+      email: 'techcorp@example.com',
+      country: 'United States',
+      organization: 'Tech Corp',
+      demo: true,
+      demoLogin: true,
+      createdAt: '2026-09-01T00:00:00Z',
+    },
+    {
+      id: 'donor-002',
+      type: 'donor',
+      name: 'Sarah Mitchell',
+      email: 'sarah@example.com',
+      country: 'Canada',
+      organization: '',
+      demo: true,
+      createdAt: '2026-09-05T00:00:00Z',
+    },
+    {
+      id: 'lalider-demo-ana',
+      type: 'lalider',
+      name: 'Ana Beatriz Silva',
+      email: 'ana.demo@example.com',
+      verificationCode: 'LALA-VLB32-003',
+      camp: 'VLB32',
+      country: 'Brazil',
+      state: 'Pernambuco',
+      areaOfInterest: 'Technology & Software Development',
+      verified: true,
+      demo: true,
+      demoLogin: true,
+      createdAt: '2026-09-08T00:00:00Z',
+    },
+  ],
+
+  /**
    * Camp options — VLB (Virtual) and BLB (In-person/Blended)
    */
   camps: [

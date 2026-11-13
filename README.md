@@ -18,18 +18,9 @@ LALA Bridge is a web platform that connects generous donors with verified Lalíd
 2. Open `index.html` in your browser (no build step needed!)
 3. Use demo accounts or register a new user
 
-### Demo Accounts
+### Demo mode
 
-| Type  | Email                | Password |
-| ----- | -------------------- | -------- |
-| Donor | techcorp@example.com | demo123  |
-| Donor | sarah@example.com    | demo123  |
-
-To test as a Lalíder, register with one of these verification codes:
-
-- `LALA-VLB32-001` through `LALA-VLB32-004`
-- `LALA-BLB10-001` through `LALA-BLB10-004`
-- And more (see `js/mock-data.js`)
+With `DEMO_MODE: true` in `js/config.js` (the default for now), the app seeds fictitious sample data in your browser and the login page shows **"Enter as demo"** buttons for a donor and a Lalíder. Demo accounts have no password. Set `DEMO_MODE: false` for any pilot with real people.
 
 ## 📁 Project Structure
 

@@ -10,9 +10,10 @@ const Donations = {
   NEEDS_KEY: 'lala_bridge_needs',
 
   /**
-   * Initialize donations with sample data if empty
+   * No modo demo, popula doações e pedidos de exemplo se estiverem vazios
    */
   init() {
+    if (!LALA_CONFIG.DEMO_MODE) return;
     if (!localStorage.getItem(this.STORAGE_KEY)) {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(MockDB.sampleDonations));
     }
