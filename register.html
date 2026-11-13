@@ -124,37 +124,73 @@
               />
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
+            <div class="form-group">
+              <label class="form-label form-label--required" data-i18n="register.camp"
+                >Turma (camp)</label
+              >
+              <select class="form-select" id="lalider-camp" required>
+                <option value="" data-i18n="register.selectCamp">Selecione sua turma</option>
+              </select>
+              <p class="form-hint" data-i18n="register.campHint">VLB = virtual, BLB = presencial</p>
+            </div>
+
+            <div class="location-fields" data-location="lalider">
               <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="register.camp"
-                  >Turma (camp)</label
-                >
-                <select class="form-select" id="lalider-camp" required>
-                  <option value="" data-i18n="register.selectCamp">Selecione sua turma</option>
-                </select>
-                <p class="form-hint" data-i18n="register.campHint">
-                  VLB = virtual, BLB = presencial
-                </p>
-              </div>
-              <div class="form-group">
-                <label class="form-label form-label--required" data-i18n="location.country"
+                <label
+                  class="form-label form-label--required"
+                  for="lalider-country"
+                  data-i18n="location.country"
                   >País</label
                 >
-                <select class="form-select" id="lalider-country" required>
+                <select class="form-select" id="lalider-country" required autocomplete="country">
                   <option value="" data-i18n="location.selectCountry">Selecione o país</option>
                 </select>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" data-i18n="location.region">Estado / Região</label>
-              <input
-                data-i18n-attr="placeholder:location.regionPlaceholder"
-                type="text"
-                class="form-input"
-                id="lalider-state"
-                placeholder="ex.: Antioquia, Jalisco"
-              />
+              <div class="form-row">
+                <div class="form-group" data-location-br>
+                  <label
+                    class="form-label form-label--required"
+                    for="lalider-uf"
+                    data-i18n="location.uf"
+                    >Estado (UF)</label
+                  >
+                  <select class="form-select" id="lalider-uf">
+                    <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                  </select>
+                </div>
+                <div class="form-group" data-location-other hidden>
+                  <label class="form-label" for="lalider-region" data-i18n="location.region"
+                    >Estado / Região</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="lalider-region"
+                    maxlength="80"
+                    autocomplete="address-level1"
+                    data-i18n-attr="placeholder:location.regionPlaceholder"
+                    placeholder="ex.: Antioquia, Jalisco"
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    class="form-label form-label--required"
+                    for="lalider-city"
+                    data-i18n="location.city"
+                    >Cidade</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="lalider-city"
+                    maxlength="80"
+                    required
+                    autocomplete="address-level2"
+                    data-i18n-attr="placeholder:location.cityPlaceholder"
+                    placeholder="ex.: Recife"
+                  />
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -299,22 +335,63 @@
               </p>
             </div>
 
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="location.country"
-                >País</label
-              >
-              <select class="form-select" id="donor-country" required>
-                <option value="" data-i18n="location.selectCountry">Selecione o país</option>
-                <option value="United States">United States</option>
-                <option value="Canada">Canada</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="Germany">Germany</option>
-                <option value="France">France</option>
-                <option value="Spain">Spain</option>
-                <option value="Portugal">Portugal</option>
-                <option value="Australia">Australia</option>
-                <option value="Japan">Japan</option>
-              </select>
+            <div class="location-fields" data-location="donor">
+              <div class="form-group">
+                <label
+                  class="form-label form-label--required"
+                  for="donor-country"
+                  data-i18n="location.country"
+                  >País</label
+                >
+                <select class="form-select" id="donor-country" required autocomplete="country">
+                  <option value="" data-i18n="location.selectCountry">Selecione o país</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group" data-location-br>
+                  <label
+                    class="form-label form-label--required"
+                    for="donor-uf"
+                    data-i18n="location.uf"
+                    >Estado (UF)</label
+                  >
+                  <select class="form-select" id="donor-uf">
+                    <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                  </select>
+                </div>
+                <div class="form-group" data-location-other hidden>
+                  <label class="form-label" for="donor-region" data-i18n="location.region"
+                    >Estado / Região</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="donor-region"
+                    maxlength="80"
+                    autocomplete="address-level1"
+                    data-i18n-attr="placeholder:location.regionPlaceholder"
+                    placeholder="ex.: Antioquia, Jalisco"
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    class="form-label form-label--required"
+                    for="donor-city"
+                    data-i18n="location.city"
+                    >Cidade</label
+                  >
+                  <input
+                    type="text"
+                    class="form-input"
+                    id="donor-city"
+                    maxlength="80"
+                    required
+                    autocomplete="address-level2"
+                    data-i18n-attr="placeholder:location.cityPlaceholder"
+                    placeholder="ex.: Recife"
+                  />
+                </div>
+              </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">

@@ -12,7 +12,9 @@ describe('Auth: senhas', () => {
       name: 'Empresa Teste',
       email: 'empresa@example.com',
       password: 'segredo123',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
     });
     expect(res.success).toBe(true);
     const stored = localStorage.getItem(Auth.STORAGE_KEY);
@@ -35,7 +37,9 @@ describe('Auth: senhas', () => {
       name: 'D',
       email: 'd@example.com',
       password: 'certa123',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
     });
     expect((await Auth.login('d@example.com', 'errada')).success).toBe(false);
     expect((await Auth.login('D@EXAMPLE.COM', 'certa123')).success).toBe(true);
@@ -62,7 +66,9 @@ describe('Auth: verificação do código LALA', () => {
     password: 'senha123',
     verificationCode: 'lala-vlb32-003',
     camp: 'VLB32',
-    country: 'Brazil',
+    country: 'BR',
+    state: 'PE',
+    city: 'Recife',
   };
   beforeEach(() => {
     ({ Auth } = loadApp());
@@ -140,7 +146,14 @@ describe('Auth: validação e sessão', () => {
   });
 
   it('recusa nome vazio, e-mail inválido e senha curta', async () => {
-    const ok = { name: 'D', email: 'd@example.com', password: 'abcdef', country: 'Brazil' };
+    const ok = {
+      name: 'D',
+      email: 'd@example.com',
+      password: 'abcdef',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
+    };
     expect((await Auth.registerDonor({ ...ok, name: '  ' })).success).toBe(false);
     expect((await Auth.registerDonor({ ...ok, email: 'sem-arroba' })).success).toBe(false);
     expect((await Auth.registerDonor({ ...ok, password: '123' })).success).toBe(false);
@@ -148,7 +161,14 @@ describe('Auth: validação e sessão', () => {
   });
 
   it('não cria duas contas quando o mesmo cadastro é enviado em paralelo', async () => {
-    const data = { name: 'D', email: 'd@example.com', password: 'abcdef', country: 'Brazil' };
+    const data = {
+      name: 'D',
+      email: 'd@example.com',
+      password: 'abcdef',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
+    };
     const results = await Promise.all([Auth.registerDonor(data), Auth.registerDonor(data)]);
     expect(results.filter((r) => r.success)).toHaveLength(1);
     expect(Auth.getUsers()).toHaveLength(1);
@@ -159,7 +179,9 @@ describe('Auth: validação e sessão', () => {
       name: 'D',
       email: '  D@Example.com ',
       password: 'abcdef',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
     });
     expect(Auth.getUsers()[0].email).toBe('D@Example.com');
     expect((await Auth.login(' d@example.com ', 'abcdef')).success).toBe(true);
@@ -206,5 +228,45 @@ describe('Auth: contas demo em navegador com dados antigos', () => {
     expect(Auth.getUsers().find((u) => u.id === 'donor-999').passwordHash).toBe('x');
     expect(Auth.getDemoAccounts()).toHaveLength(2);
     expect(Donations.getNeedById('need-001').laliderId).toBe('lalider-sample-maria');
+  });
+});
+
+describe('Auth: localização', () => {
+  let Auth;
+  beforeEach(() => {
+    ({ Auth } = loadApp());
+  });
+  const donor = { name: 'D', email: 'd@example.com', password: 'abcdef' };
+
+  it('no Brasil exige UF válida e cidade', async () => {
+    const noUf = await Auth.registerDonor({ ...donor, country: 'BR', city: 'Recife' });
+    expect(noUf.success).toBe(false);
+    expect(noUf.message).toMatch(/UF/);
+    const badUf = await Auth.registerDonor({
+      ...donor,
+      country: 'BR',
+      state: 'XX',
+      city: 'Recife',
+    });
+    expect(badUf.success).toBe(false);
+    const noCity = await Auth.registerDonor({ ...donor, country: 'BR', state: 'PE' });
+    expect(noCity.success).toBe(false);
+  });
+
+  it('guarda país, UF e cidade normalizados', async () => {
+    const res = await Auth.registerDonor({
+      ...donor,
+      country: 'BR',
+      state: 'pe',
+      city: ' Recife ',
+    });
+    expect(res.success).toBe(true);
+    expect(res.user).toMatchObject({ country: 'BR', state: 'PE', city: 'Recife' });
+  });
+
+  it('fora do Brasil a região é livre e opcional', async () => {
+    const res = await Auth.registerDonor({ ...donor, country: 'CO', city: 'Medellín' });
+    expect(res.success).toBe(true);
+    expect(res.user).toMatchObject({ country: 'CO', state: '', city: 'Medellín' });
   });
 });

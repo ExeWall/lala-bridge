@@ -12,21 +12,9 @@ App.ready(() => {
     campSelect.appendChild(opt);
   });
 
-  const countrySelect = document.getElementById('lalider-country');
-  MockDB.countries.forEach((country) => {
-    const opt = document.createElement('option');
-    opt.value = country;
-    opt.textContent = country;
-    countrySelect.appendChild(opt);
-  });
-
-  const donorCountrySelect = document.getElementById('donor-country');
-  MockDB.countries.forEach((country) => {
-    const opt = document.createElement('option');
-    opt.value = country;
-    opt.textContent = country;
-    donorCountrySelect.appendChild(opt);
-  });
+  // Lalíderes: países da América Latina; doadores: qualquer país da lista.
+  App.setupLocationFields('lalider', { countries: MockDB.latinAmericaCountries });
+  App.setupLocationFields('donor', { value: { country: 'BR' } });
 
   const needCategorySelect = document.getElementById('lalider-need-category');
   MockDB.equipmentCategories.forEach((cat) => {
@@ -100,7 +88,7 @@ function handleCodeInput(value) {
 
       if (result.data) {
         document.getElementById('lalider-camp').value = result.data.camp;
-        document.getElementById('lalider-country').value = result.data.country;
+        App.setLocationCountry('lalider', result.data.country);
       }
     } else {
       widget.className = 'verification-widget failed';
@@ -145,8 +133,7 @@ async function handleLaliderRegister(e) {
       password,
       verificationCode: document.getElementById('lalider-code').value,
       camp: document.getElementById('lalider-camp').value,
-      country: document.getElementById('lalider-country').value,
-      state: document.getElementById('lalider-state').value,
+      ...App.readLocation('lalider'),
       showerSong: document.getElementById('lalider-shower-song').value,
       areaOfInterest: document.getElementById('lalider-area').value,
       needDescription: needDesc,
@@ -162,6 +149,8 @@ async function handleLaliderRegister(e) {
         laliderName: App.displayName(result.user),
         camp: result.user.camp,
         country: result.user.country,
+        state: result.user.state,
+        city: result.user.city,
         category: needCategory,
         title: I18n.t('register.needTitle', { category: App.getCategory(needCategory).name }),
         description: needDesc,
@@ -202,7 +191,7 @@ async function handleDonorRegister(e) {
       name: document.getElementById('donor-name').value,
       email: document.getElementById('donor-email').value,
       password,
-      country: document.getElementById('donor-country').value,
+      ...App.readLocation('donor'),
       organization: document.getElementById('donor-org').value,
     })
   );

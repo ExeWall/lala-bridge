@@ -43,7 +43,9 @@ describe('App.escapeHTML', () => {
       laliderId: 'lalider-x',
       laliderName: PAYLOAD,
       camp: PAYLOAD,
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
       category: 'laptop',
       title: PAYLOAD,
       description: PAYLOAD,
@@ -78,7 +80,9 @@ describe('App.renderOfferCard', () => {
       laliderId: users.lalider.id,
       laliderName: 'Ana S.',
       camp: 'VLB32',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
       category: 'laptop',
       title: PAYLOAD,
       description: 'x',
@@ -93,5 +97,19 @@ describe('App.renderOfferCard', () => {
     expect(document.querySelector('img')).toBeNull();
     expect(document.body.textContent).toContain(PAYLOAD);
     expect(document.body.textContent).toContain(users.donor.email);
+  });
+});
+
+describe('App: localização exibida', () => {
+  it('mostra Cidade/UF no Brasil e o país traduzido fora dele', () => {
+    const { App } = loadApp();
+    expect(App.formatLocation({ country: 'BR', state: 'PE', city: 'Recife' })).toBe('Recife/PE');
+    expect(App.formatLocation({ country: 'CO', city: 'Medellín' })).toBe('Medellín, Colômbia');
+  });
+
+  it('a região pública do Lalíder nunca mostra a cidade', () => {
+    const { App } = loadApp();
+    expect(App.publicRegion({ country: 'BR', state: 'PE', city: 'Recife' })).toBe('PE');
+    expect(App.publicRegion({ country: 'MX', state: 'CDMX', city: 'Coyoacán' })).toBe('México');
   });
 });

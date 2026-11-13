@@ -92,4 +92,7 @@ T = [
 ("location.regionPlaceholder","ex.: Antioquia, Jalisco","e.g. Antioquia, Jalisco","p. ej.: Antioquia, Jalisco"),
 ("location.city","Cidade","City","Ciudad"),
 ("location.cityPlaceholder","ex.: Recife","e.g. Recife","p. ej.: Recife"),
+("location.errorCountry","Selecione o país.","Please select a country.","Selecciona el país."),
+("location.errorUf","Selecione o estado (UF).","Please select a state.","Selecciona el estado."),
+("location.errorCity","Informe a cidade.","Please enter your city.","Ingresa la ciudad."),
 ]

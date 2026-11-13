@@ -138,27 +138,70 @@
             ></textarea>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4)">
+          <div class="form-group">
+            <label class="form-label form-label--required" data-i18n="donate.condition"
+              >Estado de conservação</label
+            >
+            <select class="form-select" id="donation-condition" required>
+              <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
+            </select>
+          </div>
+          <div class="location-fields" data-location="donation">
             <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="donate.condition"
-                >Estado de conservação</label
+              <label
+                class="form-label form-label--required"
+                for="donation-country"
+                data-i18n="location.country"
+                >País</label
               >
-              <select class="form-select" id="donation-condition" required>
-                <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
+              <select class="form-select" id="donation-country" required autocomplete="country">
+                <option value="" data-i18n="location.selectCountry">Selecione o país</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label form-label--required" data-i18n="donate.location"
-                >Sua localização</label
-              >
-              <input
-                data-i18n-attr="placeholder:donate.locationPlaceholder"
-                type="text"
-                class="form-input"
-                id="donation-location"
-                placeholder="Cidade, país"
-                required
-              />
+            <div class="form-row">
+              <div class="form-group" data-location-br>
+                <label
+                  class="form-label form-label--required"
+                  for="donation-uf"
+                  data-i18n="location.uf"
+                  >Estado (UF)</label
+                >
+                <select class="form-select" id="donation-uf">
+                  <option value="" data-i18n="location.selectUf">Selecione o estado</option>
+                </select>
+              </div>
+              <div class="form-group" data-location-other hidden>
+                <label class="form-label" for="donation-region" data-i18n="location.region"
+                  >Estado / Região</label
+                >
+                <input
+                  type="text"
+                  class="form-input"
+                  id="donation-region"
+                  maxlength="80"
+                  autocomplete="address-level1"
+                  data-i18n-attr="placeholder:location.regionPlaceholder"
+                  placeholder="ex.: Antioquia, Jalisco"
+                />
+              </div>
+              <div class="form-group">
+                <label
+                  class="form-label form-label--required"
+                  for="donation-city"
+                  data-i18n="location.city"
+                  >Cidade</label
+                >
+                <input
+                  type="text"
+                  class="form-input"
+                  id="donation-city"
+                  maxlength="80"
+                  required
+                  autocomplete="address-level2"
+                  data-i18n-attr="placeholder:location.cityPlaceholder"
+                  placeholder="ex.: Recife"
+                />
+              </div>
             </div>
           </div>
 

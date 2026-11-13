@@ -47,7 +47,17 @@ const Donations = {
   /**
    * Create a new donation
    */
-  create({ donorId, donorName, category, title, description, condition, country }) {
+  create({
+    donorId,
+    donorName,
+    category,
+    title,
+    description,
+    condition,
+    country,
+    state = '',
+    city = '',
+  }) {
     if (!Auth.hasRole(donorId, 'donor')) {
       throw new Error(I18n.t('donations.onlyDonors'));
     }
@@ -61,6 +71,8 @@ const Donations = {
       description,
       condition,
       country,
+      state,
+      city,
       status: 'available',
       createdAt: new Date().toISOString(),
       image: null,
@@ -92,10 +104,11 @@ const Donations = {
   /**
    * Filter donations
    */
-  filter(donations, { category, country, search, condition } = {}) {
+  filter(donations, { category, country, state, search, condition } = {}) {
     return donations.filter((d) => {
       if (category && category !== 'all' && d.category !== category) return false;
-      if (country && d.country.toLowerCase() !== country.toLowerCase()) return false;
+      if (country && String(d.country).toLowerCase() !== country.toLowerCase()) return false;
+      if (state && d.state !== state) return false;
       if (condition && d.condition !== condition) return false;
       if (search) {
         const q = search.toLowerCase();

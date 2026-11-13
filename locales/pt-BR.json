@@ -141,7 +141,10 @@
     "region": "Estado / Região",
     "regionPlaceholder": "ex.: Antioquia, Jalisco",
     "city": "Cidade",
-    "cityPlaceholder": "ex.: Recife"
+    "cityPlaceholder": "ex.: Recife",
+    "errorCountry": "Selecione o país.",
+    "errorUf": "Selecione o estado (UF).",
+    "errorCity": "Informe a cidade."
   },
   "index": {
     "metaTitle": "LALA Bridge — equipamentos para Lalíderes estudarem",
@@ -316,8 +319,6 @@
     "descriptionPlaceholder": "Descreva o item: estado, o que acompanha (carregador, capa...) e outras informações úteis.",
     "condition": "Estado de conservação",
     "selectCondition": "Selecione o estado",
-    "location": "Sua localização",
-    "locationPlaceholder": "Cidade, país",
     "preview": "Pré-visualizar",
     "previewLabel": "Pré-visualização",
     "publish": "Publicar doação",

@@ -35,8 +35,6 @@ T = [
 ("donate.descriptionPlaceholder","Descreva o item: estado, o que acompanha (carregador, capa...) e outras informações úteis.","Describe the item: condition, what's included (charger, case...) and other useful info.","Describe el artículo: estado, qué incluye (cargador, funda...) y otra información útil."),
 ("donate.condition","Estado de conservação","Condition","Estado de conservación"),
 ("donate.selectCondition","Selecione o estado","Select condition","Selecciona el estado"),
-("donate.location","Sua localização","Your location","Tu ubicación"),
-("donate.locationPlaceholder","Cidade, país","City, country","Ciudad, país"),
 ("donate.preview","Pré-visualizar","Preview","Vista previa"),
 ("donate.previewLabel","Pré-visualização","Preview","Vista previa"),
 ("donate.publish","Publicar doação","Publish donation","Publicar donación"),

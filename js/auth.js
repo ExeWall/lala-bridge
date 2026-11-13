@@ -234,6 +234,27 @@ const Auth = {
     return null;
   },
 
+  /**
+   * Valida e normaliza a localização. No Brasil, exige UF válida.
+   * @returns {{ error: string|null, location: { country, state, city } }}
+   */
+  _validateLocation({ country, state, city } = {}) {
+    const location = {
+      country: String(country || '').trim(),
+      state: String(state || '').trim(),
+      city: String(city || '').trim(),
+    };
+    if (!location.country) return { error: I18n.t('location.errorCountry'), location };
+    if (location.country === 'BR') {
+      location.state = location.state.toUpperCase();
+      if (!MockDB.brazilStates.some((s) => s.uf === location.state)) {
+        return { error: I18n.t('location.errorUf'), location };
+      }
+    }
+    if (!location.city) return { error: I18n.t('location.errorCity'), location };
+    return { error: null, location };
+  },
+
   _emailTaken(users, email) {
     return users.some((u) => u.email?.toLowerCase() === email.toLowerCase());
   },
@@ -249,12 +270,15 @@ const Auth = {
     camp,
     country,
     state,
+    city,
     showerSong,
     areaOfInterest,
     needDescription,
   }) {
     const invalid = this._validateAccount({ name, email, password });
     if (invalid) return { success: false, message: invalid };
+    const { error: locationError, location } = this._validateLocation({ country, state, city });
+    if (locationError) return { success: false, message: locationError };
     name = name.trim();
     email = email.trim();
 
@@ -283,8 +307,7 @@ const Auth = {
       ...credentials,
       verificationCode: verificationCode.trim().toUpperCase(),
       camp,
-      country,
-      state: state || '',
+      ...location,
       showerSong: showerSong || '',
       areaOfInterest: areaOfInterest || '',
       needDescription: needDescription || '',
@@ -301,9 +324,11 @@ const Auth = {
   /**
    * Register a new Donor
    */
-  async registerDonor({ name, email, password, country, organization }) {
+  async registerDonor({ name, email, password, country, state, city, organization }) {
     const invalid = this._validateAccount({ name, email, password });
     if (invalid) return { success: false, message: invalid };
+    const { error: locationError, location } = this._validateLocation({ country, state, city });
+    if (locationError) return { success: false, message: locationError };
     name = name.trim();
     email = email.trim();
 
@@ -320,7 +345,7 @@ const Auth = {
       name,
       email,
       ...credentials,
-      country,
+      ...location,
       organization: organization || '',
       createdAt: new Date().toISOString(),
     };

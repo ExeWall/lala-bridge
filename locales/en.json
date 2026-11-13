@@ -141,7 +141,10 @@
     "region": "State / Region",
     "regionPlaceholder": "e.g. Antioquia, Jalisco",
     "city": "City",
-    "cityPlaceholder": "e.g. Recife"
+    "cityPlaceholder": "e.g. Recife",
+    "errorCountry": "Please select a country.",
+    "errorUf": "Please select a state.",
+    "errorCity": "Please enter your city."
   },
   "index": {
     "metaTitle": "LALA Bridge — equipment so Lalíderes can study",
@@ -316,8 +319,6 @@
     "descriptionPlaceholder": "Describe the item: condition, what's included (charger, case...) and other useful info.",
     "condition": "Condition",
     "selectCondition": "Select condition",
-    "location": "Your location",
-    "locationPlaceholder": "City, country",
     "preview": "Preview",
     "previewLabel": "Preview",
     "publish": "Publish donation",

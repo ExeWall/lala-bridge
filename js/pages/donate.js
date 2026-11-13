@@ -34,8 +34,11 @@ App.ready(() => {
 
   document.getElementById('donation-form').addEventListener('submit', handleDonation);
 
+  // Começa com a localização do cadastro do doador; dá para mudar.
   const user = Auth.getCurrentUser();
-  if (user.country) document.getElementById('donation-location').value = user.country;
+  App.setupLocationFields('donation', {
+    value: { country: user.country || 'BR', state: user.state, city: user.city },
+  });
 });
 
 App.registerActions({
@@ -66,7 +69,7 @@ function showPreview() {
     title,
     description: document.getElementById('donation-desc').value || I18n.t('donate.noDescription'),
     condition: document.getElementById('donation-condition').value || 'good',
-    country: document.getElementById('donation-location').value || user.country || 'Unknown',
+    ...App.readLocation('donation'),
     status: 'available',
     createdAt: new Date().toISOString(),
   };
@@ -95,7 +98,7 @@ function handleDonation(e) {
     title: document.getElementById('donation-title').value,
     description: document.getElementById('donation-desc').value,
     condition: document.getElementById('donation-condition').value,
-    country: document.getElementById('donation-location').value,
+    ...App.readLocation('donation'),
   });
   App.showToast(I18n.t('donate.published'), 'success');
   setTimeout(() => {

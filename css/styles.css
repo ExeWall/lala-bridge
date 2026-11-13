@@ -1843,3 +1843,16 @@ h6 {
   opacity: 0.85;
   pointer-events: none;
 }
+
+/* Duas colunas em formulários; uma coluna em telas estreitas */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

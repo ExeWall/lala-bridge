@@ -16,14 +16,18 @@ describe('Donations', () => {
     title: 'Notebook Dell 8GB',
     description: 'Bom estado, com carregador',
     condition: 'good',
-    country: 'Brazil',
+    country: 'BR',
+    state: 'PE',
+    city: 'Recife',
   });
 
   const need = (laliderId) => ({
     laliderId,
     laliderName: 'Ana S.',
     camp: 'VLB32',
-    country: 'Brazil',
+    country: 'BR',
+    state: 'PE',
+    city: 'Recife',
     category: 'laptop',
     title: 'Notebook para curso de Python',
     description: 'Preciso para estudar',
@@ -67,7 +71,9 @@ describe('Donations', () => {
         description: 'x',
         donorName: 'A',
         category: 'laptop',
-        country: 'Brazil',
+        country: 'BR',
+        state: 'PE',
+        city: 'Recife',
         condition: 'good',
       },
       {
@@ -75,7 +81,7 @@ describe('Donations', () => {
         description: 'celular',
         donorName: 'Tech Corp',
         category: 'phone',
-        country: 'Canada',
+        country: 'CA',
         condition: 'like-new',
       },
     ];
@@ -83,7 +89,9 @@ describe('Donations', () => {
     it('filtra por categoria, país, condição e busca', () => {
       expect(Donations.filter(items, { category: 'phone' })).toHaveLength(1);
       expect(Donations.filter(items, { category: 'all' })).toHaveLength(2);
-      expect(Donations.filter(items, { country: 'brazil' })[0].title).toBe('Notebook Dell');
+      expect(Donations.filter(items, { country: 'br' })[0].title).toBe('Notebook Dell');
+      expect(Donations.filter(items, { state: 'PE' })[0].title).toBe('Notebook Dell');
+      expect(Donations.filter(items, { state: 'SP' })).toHaveLength(0);
       expect(Donations.filter(items, { condition: 'like-new' })[0].title).toBe('iPhone');
       expect(Donations.filter(items, { search: 'tech' })[0].title).toBe('iPhone');
       expect(Donations.filter(items, { search: 'CELULAR' })).toHaveLength(1);

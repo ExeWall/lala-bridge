@@ -12,7 +12,9 @@ describe('Offers', () => {
       laliderId: users.lalider.id,
       laliderName: 'Ana S.',
       camp: 'VLB32',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
       category: 'laptop',
       title: 'Notebook para curso de Python',
       description: 'Preciso para estudar',
@@ -25,7 +27,9 @@ describe('Offers', () => {
       title: 'Notebook Dell 8GB',
       description: 'Bom estado',
       condition: 'good',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
     });
   });
 
@@ -185,7 +189,9 @@ describe('Offers.cancel', () => {
       laliderId: users.lalider.id,
       laliderName: 'Ana S.',
       camp: 'VLB32',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
       category: 'laptop',
       title: 'Notebook',
       description: 'x',
@@ -197,7 +203,9 @@ describe('Offers.cancel', () => {
       title: 'Dell',
       description: 'x',
       condition: 'good',
-      country: 'Brazil',
+      country: 'BR',
+      state: 'PE',
+      city: 'Recife',
     });
   });
 

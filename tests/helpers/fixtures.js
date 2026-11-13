@@ -7,7 +7,9 @@ export function seedUsers(Auth) {
     type: 'donor',
     name: 'Empresa Teste',
     email: 'empresa@example.com',
-    country: 'Brazil',
+    country: 'BR',
+    state: 'PE',
+    city: 'Recife',
     organization: 'Empresa Teste',
   };
   const donor2 = { ...donor, id: 'donor-t2', email: 'outra@example.com', name: 'Outra Empresa' };
@@ -18,7 +20,9 @@ export function seedUsers(Auth) {
     email: 'ana@example.com',
     verificationCode: 'LALA-VLB32-003',
     camp: 'VLB32',
-    country: 'Brazil',
+    country: 'BR',
+    state: 'PE',
+    city: 'Recife',
   };
   const lalider2 = {
     ...lalider,

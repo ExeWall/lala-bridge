@@ -376,6 +376,86 @@ const App = {
     return [city, state, I18n.countryName(country)].filter(Boolean).join(', ');
   },
 
+  // =========================================================================
+  // Campos de localização (país → UF + cidade no Brasil; região + cidade fora)
+  // =========================================================================
+
+  /** Países ordenados pelo nome no idioma ativo, com o Brasil primeiro. */
+  sortedCountries(codes) {
+    const rest = codes
+      .filter((c) => c !== 'BR')
+      .map((code) => ({ code, name: I18n.countryName(code) }))
+      .sort((a, b) => a.name.localeCompare(b.name, I18n.locale));
+    return [
+      ...(codes.includes('BR') ? [{ code: 'BR', name: I18n.countryName('BR') }] : []),
+      ...rest,
+    ];
+  },
+
+  /**
+   * Prepara um bloco .location-fields[data-location="prefix"].
+   * @param {string} prefix - prefixo dos ids (ex.: 'donor' → #donor-country)
+   * @param {{ countries?: string[], value?: { country, state, city } }} options
+   */
+  setupLocationFields(prefix, { countries, value = {} } = {}) {
+    const root = document.querySelector(`[data-location="${prefix}"]`);
+    if (!root) return;
+    const country = document.getElementById(`${prefix}-country`);
+    const uf = document.getElementById(`${prefix}-uf`);
+    const region = document.getElementById(`${prefix}-region`);
+    const city = document.getElementById(`${prefix}-city`);
+
+    const list = countries || [...MockDB.latinAmericaCountries, ...MockDB.otherCountries];
+    this.sortedCountries(list).forEach(({ code, name }) => {
+      country.appendChild(new Option(name, code));
+    });
+    MockDB.brazilStates.forEach(({ uf: code, name }) => {
+      uf.appendChild(new Option(`${name} (${code})`, code));
+    });
+
+    const sync = () => {
+      const isBrazil = country.value === 'BR';
+      root.querySelector('[data-location-br]').hidden = !isBrazil;
+      root.querySelector('[data-location-other]').hidden = isBrazil;
+      uf.required = isBrazil;
+    };
+    country.addEventListener('change', sync);
+
+    if (value.country) country.value = value.country;
+    if (value.country === 'BR') uf.value = value.state || '';
+    else if (value.state) region.value = value.state;
+    if (value.city) city.value = value.city;
+    sync();
+  },
+
+  /** Lê um bloco de localização: { country, state, city }. */
+  readLocation(prefix) {
+    const country = document.getElementById(`${prefix}-country`)?.value || '';
+    const state =
+      country === 'BR'
+        ? document.getElementById(`${prefix}-uf`)?.value || ''
+        : (document.getElementById(`${prefix}-region`)?.value || '').trim();
+    const city = (document.getElementById(`${prefix}-city`)?.value || '').trim();
+    return { country, state, city };
+  },
+
+  /** Muda o país de um bloco já preparado (ex.: preenchido pelo código LALA). */
+  setLocationCountry(prefix, code) {
+    const country = document.getElementById(`${prefix}-country`);
+    if (!country || !code) return;
+    country.value = code;
+    country.dispatchEvent(new Event('change'));
+  },
+
+  /**
+   * Região pública de um Lalíder (LGPD: sem cidade): só a UF no Brasil e
+   * só o país fora dele.
+   */
+  publicRegion({ country, state } = {}) {
+    if (country === 'BR') return state || I18n.countryName('BR');
+    return I18n.countryName(country);
+  },
+
   /** Nome da área de interesse no idioma ativo (aceita id ou texto antigo). */
   areaName(value) {
     if (!value) return '';
@@ -420,7 +500,7 @@ const App = {
         <p class="donation-card__desc">${e(donation.description)}</p>
         <div class="card__footer">
           <div class="donation-card__meta">
-            <span class="donation-card__meta-item">${e(donation.country)}</span>
+            <span class="donation-card__meta-item">${e(this.formatLocation(donation))}</span>
             <span class="donation-card__meta-item">${this.formatDate(donation.createdAt)}</span>
           </div>
           <div class="flex items-center gap-2">
@@ -458,7 +538,7 @@ const App = {
           <div class="need-card__avatar">${e(this.getInitials(need.laliderName))}</div>
           <div class="need-card__info">
             <div class="need-card__name">${e(need.laliderName)}</div>
-            <div class="need-card__camp">${e(need.camp)} · ${e(need.country)}</div>
+            <div class="need-card__camp">${[need.camp, this.publicRegion(need)].filter(Boolean).map(e).join(' · ')}</div>
           </div>
           ${urgencyBadge[need.urgency] || ''}
         </div>
