@@ -140,7 +140,7 @@ async function handleLaliderRegister(e) {
     const needDesc = document.getElementById('lalider-need').value;
     if (needDesc) {
       Donations.createNeed({
-        laliderId: result.user.verificationCode,
+        laliderId: result.user.id,
         laliderName:
           result.user.name.split(' ')[0] + ' ' + result.user.name.split(' ').pop()[0] + '.',
         camp: result.user.camp,

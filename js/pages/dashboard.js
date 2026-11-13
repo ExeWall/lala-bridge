@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderLaliderDashboard(user) {
   const stats = Donations.getStats();
-  const myNeeds = Donations.getNeedsByLalider(user.verificationCode);
-  const myDonations = Donations.getMatchedToLalider(user.verificationCode);
+  const myNeeds = Donations.getNeedsByLalider(user.id);
+  const myDonations = Donations.getMatchedToLalider(user.id);
   const available = Donations.getAvailable();
 
   document.getElementById('dashboard-header').innerHTML = `
@@ -215,7 +215,7 @@ function submitRequest() {
   }
 
   Donations.createNeed({
-    laliderId: user.verificationCode,
+    laliderId: user.id,
     laliderName: user.name.split(' ')[0] + ' ' + user.name.split(' ').pop()[0] + '.',
     camp: user.camp,
     country: user.country,
