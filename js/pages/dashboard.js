@@ -23,13 +23,13 @@ function renderLaliderDashboard(user) {
   document.getElementById('dashboard-header').innerHTML = `
   <div>
     <div class="dashboard__welcome">
-      Welcome, ${user.name.split(' ')[0]}
+      Welcome, ${App.escapeHTML(user.name.split(' ')[0])}
       <span class="badge badge--lalider" style="margin-left: 8px; vertical-align: middle;">Verified Lalíder</span>
     </div>
     <p class="dashboard__subtitle">
-      ${user.camp} &middot; ${user.country}${user.state ? ', ' + user.state : ''} &middot; ${user.areaOfInterest || 'LALA Community'}
+      ${App.escapeHTML(user.camp)} &middot; ${App.escapeHTML(user.country)}${user.state ? ', ' + App.escapeHTML(user.state) : ''} &middot; ${App.escapeHTML(user.areaOfInterest || 'LALA Community')}
     </p>
-    ${user.showerSong ? `<p class="text-sm text-muted" style="margin-top: 4px;">Shower song: "${user.showerSong}"</p>` : ''}
+    ${user.showerSong ? `<p class="text-sm text-muted" style="margin-top: 4px;">Shower song: "${App.escapeHTML(user.showerSong)}"</p>` : ''}
   </div>
 `;
 
@@ -98,11 +98,11 @@ function renderDonorDashboard(user) {
   document.getElementById('dashboard-header').innerHTML = `
   <div>
     <div class="dashboard__welcome">
-      Welcome, ${user.name.split(' ')[0]}
+      Welcome, ${App.escapeHTML(user.name.split(' ')[0])}
       <span class="badge badge--donor" style="margin-left: 8px; vertical-align: middle;">Donor</span>
     </div>
     <p class="dashboard__subtitle">
-      ${user.organization ? user.organization + ' &middot; ' : ''}${user.country} &middot; Thank you for your generosity
+      ${user.organization ? App.escapeHTML(user.organization) + ' &middot; ' : ''}${App.escapeHTML(user.country)} &middot; Thank you for your generosity
     </p>
   </div>
 `;

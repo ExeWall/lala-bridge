@@ -143,6 +143,26 @@ const App = {
   },
 
   // =========================================================================
+  // Segurança: escape de HTML
+  // =========================================================================
+
+  /**
+   * Escapa um valor para inserção segura em HTML (conteúdo ou atributo entre aspas).
+   * Use em TODO dado vindo do usuário ou do armazenamento antes de interpolar
+   * em template strings atribuídas a `innerHTML`.
+   */
+  escapeHTML(value) {
+    if (value === null || value === undefined) return '';
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/`/g, '&#96;');
+  },
+
+  // =========================================================================
   // Toast Notifications
   // =========================================================================
 
@@ -156,10 +176,18 @@ const App = {
 
     const toast = document.createElement('div');
     toast.className = `toast toast--${type}`;
-    toast.innerHTML = `
-      <span class="toast__message">${message}</span>
-      <button class="toast__close" onclick="this.parentElement.remove()">&times;</button>
-    `;
+    const messageEl = document.createElement('span');
+    messageEl.className = 'toast__message';
+    messageEl.textContent = message;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'toast__close';
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.addEventListener('click', () => toast.remove());
+
+    toast.append(messageEl, closeBtn);
 
     container.appendChild(toast);
 
@@ -173,6 +201,11 @@ const App = {
   // Modal
   // =========================================================================
 
+  /**
+   * Abre um modal.
+   * @param {string} title - texto puro (é escapado aqui)
+   * @param {string} body - HTML confiável; quem chama deve escapar dados de usuário
+   */
   showModal(title, body, actions = []) {
     document.querySelector('.modal-overlay')?.remove();
 
@@ -182,13 +215,13 @@ const App = {
     const actionsHTML = actions
       .map(
         (a) =>
-          `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${a.label}</button>`
+          `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${App.escapeHTML(a.label)}</button>`
       )
       .join('');
 
     overlay.innerHTML = `
       <div class="modal">
-        <h3 class="modal__title">${title}</h3>
+        <h3 class="modal__title">${App.escapeHTML(title)}</h3>
         <div class="modal__body">${body}</div>
         <div class="modal__actions">
           <button class="btn btn--ghost" onclick="App.closeModal()">Cancel</button>
@@ -245,8 +278,10 @@ const App = {
   },
 
   getInitials(name) {
-    return name
-      .split(' ')
+    return String(name || '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
       .map((n) => n[0])
       .join('')
       .substring(0, 2)
@@ -258,6 +293,7 @@ const App = {
   // =========================================================================
 
   renderDonationCard(donation) {
+    const e = (v) => this.escapeHTML(v);
     const cat = this.getCategory(donation.category);
     const cond = this.getCondition(donation.condition);
     const statusBadge =
@@ -266,19 +302,19 @@ const App = {
         : '<span class="badge badge--warning">Matched</span>';
 
     return `
-      <div class="card donation-card" data-id="${donation.id}">
+      <div class="card donation-card" data-id="${e(donation.id)}">
         <div class="donation-card__category">
-          <span class="donation-card__category-name">${cat.name}</span>
+          <span class="donation-card__category-name">${e(cat.name)}</span>
         </div>
-        <h3 class="donation-card__title">${donation.title}</h3>
-        <p class="donation-card__desc">${donation.description}</p>
+        <h3 class="donation-card__title">${e(donation.title)}</h3>
+        <p class="donation-card__desc">${e(donation.description)}</p>
         <div class="card__footer">
           <div class="donation-card__meta">
-            <span class="donation-card__meta-item">${donation.country}</span>
+            <span class="donation-card__meta-item">${e(donation.country)}</span>
             <span class="donation-card__meta-item">${this.formatDate(donation.createdAt)}</span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="badge badge--gold">${cond.label}</span>
+            <span class="badge badge--gold">${e(cond.label)}</span>
             ${statusBadge}
           </div>
         </div>
@@ -287,8 +323,11 @@ const App = {
   },
 
   renderNeedCard(need) {
+    const e = (v) => this.escapeHTML(v);
     const cat = this.getCategory(need.category);
-    const urgencyClass = `need-card--${need.urgency}`;
+    const urgencyClass = ['high', 'medium', 'low'].includes(need.urgency)
+      ? `need-card--${need.urgency}`
+      : '';
     const urgencyBadge = {
       high: '<span class="badge badge--error">High Priority</span>',
       medium: '<span class="badge badge--warning">Medium</span>',
@@ -296,23 +335,23 @@ const App = {
     };
 
     return `
-      <div class="card need-card ${urgencyClass}" data-id="${need.id}">
+      <div class="card need-card ${urgencyClass}" data-id="${e(need.id)}">
         <div class="need-card__header">
-          <div class="need-card__avatar">${this.getInitials(need.laliderName)}</div>
+          <div class="need-card__avatar">${e(this.getInitials(need.laliderName))}</div>
           <div class="need-card__info">
-            <div class="need-card__name">${need.laliderName}</div>
-            <div class="need-card__camp">${need.camp} · ${need.country}</div>
+            <div class="need-card__name">${e(need.laliderName)}</div>
+            <div class="need-card__camp">${e(need.camp)} · ${e(need.country)}</div>
           </div>
           ${urgencyBadge[need.urgency] || ''}
         </div>
         <div class="donation-card__category">
-          <span class="donation-card__category-name">${cat.name}</span>
+          <span class="donation-card__category-name">${e(cat.name)}</span>
         </div>
-        <h3 class="donation-card__title">${need.title}</h3>
-        <p class="donation-card__desc">${need.description}</p>
+        <h3 class="donation-card__title">${e(need.title)}</h3>
+        <p class="donation-card__desc">${e(need.description)}</p>
         <div class="card__footer">
           <span class="donation-card__meta-item">${this.formatDate(need.createdAt)}</span>
-          ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" onclick="App.showMatchModal('${need.id}')">Offer to Help</button>` : ''}
+          ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" onclick="App.showMatchModal('${e(need.id)}')">Offer to Help</button>` : ''}
         </div>
       </div>
     `;
@@ -322,12 +361,12 @@ const App = {
     const need = Donations.getAllNeeds().find((n) => n.id === needId);
     if (!need) return;
 
-    const cat = this.getCategory(need.category);
+    const e = (v) => this.escapeHTML(v);
     this.showModal(
       `Help ${need.laliderName}`,
       `<p>You're offering to help with:</p>
-       <p><strong>${need.title}</strong></p>
-       <p class="text-sm text-muted" style="margin-top: var(--s-2);">${need.description}</p>
+       <p><strong>${e(need.title)}</strong></p>
+       <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(need.description)}</p>
        <p style="margin-top: var(--s-4);">This will notify the Lalíder that you want to help. They'll receive your contact information to coordinate the donation.</p>`,
       [{ label: 'Confirm Offer', class: 'btn--primary', onclick: `App.confirmMatch('${needId}')` }]
     );

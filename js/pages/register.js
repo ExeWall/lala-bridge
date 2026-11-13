@@ -88,7 +88,9 @@ function handleCodeInput(value) {
       widget.className = 'verification-widget failed';
       input.className = 'form-input form-input--code form-input--error';
       status.innerHTML =
-        '<span style="color: var(--error); font-weight: 600;">' + result.message + '</span>';
+        '<span style="color: var(--error); font-weight: 600;">' +
+        App.escapeHTML(result.message) +
+        '</span>';
       submitBtn.disabled = true;
       codeVerified = false;
     }
