@@ -94,33 +94,33 @@ Tudo deve respeitar a LGPD e ter revisão humana nas decisões sensíveis. O pil
 Objetivo: o MVP atual fica seguro de demonstrar e o fluxo principal funciona de ponta a ponta, ainda com `localStorage`.
 
 **1.1 Infraestrutura do repositório**
-- [ ] Adicionar o arquivo `LICENSE` (MIT, titular Wallyson Silva e contribuidores da comunidade LALA).
-- [ ] Criar o `package.json` com scripts `dev` (servidor estático, por exemplo `vite` ou `serve`), `lint` (ESLint), `format` (Prettier) e `test` (Vitest com jsdom).
-- [ ] Criar `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` e os templates de issue e PR em `.github/`.
-- [ ] Configurar o GitHub Actions: lint e testes em cada PR.
+- [x] Adicionar o arquivo `LICENSE` (MIT, titular Wallyson Silva e contribuidores da comunidade LALA).
+- [x] Criar o `package.json` com scripts `dev` (servidor estático, por exemplo `vite` ou `serve`), `lint` (ESLint), `format` (Prettier) e `test` (Vitest com jsdom).
+- [x] Criar `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` e os templates de issue e PR em `.github/`.
+- [x] Configurar o GitHub Actions: lint e testes em cada PR.
 
 **1.2 Segurança**
-- [ ] Criar a função `escapeHTML()` em `app.js` e aplicá-la em **todo** dado de usuário renderizado via `innerHTML`, ou trocar por `textContent` e `createElement`. Cobrir com testes que injetam `<img src=x onerror=alert(1)>`.
-- [ ] Trocar os `onclick="..."` em string dos modais e cards por `addEventListener` com `data-*`.
-- [ ] Fazer hash das senhas com `crypto.subtle` (SHA-256 com salt), como paliativo até a Fase 3. Documentar no código que isso **não** é segurança de produção.
-- [ ] Tirar os códigos de verificação de demo do README e criar um "modo demo" explícito (botão "Entrar como demo") que só existe com uma flag `DEMO_MODE`.
+- [x] Criar a função `escapeHTML()` em `app.js` e aplicá-la em **todo** dado de usuário renderizado via `innerHTML`, ou trocar por `textContent` e `createElement`. Cobrir com testes que injetam `<img src=x onerror=alert(1)>`.
+- [x] Trocar os `onclick="..."` em string dos modais e cards por `addEventListener` com `data-*`.
+- [x] Fazer hash das senhas com `crypto.subtle` (SHA-256 com salt), como paliativo até a Fase 3. Documentar no código que isso **não** é segurança de produção.
+- [x] Tirar os códigos de verificação de demo do README e criar um "modo demo" explícito (botão "Entrar como demo") que só existe com uma flag `DEMO_MODE`.
 
 **1.3 Correções funcionais**
-- [ ] **Implementar o fluxo de match de verdade:**
+- [x] **Implementar o fluxo de match de verdade:**
   - Criar a entidade `offer` (oferta) com `{ id, needId, donationId?, donorId, laliderId, status: 'pending'|'accepted'|'declined'|'delivered', createdAt, updatedAt }`.
   - Doador → "Oferecer ajuda" em um pedido gera uma `offer` pendente.
   - Lalíder → "Solicitar" em uma doação gera uma `offer` pendente no sentido inverso.
   - O dashboard de cada lado lista as ofertas recebidas, com os botões Aceitar e Recusar.
   - Quando a oferta é aceita, a doação vira `matched` e o pedido vira `matched`. Só então os contatos são revelados às duas partes.
   - "Marcar como entregue" faz a doação e o pedido virarem `delivered`.
-- [ ] Padronizar IDs: usar sempre `user.id` em `laliderId` e `matchedTo`, e escrever uma migração simples dos dados antigos do `localStorage`.
-- [ ] Bloquear `donate.html` para quem não é doador e o formulário de pedido para quem não é Lalíder.
-- [ ] Fazer o pedido criado no cadastro pedir a categoria em vez de fixar `laptop`.
-- [ ] Remover `markCodeAsUsed` ou persistir o uso do código corretamente.
-- [ ] Validar o nome informado contra o nome registrado do código, com comparação tolerante a acentos e caixa.
+- [x] Padronizar IDs: usar sempre `user.id` em `laliderId` e `matchedTo`, e escrever uma migração simples dos dados antigos do `localStorage`.
+- [x] Bloquear `donate.html` para quem não é doador e o formulário de pedido para quem não é Lalíder.
+- [x] Fazer o pedido criado no cadastro pedir a categoria em vez de fixar `laptop`.
+- [x] Remover `markCodeAsUsed` ou persistir o uso do código corretamente.
+- [x] Validar o nome informado contra o nome registrado do código, com comparação tolerante a acentos e caixa.
 
 **1.4 Testes**
-- [ ] Testes unitários para `Auth`, `Donations`, ofertas, filtros e `escapeHTML`.
+- [x] Testes unitários para `Auth`, `Donations`, ofertas, filtros e `escapeHTML`.
 
 **Critério de pronto:** um doador oferece, o Lalíder aceita, os contatos aparecem e o pedido fica "entregue", sem erro no console e com os testes passando no CI.
 
@@ -228,7 +228,7 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 ---
 
 ## 7. Checklist de progresso
-- [ ] Fase 1: Fundação, correções e segurança
+- [x] Fase 1: Fundação, correções e segurança (branch `fase-1-correcoes`)
 - [ ] Fase 2: Brasil, PT-BR, LGPD e acessibilidade
 - [ ] Fase 3: Backend Supabase e deploy
 - [ ] Fase 4.1: Assistente de pedido
