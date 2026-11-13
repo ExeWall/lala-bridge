@@ -7,7 +7,7 @@
 
 const Migrations = {
   VERSION_KEY: 'lala_bridge_schema_version',
-  CURRENT_VERSION: 3,
+  CURRENT_VERSION: 4,
 
   getVersion() {
     return parseInt(localStorage.getItem(this.VERSION_KEY) || '1', 10);
@@ -105,6 +105,44 @@ const Migrations = {
         Donations.NEEDS_KEY,
         Migrations._read(Donations.NEEDS_KEY).map(fixLocation)
       );
+    },
+
+    /**
+     * v3 → v4 (só no modo demo): troca os dados de exemplo antigos (EUA e
+     * outros países) pelos dados fictícios brasileiros. Contas reais e o que
+     * elas criaram são mantidos; ofertas que apontavam para contas demo que
+     * deixaram de existir são removidas.
+     */
+    4() {
+      if (!LALA_CONFIG.DEMO_MODE) return;
+      const demoById = new Map(MockDB.demoUsers.map((u) => [u.id, u]));
+      const users = Migrations._read(Auth.STORAGE_KEY)
+        .filter((u) => !u.demo || demoById.has(u.id))
+        .map((u) => (demoById.has(u.id) ? { ...demoById.get(u.id) } : u));
+      demoById.forEach((demo, id) => {
+        if (!users.some((u) => u.id === id)) users.push({ ...demo });
+      });
+      Migrations._write(Auth.STORAGE_KEY, users);
+      const userIds = new Set(users.map((u) => u.id));
+
+      const refresh = (key, samples, ownerField) => {
+        const sampleById = new Map(samples.map((x) => [x.id, x]));
+        const items = Migrations._read(key)
+          .filter((x) => !sampleById.has(x.id))
+          .filter((x) => userIds.has(x[ownerField]));
+        Migrations._write(key, [...samples.map((x) => ({ ...x })), ...items]);
+      };
+      refresh(Donations.STORAGE_KEY, MockDB.sampleDonations, 'donorId');
+      refresh(Donations.NEEDS_KEY, MockDB.sampleNeeds, 'laliderId');
+
+      const sampleOfferIds = new Set(MockDB.sampleOffers.map((o) => o.id));
+      const offers = Migrations._read(Offers.STORAGE_KEY)
+        .filter((o) => !sampleOfferIds.has(o.id))
+        .filter((o) => userIds.has(o.donorId) && userIds.has(o.laliderId));
+      Migrations._write(Offers.STORAGE_KEY, [
+        ...MockDB.sampleOffers.map((o) => ({ ...o })),
+        ...offers,
+      ]);
     },
   },
 

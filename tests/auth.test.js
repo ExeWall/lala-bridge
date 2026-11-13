@@ -80,7 +80,7 @@ describe('Auth: verificação do código LALA', () => {
 
   it('valida o nome ignorando acentos, caixa e espaços extras', () => {
     expect(Auth.verifyLaliderCode('LALA-VLB32-003', '  ana  BEATRIZ silva ').valid).toBe(true);
-    expect(Auth.verifyLaliderCode('LALA-VLB32-001', 'maria gonzalez').valid).toBe(true);
+    expect(Auth.verifyLaliderCode('LALA-VLB31-002', 'JOSE DA CONCEICAO').valid).toBe(true);
   });
 
   it('recusa nome diferente do registrado', () => {
@@ -227,7 +227,8 @@ describe('Auth: contas demo em navegador com dados antigos', () => {
     expect(tech.demoLogin).toBe(true);
     expect(Auth.getUsers().find((u) => u.id === 'donor-999').passwordHash).toBe('x');
     expect(Auth.getDemoAccounts()).toHaveLength(2);
-    expect(Donations.getNeedById('need-001').laliderId).toBe('lalider-sample-maria');
+    expect(tech.name).toBe('Instituto Ponte Digital'); // dados demo brasileiros
+    expect(Donations.getNeedById('need-001').laliderId).toBe('lalider-sample-larissa');
   });
 });
 
