@@ -5,7 +5,7 @@
 let currentCategoryFilter = 'all';
 let currentUrgencyFilter = 'all';
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   const cf = document.getElementById('category-filters');
   cf.innerHTML =
     '<button class="tag active" data-action="filter-category" data-category="all">All</button>' +

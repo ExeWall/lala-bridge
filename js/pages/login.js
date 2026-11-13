@@ -2,7 +2,7 @@
  * LALA Bridge — script da página login.html
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
   document.getElementById('login-form').addEventListener('submit', handleLogin);
   renderDemoAccounts();

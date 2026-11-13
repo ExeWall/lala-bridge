@@ -4,7 +4,7 @@
 
 let selectedCategory = '';
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   if (!Auth.isLoggedIn()) {
     document.getElementById('auth-required').style.display = 'block';
     return;

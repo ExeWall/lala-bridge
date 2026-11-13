@@ -4,6 +4,7 @@ import globals from 'globals';
 // Globais compartilhados entre os scripts clássicos carregados pelas páginas HTML.
 const appGlobals = {
   LALA_CONFIG: 'readonly',
+  I18n: 'readonly',
   MockDB: 'readonly',
   Auth: 'readonly',
   Donations: 'readonly',

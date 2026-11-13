@@ -10,6 +10,7 @@ const App = {
    * Initialize the app — call on every page
    */
   init() {
+    I18n.apply();
     this.initActions();
     this.initNavbar();
     this.initScrollReveal();
@@ -28,6 +29,23 @@ const App = {
     notice.setAttribute('role', 'note');
     notice.textContent = 'Demo: fictitious data, stored only in this browser.';
     document.body.appendChild(notice);
+  },
+
+  /**
+   * Executa `fn` quando o DOM e o idioma estiverem prontos. Use no lugar de
+   * DOMContentLoaded nos scripts de página. App.init roda antes de todos.
+   */
+  ready(fn) {
+    if (!this._readyPromise) {
+      const dom =
+        document.readyState === 'loading'
+          ? new Promise((resolve) =>
+              document.addEventListener('DOMContentLoaded', resolve, { once: true })
+            )
+          : Promise.resolve();
+      this._readyPromise = Promise.all([dom, I18n.ready]).then(() => this.init());
+    }
+    return this._readyPromise.then(() => fn && fn());
   },
 
   // =========================================================================
@@ -666,9 +684,7 @@ App.registerActions({
   },
 });
 
-// Initialize App on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  App.init();
-});
+// Inicializa o App quando DOM e idioma estiverem prontos.
+App.ready();
 
 window.App = App;

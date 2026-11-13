@@ -2,7 +2,7 @@
  * LALA Bridge — script da página register.html
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   const campSelect = document.getElementById('lalider-camp');
   MockDB.camps.forEach((camp) => {
     const opt = document.createElement('option');

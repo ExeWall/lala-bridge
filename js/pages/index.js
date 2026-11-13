@@ -13,7 +13,7 @@ function renderNeedsPreview() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   App.onDataChange = renderNeedsPreview;
   renderNeedsPreview();
   App.animateCounters();

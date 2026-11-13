@@ -2,7 +2,7 @@
  * LALA Bridge — script da página dashboard.html
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+App.ready(() => {
   if (!Auth.requireAuth()) return;
   if (!Auth.getCurrentUser()) {
     Auth.logout();
