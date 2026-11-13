@@ -2,7 +2,7 @@
  * LALA Bridge — script da página index.html
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function renderNeedsPreview() {
   const container = document.getElementById('needs-preview');
   const needs = Donations.getOpenNeeds().slice(0, 3);
   container.innerHTML = needs.map((n) => App.renderNeedCard(n)).join('');
@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   container.querySelectorAll('.card').forEach((card) => {
     card.classList.add('card--dark');
   });
+}
 
+document.addEventListener('DOMContentLoaded', () => {
+  App.onDataChange = renderNeedsPreview;
+  renderNeedsPreview();
   App.animateCounters();
 });

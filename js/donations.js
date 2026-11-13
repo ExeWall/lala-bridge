@@ -1,7 +1,8 @@
 /**
  * LALA Bridge — Donations System
  *
- * Handles creating, listing, filtering, and matching donations.
+ * Handles creating, listing and filtering donations and needs.
+ * The matching flow lives in js/offers.js.
  * Uses localStorage for the MVP.
  */
 
@@ -78,20 +79,21 @@ const Donations = {
     return donation;
   },
 
+  getById(id) {
+    return this.getAll().find((d) => d.id === id) || null;
+  },
+
   /**
-   * Match a donation to a Lalíder
+   * Atualiza campos de uma doação. Usado pelo fluxo de ofertas (Offers);
+   * o match de verdade acontece em Offers.respond().
    */
-  match(donationId, laliderId) {
+  update(id, patch) {
     const donations = this.getAll();
-    const idx = donations.findIndex((d) => d.id === donationId);
-    if (idx === -1) return false;
-
-    donations[idx].status = 'matched';
-    donations[idx].matchedTo = laliderId;
-    donations[idx].matchedAt = new Date().toISOString();
-
+    const idx = donations.findIndex((d) => d.id === id);
+    if (idx === -1) return null;
+    donations[idx] = { ...donations[idx], ...patch, updatedAt: new Date().toISOString() };
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(donations));
-    return true;
+    return donations[idx];
   },
 
   /**
@@ -137,6 +139,19 @@ const Donations = {
     return this.getAllNeeds().filter((n) => n.laliderId === laliderId);
   },
 
+  getNeedById(id) {
+    return this.getAllNeeds().find((n) => n.id === id) || null;
+  },
+
+  updateNeed(id, patch) {
+    const needs = this.getAllNeeds();
+    const idx = needs.findIndex((n) => n.id === id);
+    if (idx === -1) return null;
+    needs[idx] = { ...needs[idx], ...patch, updatedAt: new Date().toISOString() };
+    localStorage.setItem(this.NEEDS_KEY, JSON.stringify(needs));
+    return needs[idx];
+  },
+
   /**
    * Create a new need
    */
@@ -176,6 +191,7 @@ const Donations = {
       totalDonations: donations.length,
       availableDonations: donations.filter((d) => d.status === 'available').length,
       matchedDonations: donations.filter((d) => d.status === 'matched').length,
+      deliveredDonations: donations.filter((d) => d.status === 'delivered').length,
       totalNeeds: needs.length,
       openNeeds: needs.filter((n) => n.status === 'open').length,
       countries: [...new Set([...donations.map((d) => d.country), ...needs.map((n) => n.country)])]

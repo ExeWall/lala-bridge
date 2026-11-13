@@ -19,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('search-donations').addEventListener('input', renderDonations);
   document.getElementById('search-needs').addEventListener('input', renderNeeds);
 
+  App.onDataChange = () => {
+    renderDonations();
+    renderNeeds();
+  };
   renderDonations();
   renderNeeds();
   if (!Auth.isLoggedIn()) document.getElementById('browse-cta').style.display = 'block';

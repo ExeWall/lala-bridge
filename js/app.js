@@ -90,9 +90,14 @@ const App = {
           ? '<span class="badge badge--lalider">Lalíder</span>'
           : '<span class="badge badge--donor">Donor</span>';
 
+      const pending = user ? Offers.getPendingFor(user.id).length : 0;
+      const pendingBadge = pending
+        ? ` <span class="badge badge--error" aria-label="${pending} offers waiting for your answer">${pending}</span>`
+        : '';
+
       actionsContainer.innerHTML = `
         ${typeBadge}
-        <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard</a>
+        <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard${pendingBadge}</a>
         <button class="btn btn--ghost btn--sm" id="logout-btn" data-action="logout">Log out</button>
       `;
     } else {
@@ -327,10 +332,14 @@ const App = {
     const e = (v) => this.escapeHTML(v);
     const cat = this.getCategory(donation.category);
     const cond = this.getCondition(donation.condition);
-    const statusBadge =
-      donation.status === 'available'
-        ? '<span class="badge badge--success">Available</span>'
-        : '<span class="badge badge--warning">Matched</span>';
+    const statusBadge = this.renderStatusBadge(donation.status);
+    const viewer = Auth.getCurrentUser();
+    let action = '';
+    if (viewer?.type === 'lalider' && donation.status === 'available') {
+      action = Offers.findPendingFrom(viewer.id, { donationId: donation.id })
+        ? '<button type="button" class="btn btn--outline btn--sm" disabled>Requested</button>'
+        : `<button type="button" class="btn btn--primary btn--sm" data-action="request-donation" data-donation-id="${e(donation.id)}">Request</button>`;
+    }
 
     return `
       <div class="card donation-card" data-id="${e(donation.id)}">
@@ -347,6 +356,7 @@ const App = {
           <div class="flex items-center gap-2">
             <span class="badge badge--gold">${e(cond.label)}</span>
             ${statusBadge}
+            ${action}
           </div>
         </div>
       </div>
@@ -359,6 +369,13 @@ const App = {
     const urgencyClass = ['high', 'medium', 'low'].includes(need.urgency)
       ? `need-card--${need.urgency}`
       : '';
+    const viewer = Auth.getCurrentUser();
+    let needAction = '';
+    if (viewer?.type === 'donor' && need.status === 'open') {
+      needAction = Offers.findPendingFrom(viewer.id, { needId: need.id })
+        ? '<button type="button" class="btn btn--outline btn--sm" disabled>Offer sent</button>'
+        : `<button type="button" class="btn btn--primary btn--sm" data-action="offer-help" data-need-id="${e(need.id)}">Offer to Help</button>`;
+    }
     const urgencyBadge = {
       high: '<span class="badge badge--error">High Priority</span>',
       medium: '<span class="badge badge--warning">Medium</span>',
@@ -382,30 +399,230 @@ const App = {
         <p class="donation-card__desc">${e(need.description)}</p>
         <div class="card__footer">
           <span class="donation-card__meta-item">${this.formatDate(need.createdAt)}</span>
-          ${Auth.isDonor() ? `<button class="btn btn--primary btn--sm" data-action="offer-help" data-need-id="${e(need.id)}">Offer to Help</button>` : ''}
+          ${need.status && need.status !== 'open' ? this.renderStatusBadge(need.status) : ''}
+          ${needAction}
         </div>
       </div>
     `;
   },
 
+  renderStatusBadge(status) {
+    const badges = {
+      available: '<span class="badge badge--success">Available</span>',
+      open: '<span class="badge badge--success">Open</span>',
+      pending: '<span class="badge badge--warning">Pending</span>',
+      matched: '<span class="badge badge--warning">Matched</span>',
+      accepted: '<span class="badge badge--warning">Accepted</span>',
+      declined: '<span class="badge badge--error">Declined</span>',
+      delivered: '<span class="badge badge--gold">Delivered</span>',
+    };
+    return badges[status] || '';
+  },
+
+  /** Nome exibido publicamente: Lalíder vira "Ana S."; doador, organização ou nome. */
+  displayName(user) {
+    if (!user) return 'Unknown';
+    if (user.type === 'lalider') {
+      const parts = String(user.name || '')
+        .trim()
+        .split(/\s+/);
+      return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0];
+    }
+    return user.organization || user.name;
+  },
+
+  _messageField(id, placeholder) {
+    return `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
+      <label class="form-label" for="${id}">Message (optional)</label>
+      <textarea class="form-textarea" id="${id}" maxlength="500" placeholder="${this.escapeHTML(placeholder)}"></textarea>
+      <p class="form-hint">Do not share phone numbers or addresses here. Contact details are shown to both sides only after the offer is accepted.</p>
+    </div>`;
+  },
+
+  /** Doador → "Offer to Help" em um pedido. */
   showMatchModal(needId) {
-    const need = Donations.getAllNeeds().find((n) => n.id === needId);
-    if (!need) return;
+    const need = Donations.getNeedById(needId);
+    const user = Auth.getCurrentUser();
+    if (!need || !user) return;
+    if (user.type !== 'donor') {
+      this.showToast('Only donors can offer help.', 'error');
+      return;
+    }
 
     const e = (v) => this.escapeHTML(v);
+    const myDonations = Donations.getByDonor(user.id).filter((d) => d.status === 'available');
+    const suggested = myDonations.find((d) => d.category === need.category);
+    const donationSelect = myDonations.length
+      ? `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
+          <label class="form-label" for="offer-donation">Link one of your donations (optional)</label>
+          <select class="form-select" id="offer-donation">
+            <option value="">No specific listing</option>
+            ${myDonations.map((d) => `<option value="${e(d.id)}" ${d.id === suggested?.id ? 'selected' : ''}>${e(d.title)}</option>`).join('')}
+          </select>
+        </div>`
+      : '';
+
     this.showModal(
       `Help ${need.laliderName}`,
       `<p>You're offering to help with:</p>
        <p><strong>${e(need.title)}</strong></p>
        <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(need.description)}</p>
-       <p style="margin-top: var(--s-4);">This will notify the Lalíder that you want to help. They'll receive your contact information to coordinate the donation.</p>`,
-      [{ label: 'Confirm Offer', class: 'btn--primary', onClick: () => this.confirmMatch(needId) }]
+       ${donationSelect}
+       ${this._messageField('offer-message', 'Tell the Lalíder how you can help')}`,
+      [
+        {
+          label: 'Send Offer',
+          class: 'btn--primary',
+          onClick: () =>
+            this._submitOffer(() =>
+              Offers.offerHelp({
+                donorId: user.id,
+                needId,
+                donationId: document.getElementById('offer-donation')?.value || null,
+                message: document.getElementById('offer-message')?.value || '',
+              })
+            ),
+        },
+      ]
     );
   },
 
-  confirmMatch(needId) {
+  /** Lalíder → "Request" em uma doação. */
+  showRequestModal(donationId) {
+    const donation = Donations.getById(donationId);
+    const user = Auth.getCurrentUser();
+    if (!donation || !user) return;
+    if (user.type !== 'lalider') {
+      this.showToast('Only verified Lalíderes can request donations.', 'error');
+      return;
+    }
+
+    const e = (v) => this.escapeHTML(v);
+    const myNeeds = Donations.getNeedsByLalider(user.id).filter((n) => n.status === 'open');
+    const suggested = myNeeds.find((n) => n.category === donation.category);
+    const needSelect = myNeeds.length
+      ? `<div class="form-group" style="margin-top: var(--s-4); text-align: left;">
+          <label class="form-label" for="request-need">Which of your requests does it answer? (optional)</label>
+          <select class="form-select" id="request-need">
+            <option value="">None</option>
+            ${myNeeds.map((n) => `<option value="${e(n.id)}" ${n.id === suggested?.id ? 'selected' : ''}>${e(n.title)}</option>`).join('')}
+          </select>
+        </div>`
+      : '';
+
+    this.showModal(
+      'Request this donation',
+      `<p><strong>${e(donation.title)}</strong></p>
+       <p class="text-sm text-muted" style="margin-top: var(--s-2);">${e(donation.description)}</p>
+       ${needSelect}
+       ${this._messageField('request-message', 'Tell the donor how this would help you')}`,
+      [
+        {
+          label: 'Send Request',
+          class: 'btn--primary',
+          onClick: () =>
+            this._submitOffer(() =>
+              Offers.requestDonation({
+                laliderId: user.id,
+                donationId,
+                needId: document.getElementById('request-need')?.value || null,
+                message: document.getElementById('request-message')?.value || '',
+              })
+            ),
+        },
+      ]
+    );
+  },
+
+  _submitOffer(fn) {
+    const result = fn();
     this.closeModal();
-    this.showToast('Your offer has been sent! The Lalíder will be notified.', 'success');
+    this.showToast(result.message, result.success ? 'success' : 'error');
+    if (result.success) this.refresh();
+  },
+
+  /** Re-renderiza a página atual depois de uma mudança de dados. */
+  refresh() {
+    this.updateNavbarAuth();
+    if (typeof this.onDataChange === 'function') this.onDataChange();
+  },
+
+  /**
+   * Card de oferta para o dashboard, do ponto de vista de `viewer`.
+   */
+  renderOfferCard(offer, viewer) {
+    const e = (v) => this.escapeHTML(v);
+    const need = offer.needId ? Donations.getNeedById(offer.needId) : null;
+    const donation = offer.donationId ? Donations.getById(offer.donationId) : null;
+    const otherId = viewer.id === offer.donorId ? offer.laliderId : offer.donorId;
+    const other = Auth.getUsers().find((u) => u.id === otherId);
+    const isRecipient = Offers.getRecipientId(offer) === viewer.id;
+
+    let direction;
+    if (offer.initiatedBy === 'donor') {
+      direction = isRecipient
+        ? `${this.displayName(other)} offered to help`
+        : `You offered help to ${this.displayName(other)}`;
+    } else {
+      direction = isRecipient
+        ? `${this.displayName(other)} asked for your donation`
+        : `You asked ${this.displayName(other)} for a donation`;
+    }
+
+    const items = [
+      donation ? `<p class="text-sm"><strong>Donation:</strong> ${e(donation.title)}</p>` : '',
+      need ? `<p class="text-sm"><strong>Request:</strong> ${e(need.title)}</p>` : '',
+    ].join('');
+
+    const message = offer.message
+      ? `<p class="donation-card__desc" style="margin-top: var(--s-2);">“${e(offer.message)}”</p>`
+      : '';
+
+    const contact = Offers.getContact(offer, viewer.id);
+    const contactHTML = contact
+      ? `<div class="card card--flat" style="margin-top: var(--s-3); padding: var(--s-3);">
+          <p class="text-xs" style="color: var(--text-2);">Contact</p>
+          <p class="text-sm"><strong>${e(contact.name)}</strong>${contact.organization ? ` · ${e(contact.organization)}` : ''}</p>
+          <p class="text-sm"><a href="mailto:${e(contact.email)}">${e(contact.email)}</a></p>
+        </div>`
+      : '';
+
+    let actions = '';
+    if (offer.status === 'pending' && isRecipient) {
+      actions = `
+        <button type="button" class="btn btn--ghost btn--sm" data-action="decline-offer" data-offer-id="${e(offer.id)}">Decline</button>
+        <button type="button" class="btn btn--primary btn--sm" data-action="accept-offer" data-offer-id="${e(offer.id)}">Accept</button>`;
+    } else if (offer.status === 'pending') {
+      actions = '<span class="text-sm text-muted">Waiting for an answer</span>';
+    } else if (offer.status === 'accepted') {
+      actions = `<button type="button" class="btn btn--primary btn--sm" data-action="deliver-offer" data-offer-id="${e(offer.id)}">Mark as delivered</button>`;
+    } else if (offer.closedReason === 'superseded') {
+      actions = '<span class="text-sm text-muted">Closed: matched with someone else</span>';
+    }
+
+    return `
+      <div class="card offer-card" data-id="${e(offer.id)}">
+        <div class="flex items-center gap-2" style="justify-content: space-between; margin-bottom: var(--s-3);">
+          <span class="text-sm"><strong>${e(direction)}</strong></span>
+          ${this.renderStatusBadge(offer.status)}
+        </div>
+        ${items}
+        ${message}
+        ${contactHTML}
+        <div class="card__footer">
+          <span class="donation-card__meta-item">${this.formatDate(offer.updatedAt || offer.createdAt)}</span>
+          <div class="flex items-center gap-2">${actions}</div>
+        </div>
+      </div>
+    `;
+  },
+
+  _offerAction(fn) {
+    const user = Auth.getCurrentUser();
+    if (!user) return;
+    const result = fn(user);
+    this.showToast(result.message, result.success ? 'success' : 'error');
+    this.refresh();
   },
 };
 
@@ -413,6 +630,15 @@ App.registerActions({
   logout: () => App.handleLogout(),
   'close-modal': () => App.closeModal(),
   'offer-help': (el) => App.showMatchModal(el.dataset.needId),
+  'request-donation': (el) => App.showRequestModal(el.dataset.donationId),
+  'accept-offer': (el) =>
+    App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'accept')),
+  'decline-offer': (el) =>
+    App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'decline')),
+  'deliver-offer': (el) => {
+    if (!window.confirm('Confirm that this item was delivered?')) return;
+    App._offerAction((user) => Offers.markDelivered(el.dataset.offerId, user.id));
+  },
 });
 
 // Initialize App on DOM ready

@@ -68,3 +68,30 @@ describe('App.escapeHTML', () => {
     expect(document.querySelector('.modal__title').textContent).toBe(PAYLOAD);
   });
 });
+
+describe('App.renderOfferCard', () => {
+  it('escapa a mensagem da oferta e os dados de contato', async () => {
+    const { App, Auth, Donations, Offers } = loadApp();
+    const { seedUsers } = await import('./helpers/fixtures.js');
+    const users = seedUsers(Auth);
+    const need = Donations.createNeed({
+      laliderId: users.lalider.id,
+      laliderName: 'Ana S.',
+      camp: 'VLB32',
+      country: 'Brazil',
+      category: 'laptop',
+      title: PAYLOAD,
+      description: 'x',
+    });
+    const { offer } = Offers.offerHelp({
+      donorId: users.donor.id,
+      needId: need.id,
+      message: PAYLOAD,
+    });
+    Offers.respond(offer.id, users.lalider.id, 'accept');
+    document.body.innerHTML = App.renderOfferCard(Offers.getById(offer.id), users.lalider);
+    expect(document.querySelector('img')).toBeNull();
+    expect(document.body.textContent).toContain(PAYLOAD);
+    expect(document.body.textContent).toContain(users.donor.email);
+  });
+});

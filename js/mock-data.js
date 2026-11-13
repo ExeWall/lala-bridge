@@ -127,6 +127,36 @@ const MockDB = {
       createdAt: '2026-09-05T00:00:00Z',
     },
     {
+      id: 'donor-003',
+      type: 'donor',
+      name: 'EduTech Brasil',
+      email: 'donor-003.sample@example.com',
+      country: 'Brazil',
+      organization: 'EduTech Brasil',
+      demo: true,
+      createdAt: '2026-09-03T00:00:00Z',
+    },
+    {
+      id: 'donor-004',
+      type: 'donor',
+      name: 'Carlos Vega',
+      email: 'donor-004.sample@example.com',
+      country: 'Mexico',
+      organization: 'Carlos Vega Alumni',
+      demo: true,
+      createdAt: '2026-09-03T00:00:00Z',
+    },
+    {
+      id: 'donor-005',
+      type: 'donor',
+      name: 'Anonymous Donor',
+      email: 'donor-005.sample@example.com',
+      country: 'Colombia',
+      organization: '',
+      demo: true,
+      createdAt: '2026-09-03T00:00:00Z',
+    },
+    {
       id: 'lalider-demo-ana',
       type: 'lalider',
       name: 'Ana Beatriz Silva',
@@ -470,6 +500,38 @@ const MockDB = {
       urgency: 'high',
       status: 'open',
       createdAt: '2026-09-19T09:30:00Z',
+    },
+    {
+      id: 'need-005',
+      laliderId: 'lalider-demo-ana',
+      laliderName: 'Ana S.',
+      camp: 'VLB32',
+      country: 'Brazil',
+      category: 'laptop',
+      title: 'Laptop for a Python course and job applications',
+      description:
+        'I study through my phone today. A laptop with at least 8GB RAM would let me finish my Python course and send my CV.',
+      urgency: 'high',
+      status: 'open',
+      createdAt: '2026-09-22T09:00:00Z',
+    },
+  ],
+
+  /**
+   * Ofertas de exemplo (modo demo): um match já aceito para a Lalíder demo.
+   */
+  sampleOffers: [
+    {
+      id: 'offer-001',
+      needId: null,
+      donationId: 'don-003',
+      donorId: 'donor-003',
+      laliderId: 'lalider-demo-ana',
+      initiatedBy: 'lalider',
+      message: 'These would help me a lot in my online classes.',
+      status: 'accepted',
+      createdAt: '2026-09-11T09:00:00Z',
+      updatedAt: '2026-09-12T09:00:00Z',
     },
   ],
 };
