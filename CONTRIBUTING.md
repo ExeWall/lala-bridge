@@ -35,6 +35,19 @@ Outros comandos:
 3. Garanta que `npm run lint`, `npm run format:check` e `npm test` passam.
 4. Abra um Pull Request preenchendo o template.
 
+## Textos e traduções
+
+A interface é em PT-BR por padrão, com inglês e espanhol. Nenhum texto fica fixo no código:
+
+- No HTML, escreva o texto em PT-BR e marque com `data-i18n="chave"` (ou `data-i18n-attr="placeholder:chave"` para atributos).
+- No JS, use `I18n.t('chave', { parametro })`.
+- Adicione a chave nos três arquivos de `locales/`. O `npm test` falha se faltar uma chave em algum idioma.
+
+## Acessibilidade e celular
+
+- Todo campo precisa de `<label for>` (ou `aria-label`), e todo botão precisa de texto ou `aria-label`. Os testes verificam isso.
+- Teste em 360px de largura: nada pode ficar mais largo que a tela, e os alvos de toque precisam ter pelo menos 44px.
+
 ## Regras importantes
 
 - **Nunca commite segredos.** Chaves de API vão no `.env` (que está no `.gitignore`). Use o `.env.example` como referência.

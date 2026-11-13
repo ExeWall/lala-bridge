@@ -129,16 +129,18 @@ Objetivo: o MVP atual fica seguro de demonstrar e o fluxo principal funciona de 
 ### FASE 2: Brasil, idioma e acessibilidade (até cerca de 20/11)
 Objetivo: o produto parece feito para o Brasil e funciona bem no celular.
 
-- [ ] **i18n** com um dicionário simples (`js/i18n.js` e `locales/pt-BR.json`, `en.json`, `es.json`). **PT-BR é o padrão**, com seletor de idioma no navbar e todos os textos fixos externalizados.
-- [ ] Datas e números com `Intl` no locale ativo. Hoje `formatDate` usa `en-US` fixo.
-- [ ] Localização brasileira: campo **UF e cidade** quando o país for Brasil, para alimentar o matching por proximidade.
-- [ ] Dados de exemplo brasileiros (jovens fictícios em PE, BA, SP e AM, e doadores empresariais fictícios).
-- [ ] **LGPD:** página `privacidade.html`, checkbox de consentimento no cadastro, botão "Excluir minha conta e meus dados" e, nos cards públicos, só o primeiro nome com a inicial, UF e turma.
-- [ ] **Acessibilidade (WCAG 2.1 AA):** labels associados, `aria-live` nos toasts, foco preso no modal e fechamento com Esc, contraste verificado e tudo navegável por teclado.
-- [ ] **Mobile-first:** testar o fluxo inteiro em 360px de largura e garantir alvos de toque de pelo menos 44px.
+- [x] **i18n** com um dicionário simples (`js/i18n.js` e `locales/pt-BR.json`, `en.json`, `es.json`). **PT-BR é o padrão**, com seletor de idioma no navbar e todos os textos fixos externalizados.
+- [x] Datas e números com `Intl` no locale ativo. Hoje `formatDate` usa `en-US` fixo.
+- [x] Localização brasileira: campo **UF e cidade** quando o país for Brasil, para alimentar o matching por proximidade.
+- [x] Dados de exemplo brasileiros (jovens fictícios em PE, BA, SP e AM, e doadores empresariais fictícios).
+- [x] **LGPD:** página `privacidade.html`, checkbox de consentimento no cadastro, botão "Excluir minha conta e meus dados" e, nos cards públicos, só o primeiro nome com a inicial, UF e turma.
+- [x] **Acessibilidade (WCAG 2.1 AA):** labels associados, `aria-live` nos toasts, foco preso no modal e fechamento com Esc, contraste verificado e tudo navegável por teclado.
+- [x] **Mobile-first:** testar o fluxo inteiro em 360px de largura e garantir alvos de toque de pelo menos 44px.
 - [x] Rever o campo `showerSong`. **Decisão do autor (13/11/2026): manter.** A música de chuveiro é uma das apresentações tradicionais da LALA.
 
 **Critério de pronto:** Lighthouse com acessibilidade ≥ 90 e performance ≥ 85 no mobile, e o fluxo completo em PT-BR em um celular.
+
+**Resultado (13/11/2026, branch `fase-2-ptbr`):** Lighthouse mobile no build de produção com desempenho entre 94 e 100 e acessibilidade, boas práticas e SEO 100 em todas as páginas públicas (início, explorar, entrar, cadastro, doar e privacidade). O painel exige login e foi verificado com axe-core (zero violações WCAG 2.1 AA) e pelo fluxo completo em 360px. O fluxo inteiro (cadastro, pedido, oferta, aceite, entrega) roda em PT-BR no celular emulado.
 
 ---
 
@@ -229,7 +231,7 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 
 ## 7. Checklist de progresso
 - [x] Fase 1: Fundação, correções e segurança (branch `fase-1-correcoes`)
-- [ ] Fase 2: Brasil, PT-BR, LGPD e acessibilidade
+- [x] Fase 2: Brasil, PT-BR, LGPD e acessibilidade (branch `fase-2-ptbr`)
 - [ ] Fase 3: Backend Supabase e deploy
 - [ ] Fase 4.1: Assistente de pedido
 - [ ] Fase 4.2: Triagem por foto
