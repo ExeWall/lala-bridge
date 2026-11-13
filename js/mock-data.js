@@ -11,7 +11,10 @@
 const MockDB = {
   /**
    * Lalíder Verification Codes Database
-   * Format: { code, name, camp, country, verified }
+   * Format: { code, name, camp, country }
+   *
+   * O uso de um código é derivado das contas cadastradas (Auth.isCodeRegistered),
+   * e não de uma flag em memória.
    *
    * In production, this would be an API call to validate against
    * the real spreadsheet/database of Lalíder codes.
@@ -38,7 +41,7 @@ const MockDB = {
       country: 'Brazil',
       used: false,
     },
-    { code: 'LALA-VLB32-004', name: 'Diego Ramírez', camp: 'VLB32', country: 'Peru', used: false },
+    { code: 'LALA-VLB32-004', name: 'Diego Ramírez', camp: 'VLB32', country: 'Peru' },
     {
       code: 'LALA-BLB10-001',
       name: 'Valentina Torres',
@@ -376,55 +379,5 @@ const MockDB = {
   ],
 };
 
-/**
- * Verify a Lalíder code against the mock database
- * @param {string} code - The verification code to check
- * @param {string} name - The name provided by the user
- * @returns {{ valid: boolean, message: string, data?: object }}
- */
-function verifyLaliderCode(code, name) {
-  const entry = MockDB.verificationCodes.find((v) => v.code.toUpperCase() === code.toUpperCase());
-
-  if (!entry) {
-    return {
-      valid: false,
-      message: 'Invalid verification code. Please check your Lalíder ID and try again.',
-    };
-  }
-
-  if (entry.used) {
-    return {
-      valid: false,
-      message: 'This verification code has already been used to create an account.',
-    };
-  }
-
-  // In a real system, you'd also validate the name matches
-  // For the MVP, we just check the code exists and isn't used
-  return {
-    valid: true,
-    message: 'Code verified successfully! Welcome, Lalíder! 🎉',
-    data: {
-      code: entry.code,
-      camp: entry.camp,
-      country: entry.country,
-      registeredName: entry.name,
-    },
-  };
-}
-
-/**
- * Mark a verification code as used
- * @param {string} code - The code to mark as used
- */
-function markCodeAsUsed(code) {
-  const entry = MockDB.verificationCodes.find((v) => v.code.toUpperCase() === code.toUpperCase());
-  if (entry) {
-    entry.used = true;
-  }
-}
-
 // Make available globally
 window.MockDB = MockDB;
-window.verifyLaliderCode = verifyLaliderCode;
-window.markCodeAsUsed = markCodeAsUsed;

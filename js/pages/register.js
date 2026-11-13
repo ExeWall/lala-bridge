@@ -80,13 +80,13 @@ function handleCodeInput(value) {
 
   clearTimeout(window._codeTimeout);
   window._codeTimeout = setTimeout(() => {
-    const result = verifyLaliderCode(value, '');
+    const result = Auth.verifyLaliderCode(value, null, { checkName: false });
 
     if (result.valid) {
       widget.className = 'verification-widget verified';
       input.className = 'form-input form-input--code form-input--success';
       status.innerHTML =
-        '<span style="color: var(--success); font-weight: 600;">Code verified successfully — Welcome, Lalíder!</span>';
+        '<span style="color: var(--success); font-weight: 600;">Code found. Enter your full name as registered with LALA.</span>';
       submitBtn.disabled = false;
       codeVerified = true;
 

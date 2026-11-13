@@ -54,3 +54,57 @@ describe('Auth: senhas', () => {
     expect((await Auth.login('old@example.com', 'abc123')).success).toBe(true);
   });
 });
+
+describe('Auth: verificação do código LALA', () => {
+  let Auth;
+  const base = {
+    email: 'ana@example.com',
+    password: 'senha123',
+    verificationCode: 'lala-vlb32-003',
+    camp: 'VLB32',
+    country: 'Brazil',
+  };
+  beforeEach(() => {
+    ({ Auth } = loadApp());
+  });
+
+  it('recusa código inexistente', () => {
+    expect(Auth.verifyLaliderCode('LALA-XXX-999', 'Qualquer').valid).toBe(false);
+  });
+
+  it('valida o nome ignorando acentos, caixa e espaços extras', () => {
+    expect(Auth.verifyLaliderCode('LALA-VLB32-003', '  ana  BEATRIZ silva ').valid).toBe(true);
+    expect(Auth.verifyLaliderCode('LALA-VLB32-001', 'maria gonzalez').valid).toBe(true);
+  });
+
+  it('recusa nome diferente do registrado', () => {
+    const res = Auth.verifyLaliderCode('LALA-VLB32-003', 'Outra Pessoa');
+    expect(res.valid).toBe(false);
+    expect(res.message).toMatch(/name/i);
+  });
+
+  it('permite pular a checagem de nome na verificação ao digitar', () => {
+    expect(Auth.verifyLaliderCode('LALA-VLB32-003', null, { checkName: false }).valid).toBe(true);
+  });
+
+  it('impede reutilizar um código já cadastrado, mesmo após recarregar', async () => {
+    const first = await Auth.registerLalider({ ...base, name: 'Ana Beatriz Silva' });
+    expect(first.success).toBe(true);
+
+    // Simula recarregar a página: novas instâncias, mesmo localStorage.
+    ({ Auth } = loadApp({ keepStorage: true }));
+    expect(Auth.isCodeRegistered('LALA-VLB32-003')).toBe(true);
+    const second = await Auth.registerLalider({
+      ...base,
+      email: 'outra@example.com',
+      name: 'Ana Beatriz Silva',
+    });
+    expect(second.success).toBe(false);
+  });
+
+  it('não cadastra Lalíder com nome divergente', async () => {
+    const res = await Auth.registerLalider({ ...base, name: 'Impostor' });
+    expect(res.success).toBe(false);
+    expect(Auth.getUsers().some((u) => u.email === base.email)).toBe(false);
+  });
+});

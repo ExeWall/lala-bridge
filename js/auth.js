@@ -112,6 +112,70 @@ const Auth = {
     return false;
   },
 
+  // ---- Verificação de código LALA ----
+
+  /**
+   * Normaliza um nome para comparação: sem acentos, minúsculo e com espaços simples.
+   */
+  normalizeName(name) {
+    return String(name || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  },
+
+  /**
+   * Indica se um código já foi usado por alguma conta cadastrada.
+   */
+  isCodeRegistered(code) {
+    const normalized = String(code || '')
+      .trim()
+      .toUpperCase();
+    return this.getUsers().some((u) => u.verificationCode === normalized);
+  },
+
+  /**
+   * Verifica um código LALA e, se `checkName` for true, confere se o nome
+   * informado corresponde ao nome registrado (ignorando acentos e caixa).
+   * @returns {{ valid: boolean, message: string, data?: object }}
+   */
+  verifyLaliderCode(code, name, { checkName = true } = {}) {
+    const normalized = String(code || '')
+      .trim()
+      .toUpperCase();
+    const entry = MockDB.verificationCodes.find((v) => v.code.toUpperCase() === normalized);
+
+    if (!entry) {
+      return {
+        valid: false,
+        message: 'Invalid verification code. Please check your Lalíder ID and try again.',
+      };
+    }
+
+    if (this.isCodeRegistered(normalized)) {
+      return {
+        valid: false,
+        message: 'This verification code has already been used to create an account.',
+      };
+    }
+
+    if (checkName && this.normalizeName(name) !== this.normalizeName(entry.name)) {
+      return {
+        valid: false,
+        message:
+          'The name does not match the one registered for this code. Use your full name as registered with LALA.',
+      };
+    }
+
+    return {
+      valid: true,
+      message: 'Code verified successfully! Welcome, Lalíder! 🎉',
+      data: { code: entry.code, camp: entry.camp, country: entry.country },
+    };
+  },
+
   /**
    * Get all registered users
    */
@@ -142,7 +206,7 @@ const Auth = {
     needDescription,
   }) {
     // Verify the code first
-    const verification = verifyLaliderCode(verificationCode, name);
+    const verification = this.verifyLaliderCode(verificationCode, name);
     if (!verification.valid) {
       return { success: false, message: verification.message };
     }
@@ -153,18 +217,13 @@ const Auth = {
       return { success: false, message: 'An account with this email already exists.' };
     }
 
-    // Check if code already used by a registered user
-    if (users.find((u) => u.verificationCode === verificationCode.toUpperCase())) {
-      return { success: false, message: 'This verification code has already been registered.' };
-    }
-
     const user = {
       id: 'lalider-' + Date.now(),
       type: 'lalider',
       name,
       email,
       ...(await this._credentialsFor(password)),
-      verificationCode: verificationCode.toUpperCase(),
+      verificationCode: verificationCode.trim().toUpperCase(),
       camp,
       country,
       state: state || '',
@@ -177,7 +236,6 @@ const Auth = {
 
     users.push(user);
     this.saveUsers(users);
-    markCodeAsUsed(verificationCode);
 
     return { success: true, message: 'Welcome to LALA Bridge! 🎉', user };
   },
