@@ -1,6 +1,6 @@
 /**
  * LALA Bridge — Donations System
- * 
+ *
  * Handles creating, listing, filtering, and matching donations.
  * Uses localStorage for the MVP.
  */
@@ -32,21 +32,21 @@ const Donations = {
    * Get available donations only
    */
   getAvailable() {
-    return this.getAll().filter(d => d.status === 'available');
+    return this.getAll().filter((d) => d.status === 'available');
   },
 
   /**
    * Get donations by donor
    */
   getByDonor(donorId) {
-    return this.getAll().filter(d => d.donorId === donorId);
+    return this.getAll().filter((d) => d.donorId === donorId);
   },
 
   /**
    * Get donations matched to a Lalíder
    */
   getMatchedToLalider(laliderId) {
-    return this.getAll().filter(d => d.matchedTo === laliderId);
+    return this.getAll().filter((d) => d.matchedTo === laliderId);
   },
 
   /**
@@ -65,7 +65,7 @@ const Donations = {
       country,
       status: 'available',
       createdAt: new Date().toISOString(),
-      image: null
+      image: null,
     };
 
     donations.unshift(donation);
@@ -79,7 +79,7 @@ const Donations = {
    */
   match(donationId, laliderId) {
     const donations = this.getAll();
-    const idx = donations.findIndex(d => d.id === donationId);
+    const idx = donations.findIndex((d) => d.id === donationId);
     if (idx === -1) return false;
 
     donations[idx].status = 'matched';
@@ -94,15 +94,17 @@ const Donations = {
    * Filter donations
    */
   filter(donations, { category, country, search, condition } = {}) {
-    return donations.filter(d => {
+    return donations.filter((d) => {
       if (category && category !== 'all' && d.category !== category) return false;
       if (country && d.country.toLowerCase() !== country.toLowerCase()) return false;
       if (condition && d.condition !== condition) return false;
       if (search) {
         const q = search.toLowerCase();
-        return d.title.toLowerCase().includes(q) || 
-               d.description.toLowerCase().includes(q) ||
-               d.donorName.toLowerCase().includes(q);
+        return (
+          d.title.toLowerCase().includes(q) ||
+          d.description.toLowerCase().includes(q) ||
+          d.donorName.toLowerCase().includes(q)
+        );
       }
       return true;
     });
@@ -121,14 +123,14 @@ const Donations = {
    * Get open needs
    */
   getOpenNeeds() {
-    return this.getAllNeeds().filter(n => n.status === 'open');
+    return this.getAllNeeds().filter((n) => n.status === 'open');
   },
 
   /**
    * Get needs by Lalíder
    */
   getNeedsByLalider(laliderId) {
-    return this.getAllNeeds().filter(n => n.laliderId === laliderId);
+    return this.getAllNeeds().filter((n) => n.laliderId === laliderId);
   },
 
   /**
@@ -147,7 +149,7 @@ const Donations = {
       description,
       urgency: urgency || 'medium',
       status: 'open',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     needs.unshift(need);
@@ -162,16 +164,17 @@ const Donations = {
   getStats() {
     const donations = this.getAll();
     const needs = this.getAllNeeds();
-    
+
     return {
       totalDonations: donations.length,
-      availableDonations: donations.filter(d => d.status === 'available').length,
-      matchedDonations: donations.filter(d => d.status === 'matched').length,
+      availableDonations: donations.filter((d) => d.status === 'available').length,
+      matchedDonations: donations.filter((d) => d.status === 'matched').length,
       totalNeeds: needs.length,
-      openNeeds: needs.filter(n => n.status === 'open').length,
-      countries: [...new Set([...donations.map(d => d.country), ...needs.map(n => n.country)])].length
+      openNeeds: needs.filter((n) => n.status === 'open').length,
+      countries: [...new Set([...donations.map((d) => d.country), ...needs.map((n) => n.country)])]
+        .length,
     };
-  }
+  },
 };
 
 // Initialize

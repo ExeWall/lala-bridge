@@ -20,12 +20,13 @@ LALA Bridge is a web platform that connects generous donors with verified Lalíd
 
 ### Demo Accounts
 
-| Type | Email | Password |
-|------|-------|----------|
-| Donor | techcorp@example.com | demo123 |
-| Donor | sarah@example.com | demo123 |
+| Type  | Email                | Password |
+| ----- | -------------------- | -------- |
+| Donor | techcorp@example.com | demo123  |
+| Donor | sarah@example.com    | demo123  |
 
 To test as a Lalíder, register with one of these verification codes:
+
 - `LALA-VLB32-001` through `LALA-VLB32-004`
 - `LALA-BLB10-001` through `LALA-BLB10-004`
 - And more (see `js/mock-data.js`)

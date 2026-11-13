@@ -1,9 +1,9 @@
 /**
  * LALA Bridge — Authentication System
- * 
+ *
  * Handles user registration, login, session management,
  * and Lalíder code verification.
- * 
+ *
  * Uses localStorage for the MVP. In production, replace with
  * proper backend authentication (JWT, sessions, etc.)
  */
@@ -27,7 +27,7 @@ const Auth = {
           password: 'demo123',
           country: 'United States',
           organization: 'Tech Corp',
-          createdAt: '2026-09-01T00:00:00Z'
+          createdAt: '2026-09-01T00:00:00Z',
         },
         {
           id: 'donor-002',
@@ -37,8 +37,8 @@ const Auth = {
           password: 'demo123',
           country: 'Canada',
           organization: '',
-          createdAt: '2026-09-05T00:00:00Z'
-        }
+          createdAt: '2026-09-05T00:00:00Z',
+        },
       ];
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(demoUsers));
     }
@@ -61,7 +61,18 @@ const Auth = {
   /**
    * Register a new Lalíder
    */
-  registerLalider({ name, email, password, verificationCode, camp, country, state, showerSong, areaOfInterest, needDescription }) {
+  registerLalider({
+    name,
+    email,
+    password,
+    verificationCode,
+    camp,
+    country,
+    state,
+    showerSong,
+    areaOfInterest,
+    needDescription,
+  }) {
     // Verify the code first
     const verification = verifyLaliderCode(verificationCode, name);
     if (!verification.valid) {
@@ -70,12 +81,12 @@ const Auth = {
 
     // Check if email already exists
     const users = this.getUsers();
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+    if (users.find((u) => u.email.toLowerCase() === email.toLowerCase())) {
       return { success: false, message: 'An account with this email already exists.' };
     }
 
     // Check if code already used by a registered user
-    if (users.find(u => u.verificationCode === verificationCode.toUpperCase())) {
+    if (users.find((u) => u.verificationCode === verificationCode.toUpperCase())) {
       return { success: false, message: 'This verification code has already been registered.' };
     }
 
@@ -93,7 +104,7 @@ const Auth = {
       areaOfInterest: areaOfInterest || '',
       needDescription: needDescription || '',
       verified: true,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     users.push(user);
@@ -108,8 +119,8 @@ const Auth = {
    */
   registerDonor({ name, email, password, country, organization }) {
     const users = this.getUsers();
-    
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+
+    if (users.find((u) => u.email.toLowerCase() === email.toLowerCase())) {
       return { success: false, message: 'An account with this email already exists.' };
     }
 
@@ -121,7 +132,7 @@ const Auth = {
       password, // In production, HASH this!
       country,
       organization: organization || '',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     users.push(user);
@@ -136,7 +147,7 @@ const Auth = {
   login(email, password) {
     const users = this.getUsers();
     const user = users.find(
-      u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
     );
 
     if (!user) {
@@ -149,7 +160,7 @@ const Auth = {
       type: user.type,
       name: user.name,
       email: user.email,
-      loginAt: new Date().toISOString()
+      loginAt: new Date().toISOString(),
     };
 
     localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
@@ -180,7 +191,7 @@ const Auth = {
     if (!session) return null;
 
     const users = this.getUsers();
-    return users.find(u => u.id === session.userId) || null;
+    return users.find((u) => u.id === session.userId) || null;
   },
 
   /**
@@ -215,7 +226,7 @@ const Auth = {
       return false;
     }
     return true;
-  }
+  },
 };
 
 // Initialize on load

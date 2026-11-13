@@ -1,6 +1,6 @@
 /**
  * LALA Bridge — Main Application Logic
- * 
+ *
  * Handles navigation, scroll effects, animations,
  * toast notifications, and shared UI utilities.
  */
@@ -56,10 +56,11 @@ const App = {
 
     if (Auth.isLoggedIn()) {
       const user = Auth.getCurrentUser();
-      const typeBadge = user?.type === 'lalider' 
-        ? '<span class="badge badge--lalider">Lalíder</span>'
-        : '<span class="badge badge--donor">Donor</span>';
-      
+      const typeBadge =
+        user?.type === 'lalider'
+          ? '<span class="badge badge--lalider">Lalíder</span>'
+          : '<span class="badge badge--donor">Donor</span>';
+
       actionsContainer.innerHTML = `
         ${typeBadge}
         <a href="dashboard.html" class="btn btn--ghost btn--sm">Dashboard</a>
@@ -88,7 +89,7 @@ const App = {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
             observer.unobserve(entry.target);
@@ -98,7 +99,7 @@ const App = {
       { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
 
-    elements.forEach(el => observer.observe(el));
+    elements.forEach((el) => observer.observe(el));
   },
 
   // =========================================================================
@@ -107,8 +108,8 @@ const App = {
 
   animateCounters() {
     const counters = document.querySelectorAll('[data-count]');
-    
-    counters.forEach(counter => {
+
+    counters.forEach((counter) => {
       const target = parseInt(counter.getAttribute('data-count'), 10);
       const duration = 2000;
       const start = 0;
@@ -177,10 +178,13 @@ const App = {
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
-    
-    const actionsHTML = actions.map(a => 
-      `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${a.label}</button>`
-    ).join('');
+
+    const actionsHTML = actions
+      .map(
+        (a) =>
+          `<button class="btn ${a.class || 'btn--outline'}" onclick="${a.onclick}">${a.label}</button>`
+      )
+      .join('');
 
     overlay.innerHTML = `
       <div class="modal">
@@ -222,20 +226,31 @@ const App = {
     if (diffDays === 1) return 'Yesterday';
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    
+
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   },
 
   getCategory(id) {
-    return MockDB.equipmentCategories.find(c => c.id === id) || { id: 'other', name: 'Other', icon: '' };
+    return (
+      MockDB.equipmentCategories.find((c) => c.id === id) || {
+        id: 'other',
+        name: 'Other',
+        icon: '',
+      }
+    );
   },
 
   getCondition(id) {
-    return MockDB.conditions.find(c => c.id === id) || { id: 'unknown', label: 'Unknown' };
+    return MockDB.conditions.find((c) => c.id === id) || { id: 'unknown', label: 'Unknown' };
   },
 
   getInitials(name) {
-    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
   },
 
   // =========================================================================
@@ -245,9 +260,10 @@ const App = {
   renderDonationCard(donation) {
     const cat = this.getCategory(donation.category);
     const cond = this.getCondition(donation.condition);
-    const statusBadge = donation.status === 'available' 
-      ? '<span class="badge badge--success">Available</span>'
-      : '<span class="badge badge--warning">Matched</span>';
+    const statusBadge =
+      donation.status === 'available'
+        ? '<span class="badge badge--success">Available</span>'
+        : '<span class="badge badge--warning">Matched</span>';
 
     return `
       <div class="card donation-card" data-id="${donation.id}">
@@ -276,7 +292,7 @@ const App = {
     const urgencyBadge = {
       high: '<span class="badge badge--error">High Priority</span>',
       medium: '<span class="badge badge--warning">Medium</span>',
-      low: '<span class="badge badge--success">Low</span>'
+      low: '<span class="badge badge--success">Low</span>',
     };
 
     return `
@@ -303,7 +319,7 @@ const App = {
   },
 
   showMatchModal(needId) {
-    const need = Donations.getAllNeeds().find(n => n.id === needId);
+    const need = Donations.getAllNeeds().find((n) => n.id === needId);
     if (!need) return;
 
     const cat = this.getCategory(need.category);
@@ -320,7 +336,7 @@ const App = {
   confirmMatch(needId) {
     this.closeModal();
     this.showToast('Your offer has been sent! The Lalíder will be notified.', 'success');
-  }
+  },
 };
 
 // Initialize App on DOM ready

@@ -1,115 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log In — LALA Bridge</title>
-  <meta name="description" content="Log in to your LALA Bridge account to manage donations or check your requests as a Lalíder.">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>">
-</head>
-<body>
-
-  <nav class="nav" id="navbar">
-    <div class="nav__inner">
-      <a href="index.html" class="nav__logo">
-        <div class="nav__logo-mark">B</div>
-        LALA Bridge
-      </a>
-      <div class="nav__links">
-        <a href="index.html" class="nav__link">Home</a>
-        <a href="browse.html" class="nav__link">Browse</a>
-        <a href="donate.html" class="nav__link">Donate</a>
-      </div>
-      <div class="nav__actions">
-        <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
-      </div>
-      <button class="nav__hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
-
-  <div class="auth-page">
-    <div class="auth-card">
-      <div class="auth-card__header">
-        <a href="index.html" class="auth-card__logo">
-          <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem;">B</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In — LALA Bridge</title>
+    <meta
+      name="description"
+      content="Log in to your LALA Bridge account to manage donations or check your requests as a Lalíder."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>"
+    />
+  </head>
+  <body>
+    <nav class="nav" id="navbar">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          <div class="nav__logo-mark">B</div>
           LALA Bridge
         </a>
-        <h1 class="auth-card__title">Welcome Back</h1>
-        <p class="auth-card__subtitle">Log in to continue your impact journey</p>
+        <div class="nav__links">
+          <a href="index.html" class="nav__link">Home</a>
+          <a href="browse.html" class="nav__link">Browse</a>
+          <a href="donate.html" class="nav__link">Donate</a>
+        </div>
+        <div class="nav__actions">
+          <a href="register.html" class="btn btn--primary btn--sm">Get Started</a>
+        </div>
+        <button class="nav__hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
+    </nav>
 
-      <form id="login-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label form-label--required">Email</label>
-          <input type="email" class="form-input" id="login-email" placeholder="you@example.com" required autofocus>
+    <div class="auth-page">
+      <div class="auth-card">
+        <div class="auth-card__header">
+          <a href="index.html" class="auth-card__logo">
+            <div class="nav__logo-mark" style="width: 28px; height: 28px; font-size: 0.8rem">B</div>
+            LALA Bridge
+          </a>
+          <h1 class="auth-card__title">Welcome Back</h1>
+          <p class="auth-card__subtitle">Log in to continue your impact journey</p>
         </div>
-        <div class="form-group">
-          <label class="form-label form-label--required">Password</label>
-          <input type="password" class="form-input" id="login-password" placeholder="Your password" required>
-        </div>
-        <div id="login-error" class="form-error" style="margin-bottom: var(--s-5);"></div>
-        <button type="submit" class="btn btn--primary btn--lg btn--full" id="login-btn">Log In</button>
-      </form>
 
-      <div class="card card--flat" style="margin-top: var(--s-6); padding: var(--s-4); background: var(--cream);">
-        <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2);">Demo Accounts</p>
-        <div style="display: flex; flex-direction: column; gap: var(--s-2);">
-          <button class="btn btn--ghost btn--sm" onclick="fillDemo('techcorp@example.com', 'demo123')" style="justify-content: flex-start;">
-            <span class="badge badge--donor">Donor</span>
-            <span style="margin-left: 8px;">techcorp@example.com</span>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label form-label--required">Email</label>
+            <input
+              type="email"
+              class="form-input"
+              id="login-email"
+              placeholder="you@example.com"
+              required
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--required">Password</label>
+            <input
+              type="password"
+              class="form-input"
+              id="login-password"
+              placeholder="Your password"
+              required
+            />
+          </div>
+          <div id="login-error" class="form-error" style="margin-bottom: var(--s-5)"></div>
+          <button type="submit" class="btn btn--primary btn--lg btn--full" id="login-btn">
+            Log In
           </button>
-          <button class="btn btn--ghost btn--sm" onclick="fillDemo('sarah@example.com', 'demo123')" style="justify-content: flex-start;">
-            <span class="badge badge--donor">Donor</span>
-            <span style="margin-left: 8px;">sarah@example.com</span>
-          </button>
-        </div>
-        <p class="form-hint" style="margin-top: var(--s-3);">Register as a Lalíder first to see the Lalíder dashboard.</p>
-      </div>
+        </form>
 
-      <div class="auth-card__footer">
-        Don't have an account? <a href="register.html">Create one</a>
+        <div
+          class="card card--flat"
+          style="margin-top: var(--s-6); padding: var(--s-4); background: var(--cream)"
+        >
+          <p class="text-xs" style="margin-bottom: var(--s-3); color: var(--text-2)">
+            Demo Accounts
+          </p>
+          <div style="display: flex; flex-direction: column; gap: var(--s-2)">
+            <button
+              class="btn btn--ghost btn--sm"
+              onclick="fillDemo('techcorp@example.com', 'demo123')"
+              style="justify-content: flex-start"
+            >
+              <span class="badge badge--donor">Donor</span>
+              <span style="margin-left: 8px">techcorp@example.com</span>
+            </button>
+            <button
+              class="btn btn--ghost btn--sm"
+              onclick="fillDemo('sarah@example.com', 'demo123')"
+              style="justify-content: flex-start"
+            >
+              <span class="badge badge--donor">Donor</span>
+              <span style="margin-left: 8px">sarah@example.com</span>
+            </button>
+          </div>
+          <p class="form-hint" style="margin-top: var(--s-3)">
+            Register as a Lalíder first to see the Lalíder dashboard.
+          </p>
+        </div>
+
+        <div class="auth-card__footer">
+          Don't have an account? <a href="register.html">Create one</a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="js/mock-data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/donations.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
-    });
+    <script src="js/mock-data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/donations.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        if (Auth.isLoggedIn()) window.location.href = 'dashboard.html';
+      });
 
-    function fillDemo(email, password) {
-      document.getElementById('login-email').value = email;
-      document.getElementById('login-password').value = password;
-    }
+      function fillDemo(email, password) {
+        document.getElementById('login-email').value = email;
+        document.getElementById('login-password').value = password;
+      }
 
-    function handleLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-      const errorEl = document.getElementById('login-error');
-      const btn = document.getElementById('login-btn');
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const errorEl = document.getElementById('login-error');
+        const btn = document.getElementById('login-btn');
 
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Logging in...';
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Logging in...';
 
-      setTimeout(() => {
-        const result = Auth.login(email, password);
-        if (result.success) {
-          App.showToast(result.message, 'success');
-          setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
-        } else {
-          errorEl.textContent = result.message;
-          errorEl.classList.add('visible');
-          btn.disabled = false;
-          btn.innerHTML = 'Log In';
-        }
-      }, 600);
-    }
-  </script>
-</body>
+        setTimeout(() => {
+          const result = Auth.login(email, password);
+          if (result.success) {
+            App.showToast(result.message, 'success');
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1000);
+          } else {
+            errorEl.textContent = result.message;
+            errorEl.classList.add('visible');
+            btn.disabled = false;
+            btn.innerHTML = 'Log In';
+          }
+        }, 600);
+      }
+    </script>
+  </body>
 </html>
