@@ -22,7 +22,7 @@ const Auth = {
    * Inicializa o sistema. No modo demo, cria as contas fictícias se ainda não existirem.
    */
   init() {
-    if (!LALA_CONFIG.DEMO_MODE) return;
+    if (!LALA_CONFIG.DEMO_MODE || Store.mode !== 'local') return;
     // Garante as contas demo também em navegadores que já tinham dados de uma
     // versão anterior (que guardava as contas demo com senha em texto puro).
     const users = this.getUsers();
@@ -68,7 +68,7 @@ const Auth = {
       email: user.email,
       loginAt: new Date().toISOString(),
     };
-    localStorage.setItem(this.SESSION_KEY, JSON.stringify(session));
+    Store.set(this.SESSION_KEY, session);
   },
 
   PBKDF2_ITERATIONS: 100000,
@@ -206,14 +206,14 @@ const Auth = {
    * Get all registered users
    */
   getUsers() {
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+    return Store.get(this.STORAGE_KEY, []);
   },
 
   /**
    * Save users to storage
    */
   saveUsers(users) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
+    Store.set(this.STORAGE_KEY, users);
   },
 
   MIN_PASSWORD_LENGTH: 6,
@@ -402,15 +402,14 @@ const Auth = {
    * Logout current user
    */
   logout() {
-    localStorage.removeItem(this.SESSION_KEY);
+    Store.remove(this.SESSION_KEY);
   },
 
   /**
    * Get current session
    */
   getSession() {
-    const session = localStorage.getItem(this.SESSION_KEY);
-    return session ? JSON.parse(session) : null;
+    return Store.get(this.SESSION_KEY, null);
   },
 
   /**

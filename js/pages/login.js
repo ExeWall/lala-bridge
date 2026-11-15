@@ -9,8 +9,8 @@ App.ready(() => {
 });
 
 App.registerActions({
-  'demo-login': (el) => {
-    const result = Auth.loginAsDemo(el.dataset.userId);
+  'demo-login': async (el) => {
+    const result = await Api.loginAsDemo(el.dataset.userId);
     App.showToast(result.message, result.success ? 'success' : 'error');
     if (result.success) {
       setTimeout(() => {
@@ -21,7 +21,7 @@ App.registerActions({
 });
 
 function renderDemoAccounts() {
-  const accounts = Auth.getDemoAccounts();
+  const accounts = Api.getDemoAccounts();
   if (!accounts.length) return;
   document.getElementById('demo-accounts').innerHTML = accounts
     .map((u) => {
@@ -46,7 +46,7 @@ async function handleLogin(e) {
   btn.disabled = true;
   btn.innerHTML = `<span class="spinner" aria-hidden="true"></span> ${App.escapeHTML(I18n.t('login.loading'))}`;
 
-  const result = await Auth.login(email, password).catch((err) => ({
+  const result = await Api.login(email, password).catch((err) => ({
     success: false,
     message: err.message,
   }));

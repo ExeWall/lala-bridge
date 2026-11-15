@@ -297,7 +297,9 @@
     "welcomeBack": "Que bom te ver de novo, {name}!",
     "demoUnavailable": "Conta de demonstração indisponível.",
     "demoSignedIn": "Modo demo: você entrou como {name}.",
-    "cryptoUnavailable": "Seu navegador bloqueou a criptografia. Abra o app por http://localhost ou HTTPS."
+    "cryptoUnavailable": "Seu navegador bloqueou a criptografia. Abra o app por http://localhost ou HTTPS.",
+    "checkEmail": "Conta criada! Confirme seu e-mail pelo link que enviamos e depois entre.",
+    "invalidRole": "Tipo de conta inválido."
   },
   "donate": {
     "metaTitle": "Doar equipamento — LALA Bridge",
@@ -532,5 +534,18 @@
     "contactTitle": "Contato",
     "contactBody": "O LALA Bridge é um projeto de código aberto da comunidade LALA. Dúvidas ou pedidos sobre seus dados podem ser enviados pelo repositório do projeto no GitHub. No piloto com usuários reais, a organização responsável será indicada aqui, com um encarregado de dados.",
     "contactLink": "Abrir o repositório no GitHub"
+  },
+  "remote": {
+    "offline": "Não foi possível conectar ao servidor. Verifique sua internet e tente de novo.",
+    "genericError": "Algo deu errado. Tente de novo em instantes."
+  },
+  "photos": {
+    "invalidType": "Envie uma imagem (JPG, PNG ou WebP)."
+  },
+  "impact": {
+    "onlyLalider": "Só quem recebeu a doação pode contar como ela ajudou.",
+    "onlyDelivered": "O relato só pode ser enviado depois da entrega.",
+    "textRequired": "Escreva algumas palavras sobre como a doação ajudou.",
+    "posted": "Obrigado! O doador vai ver seu relato."
   }
 }

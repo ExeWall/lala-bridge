@@ -82,27 +82,30 @@ function showPreview() {
     .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function handleDonation(e) {
+async function handleDonation(e) {
   e.preventDefault();
   if (!selectedCategory) {
     App.showToast(I18n.t('donate.selectCategory'), 'error');
     return;
   }
-  const user = Auth.getCurrentUser();
   if (!Auth.isDonor()) {
     App.showToast(I18n.t('donate.onlyDonors'), 'error');
     return;
   }
-  Donations.create({
-    donorId: user.id,
-    donorName: user.organization || user.name,
+  const submit = e.target.querySelector('button[type="submit"]');
+  submit.disabled = true;
+  const result = await Api.createDonation({
     category: selectedCategory,
     title: document.getElementById('donation-title').value,
     description: document.getElementById('donation-desc').value,
     condition: document.getElementById('donation-condition').value,
     ...App.readLocation('donation'),
   });
-  App.showToast(I18n.t('donate.published'), 'success');
+  App.showToast(result.message, result.success ? 'success' : 'error');
+  if (!result.success) {
+    submit.disabled = false;
+    return;
+  }
   setTimeout(() => {
     window.location.href = 'dashboard.html';
   }, 2000);

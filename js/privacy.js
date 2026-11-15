@@ -28,9 +28,8 @@ const Privacy = {
     };
   },
 
-  /** Baixa exportData como arquivo JSON. */
-  downloadData(userId) {
-    const data = this.exportData(userId);
+  /** Baixa os dados exportados como arquivo JSON. */
+  downloadJson(data) {
     if (!data) return false;
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -88,7 +87,7 @@ const Privacy = {
             ? { ...d, matchedTo: gone }
             : d
       );
-    localStorage.setItem(Donations.STORAGE_KEY, JSON.stringify(donations));
+    Store.set(Donations.STORAGE_KEY, donations);
 
     const needs = Donations.getAllNeeds()
       .filter((n) => n.laliderId !== userId || n.status === 'delivered')
@@ -99,7 +98,7 @@ const Privacy = {
             ? { ...n, matchedDonorId: gone }
             : n
       );
-    localStorage.setItem(Donations.NEEDS_KEY, JSON.stringify(needs));
+    Store.set(Donations.NEEDS_KEY, needs);
 
     // 4. Conta e sessão.
     Auth.saveUsers(Auth.getUsers().filter((u) => u.id !== userId));

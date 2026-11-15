@@ -76,7 +76,8 @@ const App = {
               document.addEventListener('DOMContentLoaded', resolve, { once: true })
             )
           : Promise.resolve();
-      this._readyPromise = Promise.all([dom, I18n.ready]).then(() => this.init());
+      const backend = LALA_CONFIG.BACKEND === 'supabase' ? Remote.init() : Promise.resolve();
+      this._readyPromise = Promise.all([dom, I18n.ready, backend]).then(() => this.init());
     }
     return this._readyPromise.then(() => fn && fn());
   },
@@ -224,8 +225,8 @@ const App = {
     }
   },
 
-  handleLogout() {
-    Auth.logout();
+  async handleLogout() {
+    await Api.logout();
     window.location.href = 'index.html';
   },
 
@@ -732,8 +733,7 @@ const App = {
           class: 'btn--primary',
           onClick: () =>
             this._submitOffer(() =>
-              Offers.offerHelp({
-                donorId: user.id,
+              Api.offerHelp({
                 needId,
                 donationId: document.getElementById('offer-donation')?.value || null,
                 message: document.getElementById('offer-message')?.value || '',
@@ -779,8 +779,7 @@ const App = {
           class: 'btn--primary',
           onClick: () =>
             this._submitOffer(() =>
-              Offers.requestDonation({
-                laliderId: user.id,
+              Api.requestDonation({
                 donationId,
                 needId: document.getElementById('request-need')?.value || null,
                 message: document.getElementById('request-message')?.value || '',
@@ -791,8 +790,8 @@ const App = {
     );
   },
 
-  _submitOffer(fn) {
-    const result = fn();
+  async _submitOffer(fn) {
+    const result = await fn();
     this.closeModal();
     this.showToast(result.message, result.success ? 'success' : 'error');
     if (result.success) this.refresh();
@@ -886,10 +885,10 @@ const App = {
     `;
   },
 
-  _offerAction(fn) {
-    const user = Auth.getCurrentUser();
-    if (!user) return;
-    const result = fn(user);
+  async _offerAction(fn, button) {
+    if (!Auth.getCurrentUser()) return;
+    if (button) button.disabled = true; // evita clique duplo enquanto espera o servidor
+    const result = await fn();
     this.showToast(result.message, result.success ? 'success' : 'error');
     this.refresh();
   },
@@ -901,16 +900,16 @@ App.registerActions({
   'offer-help': (el) => App.showMatchModal(el.dataset.needId),
   'request-donation': (el) => App.showRequestModal(el.dataset.donationId),
   'accept-offer': (el) =>
-    App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'accept')),
+    App._offerAction(() => Api.respondOffer(el.dataset.offerId, 'accept'), el),
   'decline-offer': (el) =>
-    App._offerAction((user) => Offers.respond(el.dataset.offerId, user.id, 'decline')),
+    App._offerAction(() => Api.respondOffer(el.dataset.offerId, 'decline'), el),
   'cancel-offer': (el) => {
     if (!window.confirm(I18n.t('offerCard.confirmCancel'))) return;
-    App._offerAction((user) => Offers.cancel(el.dataset.offerId, user.id));
+    App._offerAction(() => Api.cancelOffer(el.dataset.offerId), el);
   },
   'deliver-offer': (el) => {
     if (!window.confirm(I18n.t('offerCard.confirmDelivered'))) return;
-    App._offerAction((user) => Offers.markDelivered(el.dataset.offerId, user.id));
+    App._offerAction(() => Api.markDelivered(el.dataset.offerId), el);
   },
 });
 

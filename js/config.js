@@ -8,10 +8,21 @@
  *   - false: nenhum dado de exemplo é criado e o login de demonstração some.
  *     Use false em qualquer piloto com pessoas reais.
  *
- * Na Fase 3 (Vite + Supabase) esta flag passa a vir de variável de ambiente.
+ * DEMO_MODE e as credenciais públicas do Supabase vêm de js/env.js, gerado por
+ * scripts/env.js a partir das variáveis de ambiente (LALA_DEMO_MODE,
+ * SUPABASE_URL e SUPABASE_ANON_KEY).
  */
+const LALA_ENV = window.LALA_ENV || {};
+
 const LALA_CONFIG = Object.freeze({
-  DEMO_MODE: true,
+  DEMO_MODE: LALA_ENV.DEMO_MODE === undefined ? true : LALA_ENV.DEMO_MODE,
+  // 'supabase' quando a URL e a chave pública do projeto estão configuradas
+  // (variáveis SUPABASE_URL e SUPABASE_ANON_KEY); senão, 'local' (localStorage).
+  BACKEND: LALA_ENV.SUPABASE_URL && LALA_ENV.SUPABASE_ANON_KEY ? 'supabase' : 'local',
+  SUPABASE_URL: LALA_ENV.SUPABASE_URL || '',
+  SUPABASE_ANON_KEY: LALA_ENV.SUPABASE_ANON_KEY || '',
+  // Senha das contas demo do Supabase (só se DEMO_MODE; ver scripts/seed-demo.js).
+  DEMO_PASSWORD: LALA_ENV.DEMO_PASSWORD || '',
   ...(window.LALA_CONFIG_OVERRIDE || {}),
 });
 

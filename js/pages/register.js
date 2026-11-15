@@ -75,8 +75,10 @@ function handleCodeInput(value) {
   status.innerHTML = `<span class="spinner" aria-hidden="true"></span> <span>${App.escapeHTML(I18n.t('register.verifying'))}</span>`;
 
   clearTimeout(window._codeTimeout);
-  window._codeTimeout = setTimeout(() => {
-    const result = Auth.verifyLaliderCode(value, null, { checkName: false });
+  window._codeTimeout = setTimeout(async () => {
+    const result = await Api.checkLaliderCode(value);
+    // Ignora respostas atrasadas se a pessoa já mudou o código.
+    if (input.value !== value) return;
 
     if (result.valid) {
       widget.className = 'verification-widget verified';
@@ -126,7 +128,7 @@ async function handleLaliderRegister(e) {
   const submitBtn = document.getElementById('lalider-submit');
   submitBtn.disabled = true; // evita envio duplo enquanto o hash é calculado
   const result = await safeRegister(() =>
-    Auth.registerLalider({
+    Api.registerLalider({
       name: document.getElementById('lalider-name').value,
       email: document.getElementById('lalider-email').value,
       password,
@@ -141,16 +143,15 @@ async function handleLaliderRegister(e) {
   );
 
   if (result.success) {
-    Auth.startSession(result.user);
     App.showToast(result.message, 'success');
+    if (result.needsConfirmation) {
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 3000);
+      return;
+    }
     if (needDesc) {
-      Donations.createNeed({
-        laliderId: result.user.id,
-        laliderName: App.displayName(result.user),
-        camp: result.user.camp,
-        country: result.user.country,
-        state: result.user.state,
-        city: result.user.city,
+      await Api.createNeed({
         category: needCategory,
         title: I18n.t('register.needTitle', { category: App.getCategory(needCategory).name }),
         description: needDesc,
@@ -187,7 +188,7 @@ async function handleDonorRegister(e) {
   const submitBtn = e.target.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
   const result = await safeRegister(() =>
-    Auth.registerDonor({
+    Api.registerDonor({
       name: document.getElementById('donor-name').value,
       email: document.getElementById('donor-email').value,
       password,
@@ -198,8 +199,13 @@ async function handleDonorRegister(e) {
   );
 
   if (result.success) {
-    Auth.startSession(result.user);
     App.showToast(result.message, 'success');
+    if (result.needsConfirmation) {
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 3000);
+      return;
+    }
     setTimeout(() => {
       window.location.href = 'dashboard.html';
     }, 1500);

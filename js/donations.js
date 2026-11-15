@@ -14,20 +14,16 @@ const Donations = {
    * No modo demo, popula doações e pedidos de exemplo se estiverem vazios
    */
   init() {
-    if (!LALA_CONFIG.DEMO_MODE) return;
-    if (!localStorage.getItem(this.STORAGE_KEY)) {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(MockDB.sampleDonations));
-    }
-    if (!localStorage.getItem(this.NEEDS_KEY)) {
-      localStorage.setItem(this.NEEDS_KEY, JSON.stringify(MockDB.sampleNeeds));
-    }
+    if (!LALA_CONFIG.DEMO_MODE || Store.mode !== 'local') return;
+    if (!Store.has(this.STORAGE_KEY)) Store.set(this.STORAGE_KEY, MockDB.sampleDonations);
+    if (!Store.has(this.NEEDS_KEY)) Store.set(this.NEEDS_KEY, MockDB.sampleNeeds);
   },
 
   /**
    * Get all donations
    */
   getAll() {
-    return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+    return Store.get(this.STORAGE_KEY, []);
   },
 
   /**
@@ -79,7 +75,7 @@ const Donations = {
     };
 
     donations.unshift(donation);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(donations));
+    Store.set(this.STORAGE_KEY, donations);
 
     return donation;
   },
@@ -97,7 +93,7 @@ const Donations = {
     const idx = donations.findIndex((d) => d.id === id);
     if (idx === -1) return null;
     donations[idx] = { ...donations[idx], ...patch, updatedAt: new Date().toISOString() };
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(donations));
+    Store.set(this.STORAGE_KEY, donations);
     return donations[idx];
   },
 
@@ -128,7 +124,7 @@ const Donations = {
    * Get all needs
    */
   getAllNeeds() {
-    return JSON.parse(localStorage.getItem(this.NEEDS_KEY) || '[]');
+    return Store.get(this.NEEDS_KEY, []);
   },
 
   /**
@@ -154,7 +150,7 @@ const Donations = {
     const idx = needs.findIndex((n) => n.id === id);
     if (idx === -1) return null;
     needs[idx] = { ...needs[idx], ...patch, updatedAt: new Date().toISOString() };
-    localStorage.setItem(this.NEEDS_KEY, JSON.stringify(needs));
+    Store.set(this.NEEDS_KEY, needs);
     return needs[idx];
   },
 
@@ -194,7 +190,7 @@ const Donations = {
     };
 
     needs.unshift(need);
-    localStorage.setItem(this.NEEDS_KEY, JSON.stringify(needs));
+    Store.set(this.NEEDS_KEY, needs);
 
     return need;
   },

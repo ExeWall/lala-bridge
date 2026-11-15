@@ -23,21 +23,17 @@ const Offers = {
   STATUSES: ['pending', 'accepted', 'declined', 'delivered'],
 
   init() {
-    if (LALA_CONFIG.DEMO_MODE && !localStorage.getItem(this.STORAGE_KEY)) {
+    if (LALA_CONFIG.DEMO_MODE && Store.mode === 'local' && !Store.has(this.STORAGE_KEY)) {
       this._save(MockDB.sampleOffers.map((o) => ({ ...o })));
     }
   },
 
   getAll() {
-    try {
-      return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
-    } catch {
-      return [];
-    }
+    return Store.get(this.STORAGE_KEY, []);
   },
 
   _save(offers) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(offers));
+    Store.set(this.STORAGE_KEY, offers);
   },
 
   _update(id, patch) {

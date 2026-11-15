@@ -24,3 +24,7 @@ build/
 
 # Testes
 coverage/
+
+# Gerados por scripts/env.js
+js/env.js
+js/vendor/

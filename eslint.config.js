@@ -10,13 +10,29 @@ const appGlobals = {
   Auth: 'readonly',
   Donations: 'readonly',
   Offers: 'readonly',
+  Store: 'readonly',
+  Impact: 'readonly',
+  Trust: 'readonly',
+  Photos: 'readonly',
+  LocalApi: 'readonly',
+  Api: 'readonly',
+  Remote: 'readonly',
   Privacy: 'readonly',
   Migrations: 'readonly',
   App: 'readonly',
 };
 
 export default [
-  { ignores: ['node_modules/', 'dist/', 'coverage/'] },
+  {
+    ignores: [
+      'node_modules/',
+      'dist/',
+      'coverage/',
+      'js/env.js',
+      'js/vendor/',
+      'supabase/functions/',
+    ],
+  },
   js.configs.recommended,
   {
     files: ['js/**/*.js'],

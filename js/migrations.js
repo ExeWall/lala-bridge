@@ -10,19 +10,15 @@ const Migrations = {
   CURRENT_VERSION: 4,
 
   getVersion() {
-    return parseInt(localStorage.getItem(this.VERSION_KEY) || '1', 10);
+    return parseInt(Store.get(this.VERSION_KEY, 1), 10);
   },
 
   _read(key) {
-    try {
-      return JSON.parse(localStorage.getItem(key) || '[]');
-    } catch {
-      return [];
-    }
+    return Store.get(key, []);
   },
 
   _write(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    Store.set(key, value);
   },
 
   steps: {
@@ -147,11 +143,13 @@ const Migrations = {
   },
 
   run() {
+    // No modo Supabase não há dados locais para migrar (o esquema vive no servidor).
+    if (Store.mode !== 'local') return;
     let version = this.getVersion();
     while (version < this.CURRENT_VERSION) {
       version += 1;
       this.steps[version]?.();
-      localStorage.setItem(this.VERSION_KEY, String(version));
+      Store.set(this.VERSION_KEY, version);
     }
   },
 };

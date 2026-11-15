@@ -3,3 +3,5 @@ dist/
 coverage/
 package-lock.json
 docs/PLANO_DE_ACAO.md
+js/env.js
+js/vendor/

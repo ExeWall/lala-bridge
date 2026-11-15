@@ -246,13 +246,13 @@ function showDeleteAccountModal() {
       {
         label: t('myData.deleteButton'),
         class: 'btn--danger',
-        onClick: () => {
+        onClick: async () => {
           const typed = document.getElementById('delete-confirm').value.trim();
           if (typed.toUpperCase() !== word.toUpperCase()) {
             App.showToast(t('myData.deleteMismatch'), 'error');
             return;
           }
-          const result = Privacy.deleteAccount(user.id);
+          const result = await Api.deleteMyAccount();
           App.closeModal();
           App.showToast(result.message, result.success ? 'success' : 'error');
           if (result.success) {
@@ -268,9 +268,10 @@ function showDeleteAccountModal() {
 
 App.registerActions({
   'new-request': () => showRequestForm(),
-  'download-data': () => {
-    const user = Auth.getCurrentUser();
-    if (user) Privacy.downloadData(user.id);
+  'download-data': async () => {
+    const result = await Api.exportMyData();
+    if (result.success) Privacy.downloadJson(result.data);
+    else App.showToast(result.message, 'error');
   },
   'delete-account': () => showDeleteAccountModal(),
 });
@@ -311,8 +312,7 @@ function showRequestForm() {
   );
 }
 
-function submitRequest() {
-  const user = Auth.getCurrentUser();
+async function submitRequest() {
   if (!Auth.isLalider()) {
     App.showToast(t('request.onlyLalideres'), 'error');
     return;
@@ -326,20 +326,8 @@ function submitRequest() {
     return;
   }
 
-  Donations.createNeed({
-    laliderId: user.id,
-    laliderName: App.displayName(user),
-    camp: user.camp,
-    country: user.country,
-    state: user.state,
-    city: user.city,
-    category,
-    title,
-    description: desc,
-    urgency,
-  });
-
+  const result = await Api.createNeed({ category, title, description: desc, urgency });
   App.closeModal();
-  App.showToast(t('request.submitted'), 'success');
+  App.showToast(result.message, result.success ? 'success' : 'error');
   App.refresh();
 }

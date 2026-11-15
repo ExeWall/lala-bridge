@@ -399,6 +399,20 @@ const MockDB = {
   /**
    * Equipment categories for donations
    */
+  /**
+   * Peso médio aproximado por categoria (kg), para estimar o lixo eletrônico
+   * evitado. Livros não contam. Ver docs/impacto.md.
+   */
+  categoryWeightsKg: {
+    laptop: 2.0,
+    phone: 0.2,
+    headphones: 0.3,
+    monitor: 4.0,
+    peripherals: 0.5,
+    other: 1.0,
+    books: 0,
+  },
+
   equipmentCategories: [
     {
       id: 'laptop',
