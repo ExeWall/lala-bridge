@@ -16,7 +16,8 @@ App.ready(async () => {
     openNeeds: I18n.formatNumber(stats.openNeeds),
   };
   Object.entries(values).forEach(([key, value]) => {
-    document.getElementById(`impact-${key}`).textContent = value;
+    const id = key === 'states' ? 'impact-states-count' : `impact-${key}`;
+    document.getElementById(id).textContent = value;
   });
 
   document.getElementById('impact-states').textContent = states.length

@@ -68,3 +68,12 @@ describe('toasts', () => {
     expect(document.querySelector('.toast--error').getAttribute('role')).toBe('alert');
   });
 });
+
+describe('ids únicos', () => {
+  it.each(pages)('%s: nenhum id repetido', (file) => {
+    const doc = parse(file);
+    const ids = [...doc.querySelectorAll('[id]')].map((el) => el.id);
+    const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
+    expect(dupes).toEqual([]);
+  });
+});
