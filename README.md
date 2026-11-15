@@ -1,131 +1,123 @@
 # 🌉 LALA Bridge
 
-**Empowering Lalíderes Through Equipment Donations**
+**Conectamos doadores de equipamentos a jovens Lalíderes, com inteligência artificial que aproxima e uma pessoa sempre no comando.**
 
-LALA Bridge is a web platform that connects generous donors with verified Lalíderes (youth from the [Latin American Leadership Academy](https://latinamericanleadershipacademy.org)) for donating laptops, phones, and other study/work equipment.
+O LALA Bridge é uma plataforma open source (MIT) que liga quem tem notebooks, celulares, fones, monitores e livros para doar a Lalíderes verificados da [Latin American Leadership Academy](https://latinamericanleadershipacademy.org) que precisam desses equipamentos para estudar e trabalhar. O piloto começa com a rede LALA no Brasil.
 
-## 🌟 Features
+> _English summary [below](#english)._
 
-- **Verified Lalíderes**: every Lalíder registers with their LALA verification code and the name registered with LALA.
-- **Two roles**: donors publish equipment and offer help; Lalíderes publish requests and ask for donations.
-- **Real matching flow**: offer → accept/decline → contacts revealed → delivered (see below).
-- **Brazilian Portuguese first**: the interface is in PT-BR by default, with English and Spanish (selector in the navbar). Dates and numbers follow the active language.
-- **Built for Brazil**: state (UF) and city for Brazilian users, ready for proximity matching.
-- **LGPD**: privacy policy, explicit consent at sign-up, download my data and delete my account.
-- **Accessible and mobile-first**: WCAG 2.1 AA (keyboard, screen readers, contrast), tested at 360px with 44px touch targets.
-- **Camp integration**: VLB (virtual) and BLB (in-person) cohorts.
+## O problema
 
-## 🚀 Getting Started
+No Brasil, **65% das pessoas que usam a internet acessam só pelo celular** (TIC Domicílios 2025, Cetic.br). Estudar programação, fazer um curso online ou montar um currículo assim é muito difícil. Ao mesmo tempo, empresas e pessoas têm equipamentos parados que poderiam mudar a trajetória de um jovem, e que muitas vezes viram lixo eletrônico.
 
-Requirements: Node.js 20+.
+## Como funciona
+
+1. **O Lalíder pede com as próprias palavras**, escrevendo ou gravando um áudio. A IA organiza o pedido (categoria, uso, requisitos mínimos, urgência) e ele revisa antes de publicar.
+2. **O doador publica com fotos.** A IA sugere categoria, modelo, estado e configurações; o doador confirma ou corrige.
+3. **Matching explicável:** o sistema recomenda as melhores combinações e mostra o motivo ("Atende 8 GB de RAM · Pedido urgente · Mesmo estado (PE)").
+4. **Oferta → aceite → contato → entrega.** Os contatos só aparecem depois que a oferta é aceita.
+5. **Impacto:** o jovem conta como a doação ajudou, o doador recebe um resumo, e `/impacto` mostra os números agregados.
+
+## Como a IA é usada
+
+| Frente                      | O que faz                                                                                               | Sem IA                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Pedido em linguagem natural | Texto ou áudio → pedido estruturado                                                                     | Regras por palavras-chave, ditado do navegador e formulário manual |
+| Triagem por foto            | Fotos → categoria, modelo, estado, specs e usos recomendados                                            | Formulário (RAM e SSD do título preenchem as specs)                |
+| Matching                    | Embeddings (pgvector) + regras explicáveis + equidade entre regiões                                     | Similaridade de texto local                                        |
+| Confiança                   | Pedidos quase idênticos (embeddings) e regras de golpe, contato no texto, muitas contas por dispositivo | As mesmas regras, no navegador                                     |
+| Impacto                     | Resumo do relato para o doador                                                                          | Modelo de texto que cita o relato                                  |
+
+Princípios: **a IA sugere e uma pessoa decide**, **nada é bloqueado automaticamente**, **dados pessoais não vão para a IA**, e **todo fluxo funciona sem IA**. Detalhes em [`docs/ia-responsavel.md`](docs/ia-responsavel.md), checagem de justiça do matching em [`docs/matching-justica.md`](docs/matching-justica.md).
+
+## LGPD e acessibilidade
+
+- Política de Privacidade ([`privacidade.html`](privacidade.html)), consentimento no cadastro, "baixar meus dados" e "excluir minha conta" no painel.
+- Telas públicas mostram só o primeiro nome com a inicial, a UF e a turma. Contatos só aparecem após o aceite.
+- Interface em PT-BR (padrão), inglês e espanhol; WCAG 2.1 AA (teclado, leitores de tela, contraste); mobile-first testado em 360 px.
+
+## Rodando localmente
+
+Requisitos: Node.js 20+.
 
 ```bash
 npm install
 npm run dev
 ```
 
-| Command          | What it does                                   |
-| ---------------- | ---------------------------------------------- |
-| `npm run dev`    | Starts a local server (Vite) and opens the app |
-| `npm test`       | Runs the unit tests (Vitest + jsdom)           |
-| `npm run lint`   | Lints the code (ESLint)                        |
-| `npm run format` | Formats the code (Prettier)                    |
+Sem configuração, o app roda no **modo local**: dados fictícios ficam só no navegador, e o login tem botões "Entrar como demo" (Lalíder, doador e equipe). Para dados compartilhados, login real e IA, siga [`docs/supabase.md`](docs/supabase.md).
 
-## 🗄️ Backend
+| Comando                           | O que faz                                                         |
+| --------------------------------- | ----------------------------------------------------------------- |
+| `npm run dev`                     | Servidor local (Vite)                                             |
+| `npm test`                        | Testes do front-end (Vitest + jsdom)                              |
+| `npm run test:db`                 | Testes do banco: migrações, RLS e funções (Postgres com pgvector) |
+| `npm run test:functions`          | Testes e checagem de tipos das Edge Functions (Deno)              |
+| `npm run lint` / `npm run format` | ESLint / Prettier                                                 |
+| `npm run build`                   | Gera `dist/` para o deploy                                        |
+| `npm run seed:demo`               | Cria os dados fictícios no Supabase                               |
+| `node scripts/fairness.js`        | Checagem de justiça do matching por região                        |
 
-The app has two interchangeable backends behind `js/api.js`:
+## Deploy
 
-- **Local** (default, no configuration): data lives in the browser. Great for offline demos.
-- **Supabase** (when `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set): Postgres with Row Level Security, Supabase Auth, Storage for photos and Edge Functions. Setup guide: [`docs/supabase.md`](docs/supabase.md).
+Site estático na **Vercel** (`vercel.json`): cada push na `master` vai para produção, e cada pull request ganha uma URL de prévia. Configure na Vercel as variáveis de [`.env.example`](.env.example) (só as públicas). Backend: [`docs/supabase.md`](docs/supabase.md).
 
-Database tests: `npm run test:db` (needs a local Postgres with pgvector). Edge Function tests: `npm run test:functions`.
+## Arquitetura
 
-## 🌐 Deploy
-
-The site is static and is deployed on **Vercel** (`vercel.json`). Vercel runs lint, tests and `npm run build`, then serves `dist/`. Every push to `master` goes to production and every pull request gets a preview URL.
-
-One-time setup: on [vercel.com](https://vercel.com), **Add New → Project → Import** `ExeWall/lala-bridge` and click **Deploy** (no settings to change; `vercel.json` has them).
-
-## 🔄 How matching works
-
-1. A **donor** clicks "Offer to Help" on a Lalíder's request (optionally linking one of their donations), or a **Lalíder** clicks "Request" on an available donation.
-2. This creates a pending **offer**. The other side sees it on their dashboard and chooses **Accept** or **Decline**.
-3. When accepted, the donation and the request become `matched` and **only then** both sides see each other's contact details.
-4. Either side clicks **Mark as delivered** after the handover: everything becomes `delivered`.
-
-### Demo mode
-
-With `DEMO_MODE: true` in `js/config.js` (the default for now), the app seeds fictitious sample data in your browser and the login page shows **"Enter as demo"** buttons for a donor and a Lalíder. Demo accounts have no password. Set `DEMO_MODE: false` for any pilot with real people.
-
-## 📁 Project Structure
+Front-end em HTML, CSS e JavaScript sem framework, com dois backends atrás de uma interface única (`js/api.js`): **local** (navegador) e **Supabase** (Postgres com RLS, Auth, Storage, Edge Functions e pgvector). A IA roda só nas Edge Functions, com provedor compatível com a API da OpenAI configurado por variáveis de ambiente. Diagrama e detalhes: [`docs/arquitetura.md`](docs/arquitetura.md).
 
 ```
 lala-bridge/
-├── index.html, register.html, login.html, dashboard.html,
-│   donate.html, browse.html, privacidade.html
-├── css/styles.css        # Design system & all styles
-├── locales/              # pt-BR.json (default), en.json, es.json
-├── js/
-│   ├── config.js         # DEMO_MODE flag and id generator
-│   ├── i18n.js           # Translations and Intl formatting
-│   ├── mock-data.js      # Verification codes, categories, UFs and demo data
-│   ├── auth.js           # Accounts, password hashing, LALA code verification
-│   ├── donations.js      # Donations & requests (needs)
-│   ├── offers.js         # Offers: the matching flow
-│   ├── privacy.js        # LGPD: export and delete my data
-│   ├── migrations.js     # localStorage schema migrations
-│   ├── app.js            # UI utilities, escaping, cards, modals, a11y helpers
-│   └── pages/            # One script per page
-├── admin.html            # Team panel (metrics, flags, verification codes)
-├── supabase/             # Migrations, seed, DB tests and Edge Functions
-├── scripts/              # build, env (public vars), test-db, seed-demo
-├── tests/                # Vitest unit tests
-└── docs/PLANO_DE_ACAO.md # Action plan (AI4Good 2027)
+├── *.html                # Páginas (início, explorar, doar, painel, admin, impacto, privacidade…)
+├── css/styles.css
+├── locales/              # pt-BR.json, en.json, es.json
+├── js/                   # Módulos do app (api, remote, matching, ai, trust…) e js/pages/
+├── supabase/             # Migrações, seed, testes do banco e Edge Functions
+├── ai/prompts/           # Prompts versionados (PT-BR)
+├── scripts/              # build, env, test-db, seed-demo, fairness, record-demo
+├── tests/                # Testes do front-end
+└── docs/                 # Plano, arquitetura, IA responsável, Supabase, demo, impacto
 ```
 
-## 🌍 Translations
+## Limitações conhecidas
 
-Texts live in `locales/pt-BR.json`, `locales/en.json` and `locales/es.json`. In HTML, use `data-i18n="key"` (text) or `data-i18n-attr="placeholder:key"` (attributes); in JS, `I18n.t('key', { name })`. Add every new key to the three files: `npm test` fails if a key is missing in any language or if the code uses a key that does not exist.
+- No **modo local**, os dados ficam no navegador e o hash de senha é só um paliativo; use o modo Supabase com pessoas reais e `LALA_DEMO_MODE=false`.
+- A IA de verdade exige escolher um provedor e configurar as chaves nas Edge Functions. Sem isso, entram as alternativas locais.
+- O peso do lixo eletrônico evitado é uma estimativa ([`docs/impacto.md`](docs/impacto.md)).
+- As fontes vêm do Google Fonts (o IP do visitante vai para o Google); hospedar as fontes no próprio site está no roadmap.
 
-## 🔒 Security & privacy notes
+## Roadmap
 
-This MVP still stores everything in the browser's `localStorage`. It is **not ready for real personal data**:
+- [x] Fluxo de match com ofertas, aceite, contatos e entrega (Fase 1)
+- [x] PT-BR, LGPD, acessibilidade e mobile-first (Fase 2)
+- [x] Backend Supabase com RLS, fotos, notificações e painel admin (Fase 3)
+- [x] IA: pedido por texto ou voz, triagem por foto, matching explicável, confiança e impacto (Fase 4)
+- [x] Roteiro e vídeo de backup do Demo Day (Fase 5)
+- [ ] Assistente via WhatsApp
+- [ ] Abertura para escolas públicas e ONGs (verificação institucional)
+- [ ] Logística de entrega e ponte com Centros de Recondicionamento de Computadores
+- [ ] Doações corporativas em lote
 
-- Passwords are hashed with PBKDF2-SHA256 + salt, but this is only a stopgap; real auth comes with the backend (Phase 3).
-- The session can still be edited in DevTools. Roles are read from the account record, not from the session.
-- All user-provided text is escaped before rendering (`App.escapeHTML`).
-- LGPD: see [`privacidade.html`](privacidade.html). Public pages show only first name + initial, state (UF) and cohort; contacts appear only after an offer is accepted. Users can download or delete their data from the dashboard.
-- Fonts are loaded from Google Fonts, which receives the visitor's IP address. Self-hosting the fonts is on the roadmap.
+Plano completo: [`docs/PLANO_DE_ACAO.md`](docs/PLANO_DE_ACAO.md).
 
-## 🔧 Tech Stack
+## Contribuindo
 
-- **HTML5** — Semantic markup
-- **CSS3** — Custom properties, glassmorphism, Grid/Flexbox
-- **Vanilla JavaScript** — No frameworks, lightweight & fast
-- **localStorage** — MVP data persistence (replace with backend)
+Contribuições são bem-vindas! Veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [Código de Conduta](CODE_OF_CONDUCT.md).
 
-## 🗺️ Roadmap
+## Licença
 
-See [`docs/PLANO_DE_ACAO.md`](docs/PLANO_DE_ACAO.md) for the full plan. Highlights:
-
-- [x] Real matching flow with offers, accept/decline and delivery (Phase 1)
-- [ ] Backend API (Node.js / Supabase)
-- [ ] Real Lalíder verification database
-- [ ] Email notifications for matches
-- [ ] Photo uploads for donations
-- [x] PT-BR by default, plus English and Spanish (Phase 2)
-- [x] LGPD basics, accessibility (WCAG 2.1 AA) and mobile-first (Phase 2)
-- [ ] Admin panel
-- [ ] PWA support
-
-## 🤝 Contributing
-
-This is a community initiative by Lalíderes, for Lalíderes. Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## 📄 License
-
-[MIT License](LICENSE) — Feel free to use and adapt for similar causes.
+[MIT](LICENSE) — use e adapte para causas parecidas.
 
 ---
 
-Built with ❤️ by the LALA Community
+## English
+
+**LALA Bridge** is an open source (MIT) platform that connects people and companies donating laptops, phones and other study equipment with verified young leaders ("Lalíderes") from the Latin American Leadership Academy. The pilot starts in Brazil, where 65% of internet users go online only through their phones.
+
+**AI with a human in the loop:** Lalíderes describe what they need in their own words (text or voice) and AI structures the request; donors upload photos and AI suggests category, condition and specs; an explainable matching (requirements, location, urgency, waiting time, semantic similarity via pgvector and a regional equity factor) recommends pairs and says why; trust signals go to human review (nothing is blocked automatically); and AI summarizes impact updates for donors. Every AI feature has a non-AI fallback, personal data is stripped before anything reaches the model, and users always review suggestions.
+
+**Stack:** static HTML/CSS/JS (no framework), two interchangeable backends (browser-only demo mode and Supabase with Postgres RLS, Auth, Storage and Edge Functions), OpenAI-compatible AI provider configured through environment variables, deployed on Vercel. UI in Brazilian Portuguese, English and Spanish; WCAG 2.1 AA; LGPD-oriented privacy features.
+
+**Run it:** `npm install && npm run dev` (demo mode, no configuration). Backend setup: [`docs/supabase.md`](docs/supabase.md). Responsible AI: [`docs/ia-responsavel.md`](docs/ia-responsavel.md).
+
+Built with ❤️ by the LALA community.

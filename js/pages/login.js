@@ -9,6 +9,13 @@ App.ready(() => {
 });
 
 App.registerActions({
+  'demo-reset': () => {
+    if (!window.confirm(I18n.t('login.demoResetConfirm'))) return;
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith('lala_bridge_') && k !== I18n.STORAGE_KEY)
+      .forEach((k) => localStorage.removeItem(k));
+    window.location.reload();
+  },
   'demo-login': async (el) => {
     const result = await Api.loginAsDemo(el.dataset.userId);
     App.showToast(result.message, result.success ? 'success' : 'error');
@@ -34,6 +41,15 @@ function renderDemoAccounts() {
     })
     .join('');
   document.getElementById('demo-login').style.display = 'block';
+  // Ensaios da demo: volta tudo ao estado inicial (só no modo local).
+  if (Store.mode === 'local') {
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'btn btn--ghost btn--sm btn--wrap';
+    reset.dataset.action = 'demo-reset';
+    reset.textContent = I18n.t('login.demoReset');
+    document.getElementById('demo-login').appendChild(reset);
+  }
 }
 
 async function handleLogin(e) {

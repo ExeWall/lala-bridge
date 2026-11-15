@@ -54,12 +54,12 @@ const App = {
     notice.className = 'demo-notice';
     notice.setAttribute('role', 'note');
     notice.textContent = I18n.t('demo.notice');
-    // Nas telas de cadastro e login o aviso fica no topo do cartão (é onde a
-    // pessoa digitaria dados reais); nas demais, no rodapé. Nunca flutuante,
-    // para não cobrir conteúdo no celular.
+    // Nas telas de cadastro e login o aviso fica no fim do cartão (é onde a
+    // pessoa digitaria dados reais; no fim, não empurra o formulário quando
+    // aparece); nas demais, no rodapé. Nunca flutuante, para não cobrir conteúdo.
     const authCard = document.querySelector('.auth-card');
     const footer = document.querySelector('.footer__bottom');
-    if (authCard) authCard.prepend(notice);
+    if (authCard) authCard.append(notice);
     else if (footer) footer.prepend(notice);
     else document.body.appendChild(notice);
   },

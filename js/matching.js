@@ -292,7 +292,9 @@ const Matching = {
       .filter((f) => !f.negative && f.max > 0 && f.points / f.max >= 0.5)
       .filter((f) => f.key !== 'equity' || f.behind)
       .filter((f) => f.label !== 'match.noReq')
-      .sort((a, b) => b.points - a.points)
+      // Ordena pelo quanto cada fator foi atendido (e, no empate, pelo peso),
+      // para a localização aparecer mesmo valendo menos pontos.
+      .sort((a, b) => b.points / b.max - a.points / a.max || b.max - a.max)
       .slice(0, 3 - Math.min(negative.length, 1));
     return [...negative.slice(0, 1), ...strong].map((f) => I18n.t(f.label, f.params));
   },

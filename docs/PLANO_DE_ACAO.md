@@ -217,14 +217,16 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 ---
 
 ### FASE 5: Preparação do Demo Day (até 05/12)
-- [ ] Popular o ambiente com dados fictícios realistas (sem pessoas reais).
-- [ ] Escrever o roteiro de demo de 3 minutos em `docs/demo-script.md` (ver seção 6).
-- [ ] Gravar um vídeo de backup da demo, caso a internet falhe no dia.
-- [ ] Atualizar o README em PT-BR (com seção EN): problema com os dados da TIC, arquitetura com diagrama, como a IA é usada, LGPD e limitações, como rodar, como contribuir e roadmap.
-- [ ] Criar `docs/arquitetura.md` e `docs/ia-responsavel.md` (dados enviados à IA, riscos, mitigações e revisão humana).
-- [ ] Criar uma página `/impacto` com as métricas.
+- [x] Popular o ambiente com dados fictícios realistas (sem pessoas reais).
+- [x] Escrever o roteiro de demo de 3 minutos em `docs/demo-script.md` (ver seção 6).
+- [x] Gravar um vídeo de backup da demo, caso a internet falhe no dia.
+- [x] Atualizar o README em PT-BR (com seção EN): problema com os dados da TIC, arquitetura com diagrama, como a IA é usada, LGPD e limitações, como rodar, como contribuir e roadmap.
+- [x] Criar `docs/arquitetura.md` e `docs/ia-responsavel.md` (dados enviados à IA, riscos, mitigações e revisão humana).
+- [x] Criar uma página `/impacto` com as métricas.
 
 ---
+
+**Resultado (15/11/2026, branch `fase-5-demo`):** roteiro em `docs/demo-script.md` (com plano B e perguntas prováveis), vídeo de backup de cerca de 1,5 min gravado no modo offline (`scripts/record-demo.cjs` regrava na URL publicada, de preferência já com a IA ligada), README em PT-BR com seção em inglês, `docs/arquitetura.md`, `docs/ia-responsavel.md`, `docs/impacto.md` e a página `/impacto`. No login, o botão "Restaurar dados de demonstração" deixa os ensaios limpos.
 
 ## 5. Itens fora do escopo até o Demo Day (roadmap futuro)
 - PWA ou app offline, e integração com WhatsApp Business API (o assistente via WhatsApp fica como próximo passo).
@@ -253,7 +255,7 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 - [x] Fase 4.3: Matching inteligente
 - [x] Fase 4.4: Detecção de suspeitas
 - [x] Fase 4.5: Relatórios de impacto
-- [ ] Fase 5: Demo Day
+- [x] Fase 5: Demo Day (branch `fase-5-demo`)
 
 ## 8. Decisões que dependem do autor (pergunte antes)
 1. Usar Supabase como backend (recomendado) ou outro.

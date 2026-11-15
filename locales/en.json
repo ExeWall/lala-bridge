@@ -239,7 +239,9 @@
     "create": "Create one",
     "demoTitle": "Demo mode",
     "demoAs": "Enter as demo: {name}",
-    "demoHint": "Fictitious accounts stored only in this browser. No real data."
+    "demoHint": "Fictitious accounts stored only in this browser. No real data.",
+    "demoReset": "Reset demo data",
+    "demoResetConfirm": "Erase everything done in this browser and go back to the demo data?"
   },
   "register": {
     "metaTitle": "Sign up — LALA Bridge",

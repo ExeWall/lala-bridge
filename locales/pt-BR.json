@@ -239,7 +239,9 @@
     "create": "Crie uma",
     "demoTitle": "Modo demonstração",
     "demoAs": "Entrar como demo: {name}",
-    "demoHint": "Contas fictícias guardadas só neste navegador. Nenhum dado real."
+    "demoHint": "Contas fictícias guardadas só neste navegador. Nenhum dado real.",
+    "demoReset": "Restaurar dados de demonstração",
+    "demoResetConfirm": "Apagar tudo o que foi feito neste navegador e voltar aos dados de demonstração?"
   },
   "register": {
     "metaTitle": "Criar conta — LALA Bridge",

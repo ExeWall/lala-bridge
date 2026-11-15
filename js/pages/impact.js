@@ -5,21 +5,19 @@
 App.ready(async () => {
   const stats = await Api.impactStats();
   const e = (v) => App.escapeHTML(v);
-  const card = (value, label) =>
-    `<div class="card stat-card"><div><div class="stat-card__value">${e(value)}</div><div class="stat-card__label">${e(label)}</div></div></div>`;
   const states = stats.statesReached || [];
 
-  document.getElementById('impact-metrics').innerHTML = [
-    card(I18n.formatNumber(stats.delivered), I18n.t('impactPage.delivered')),
-    card(I18n.formatNumber(states.length), I18n.t('impactPage.states')),
-    card(
-      I18n.formatNumber(Number(stats.ewasteKg) || 0, { maximumFractionDigits: 1 }),
-      I18n.t('impactPage.ewaste')
-    ),
-    card(I18n.formatNumber(stats.matched || 0), I18n.t('impactPage.inProgress')),
-    card(I18n.formatNumber(stats.available), I18n.t('impactPage.available')),
-    card(I18n.formatNumber(stats.openNeeds), I18n.t('impactPage.openNeeds')),
-  ].join('');
+  const values = {
+    delivered: I18n.formatNumber(stats.delivered),
+    states: I18n.formatNumber(states.length),
+    ewaste: I18n.formatNumber(Number(stats.ewasteKg) || 0, { maximumFractionDigits: 1 }),
+    inProgress: I18n.formatNumber(stats.matched || 0),
+    available: I18n.formatNumber(stats.available),
+    openNeeds: I18n.formatNumber(stats.openNeeds),
+  };
+  Object.entries(values).forEach(([key, value]) => {
+    document.getElementById(`impact-${key}`).textContent = value;
+  });
 
   document.getElementById('impact-states').textContent = states.length
     ? states.join(' · ')

@@ -82,7 +82,54 @@
       </div>
 
       <div class="container" style="padding-bottom: var(--s-9)">
-        <div class="dashboard__grid" id="impact-metrics" aria-live="polite"></div>
+        <div class="dashboard__grid" id="impact-metrics" aria-live="polite">
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-delivered">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.delivered">
+                Equipamentos entregues
+              </div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-states">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.states">Estados alcançados</div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-ewaste">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.ewaste">
+                Kg de lixo eletrônico evitado (estimado)
+              </div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-inProgress">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.inProgress">
+                Entregas combinadas, a caminho
+              </div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-available">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.available">
+                Doações disponíveis agora
+              </div>
+            </div>
+          </div>
+          <div class="card stat-card">
+            <div>
+              <div class="stat-card__value" id="impact-openNeeds">—</div>
+              <div class="stat-card__label" data-i18n="impactPage.openNeeds">
+                Pedidos esperando doação
+              </div>
+            </div>
+          </div>
+        </div>
 
         <section class="admin-section" aria-labelledby="impact-states-title">
           <h2 class="h-3" id="impact-states-title" data-i18n="impactPage.statesList">

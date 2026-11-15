@@ -54,6 +54,10 @@ export default [
     },
   },
   {
+    files: ['scripts/**/*.cjs'],
+    languageOptions: { sourceType: 'commonjs', globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     files: ['tests/**/*.js', 'scripts/**/*.js', '*.config.js'],
     languageOptions: {
       ecmaVersion: 2022,
