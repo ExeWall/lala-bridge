@@ -600,6 +600,11 @@ const App = {
 
     return `
       <div class="card donation-card" data-id="${e(donation.id)}">
+        ${
+          donation.photos?.length
+            ? `<img class="donation-card__photo" src="${e(donation.photos[0])}" alt="${e(I18n.t('card.photoAlt', { title: donation.title }))}" loading="lazy" decoding="async" width="640" height="400">`
+            : ''
+        }
         <div class="donation-card__category">
           <span class="donation-card__category-name">${e(cat.name)}</span>
         </div>

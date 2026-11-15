@@ -328,7 +328,12 @@
     "selectCategory": "Please select a category.",
     "onlyDonors": "Only donor accounts can publish donations.",
     "published": "Donation published! Lalíderes can now see it.",
-    "noDescription": "No description provided."
+    "noDescription": "No description provided.",
+    "photos": "Equipment photos (up to 3)",
+    "photosHint": "Optional. Photos help the Lalíder see the item. They are resized on your phone before upload.",
+    "tooManyPhotos": "Send at most {max} photos.",
+    "removePhoto": "Remove photo {n}",
+    "uploading": "Uploading photos..."
   },
   "donations": {
     "onlyDonors": "Only donors can publish donations.",
@@ -422,7 +427,8 @@
     "offerHelp": "Offer to help",
     "offerSent": "Offer sent",
     "request": "Request",
-    "requested": "Requested"
+    "requested": "Requested",
+    "photoAlt": "Photo of {title}"
   },
   "offer": {
     "helpTitle": "Help {name}",

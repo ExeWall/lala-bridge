@@ -124,6 +124,25 @@
         <div id="donation-form-container" style="display: none">
           <form id="donation-form" class="card" style="padding: var(--s-7)">
             <div class="form-group">
+              <label for="donation-photos" class="form-label" data-i18n="donate.photos"
+                >Fotos do equipamento (até 3)</label
+              >
+              <input
+                type="file"
+                id="donation-photos"
+                class="form-input"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+              />
+              <p class="form-hint" data-i18n="donate.photosHint">
+                Opcional. Fotos ajudam o Lalíder a conhecer o item. Elas são reduzidas no seu
+                celular antes do envio.
+              </p>
+              <div id="photo-previews" class="photo-previews"></div>
+              <div id="ai-photo-slot"></div>
+            </div>
+
+            <div class="form-group">
               <p
                 id="category-label"
                 class="form-label form-label--required"

@@ -53,6 +53,9 @@ const Donations = {
     country,
     state = '',
     city = '',
+    photos = [],
+    specs = {},
+    aiSuggestion = null,
   }) {
     if (!Auth.hasRole(donorId, 'donor')) {
       throw new Error(I18n.t('donations.onlyDonors'));
@@ -69,9 +72,11 @@ const Donations = {
       country,
       state,
       city,
+      photos: photos.slice(0, 3),
+      specs,
+      aiSuggestion,
       status: 'available',
       createdAt: new Date().toISOString(),
-      image: null,
     };
 
     donations.unshift(donation);

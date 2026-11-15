@@ -328,7 +328,12 @@
     "selectCategory": "Selecione uma categoria.",
     "onlyDonors": "Só contas de doador podem publicar doações.",
     "published": "Doação publicada! Os Lalíderes já podem vê-la.",
-    "noDescription": "Sem descrição."
+    "noDescription": "Sem descrição.",
+    "photos": "Fotos do equipamento (até 3)",
+    "photosHint": "Opcional. Fotos ajudam o Lalíder a conhecer o item. Elas são reduzidas no seu celular antes do envio.",
+    "tooManyPhotos": "Envie no máximo {max} fotos.",
+    "removePhoto": "Remover foto {n}",
+    "uploading": "Enviando fotos..."
   },
   "donations": {
     "onlyDonors": "Só doadores podem publicar doações.",
@@ -422,7 +427,8 @@
     "offerHelp": "Oferecer ajuda",
     "offerSent": "Oferta enviada",
     "request": "Solicitar",
-    "requested": "Solicitado"
+    "requested": "Solicitado",
+    "photoAlt": "Foto de {title}"
   },
   "offer": {
     "helpTitle": "Ajudar {name}",
