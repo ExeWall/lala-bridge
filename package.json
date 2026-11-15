@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "test:db": "bash scripts/test-db.sh",
     "test:functions": "cd supabase/functions && deno test --allow-env --allow-read _shared/ && deno check */index.ts",
-    "seed:demo": "node scripts/seed-demo.js"
+    "seed:demo": "node scripts/seed-demo.js",
+    "ai:prompts": "node scripts/build-prompts.js"
   },
   "engines": {
     "node": ">=20"
