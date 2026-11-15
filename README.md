@@ -31,6 +31,15 @@ npm run dev
 | `npm run lint`   | Lints the code (ESLint)                        |
 | `npm run format` | Formats the code (Prettier)                    |
 
+## 🗄️ Backend
+
+The app has two interchangeable backends behind `js/api.js`:
+
+- **Local** (default, no configuration): data lives in the browser. Great for offline demos.
+- **Supabase** (when `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set): Postgres with Row Level Security, Supabase Auth, Storage for photos and Edge Functions. Setup guide: [`docs/supabase.md`](docs/supabase.md).
+
+Database tests: `npm run test:db` (needs a local Postgres with pgvector). Edge Function tests: `npm run test:functions`.
+
 ## 🌐 Deploy
 
 The site is static and is deployed on **Vercel** (`vercel.json`). Vercel runs lint, tests and `npm run build`, then serves `dist/`. Every push to `master` goes to production and every pull request gets a preview URL.
@@ -67,7 +76,9 @@ lala-bridge/
 │   ├── migrations.js     # localStorage schema migrations
 │   ├── app.js            # UI utilities, escaping, cards, modals, a11y helpers
 │   └── pages/            # One script per page
-├── scripts/build.js      # Builds dist/ for deploy
+├── admin.html            # Team panel (metrics, flags, verification codes)
+├── supabase/             # Migrations, seed, DB tests and Edge Functions
+├── scripts/              # build, env (public vars), test-db, seed-demo
 ├── tests/                # Vitest unit tests
 └── docs/PLANO_DE_ACAO.md # Action plan (AI4Good 2027)
 ```

@@ -147,8 +147,8 @@ Objetivo: o produto parece feito para o Brasil e funciona bem no celular.
 ### FASE 3: Backend real com Supabase (até cerca de 27/11)
 Objetivo: sair do `localStorage` para ter dados compartilhados, autenticação real e armazenamento de fotos. **Confirme a escolha do Supabase com o autor antes de começar.** É open source, tem plano gratuito, Postgres, Auth, Storage, Edge Functions e `pgvector`.
 
-- [ ] Migrar para **Vite** (sem framework), com módulos ES, para suportar variáveis de ambiente e o SDK. A identidade visual atual se mantém.
-- [ ] **Esquema** (as migrações SQL ficam em `supabase/migrations/`):
+- [x] Migrar para **Vite** (sem framework), com módulos ES, para suportar variáveis de ambiente e o SDK. A identidade visual atual se mantém.
+- [x] **Esquema** (as migrações SQL ficam em `supabase/migrations/`):
   - `profiles` (id = auth.uid, role `donor|lalider|admin`, nome, UF, cidade, turma, verificado, consentimento_em)
   - `verification_codes` (code, nome_registrado, turma, usado_por, usado_em), acessível só pelo servidor
   - `donations` (doador, categoria, título, descrição, estado, specs jsonb, fotos[], UF, cidade, status, embedding vector)
@@ -156,14 +156,22 @@ Objetivo: sair do `localStorage` para ter dados compartilhados, autenticação r
   - `offers` (como na Fase 1)
   - `impact_updates` (offer_id, texto, foto opcional, criado_em)
   - `flags` (entidade, motivo, score, status de revisão)
-- [ ] **RLS (Row Level Security)** em todas as tabelas: cada usuário só edita o que é seu, contatos só ficam visíveis depois de uma oferta aceita e o papel é verificado no servidor.
-- [ ] **Supabase Auth** (e-mail com magic link ou senha). A verificação do código LALA vira uma Edge Function.
-- [ ] Upload de fotos das doações no Storage, com compressão no cliente.
-- [ ] Notificações por e-mail para nova oferta, oferta aceita e entrega confirmada.
-- [ ] **Deploy** em Vercel, Netlify ou Cloudflare Pages, com URL pública no README.
-- [ ] Painel `admin.html` mínimo: revisar flags, ver métricas e gerenciar códigos.
+- [x] **RLS (Row Level Security)** em todas as tabelas: cada usuário só edita o que é seu, contatos só ficam visíveis depois de uma oferta aceita e o papel é verificado no servidor.
+- [x] **Supabase Auth** (e-mail com magic link ou senha). A verificação do código LALA vira uma Edge Function.
+- [x] Upload de fotos das doações no Storage, com compressão no cliente.
+- [x] Notificações por e-mail para nova oferta, oferta aceita e entrega confirmada.
+- [x] **Deploy** em Vercel, Netlify ou Cloudflare Pages, com URL pública no README.
+- [x] Painel `admin.html` mínimo: revisar flags, ver métricas e gerenciar códigos.
 
 **Critério de pronto:** dois navegadores diferentes veem os mesmos dados, a sessão não pode ser forjada pelo DevTools e a app está publicada.
+
+**Resultado (15/11/2026, branch `fase-3-supabase`):**
+- Esquema, RLS e funções em `supabase/migrations/`, testados num Postgres com pgvector (`npm run test:db`, também no CI): cadastro, o que cada papel vê e altera, fluxo de ofertas, storage e exclusão de conta.
+- O front-end tem dois backends com a mesma interface (`js/api.js`): Supabase quando `SUPABASE_URL` e `SUPABASE_ANON_KEY` estão configuradas, e local (navegador) sem elas. A sessão no modo Supabase é a do Supabase Auth, validada no servidor, então não pode ser forjada pelo DevTools.
+- **Decisões diferentes do plano, para reduzir risco no prazo:**
+  - Mantive os scripts clássicos (sem converter tudo para módulos ES). O Vite segue como servidor de desenvolvimento, e as variáveis de ambiente chegam por `js/env.js`, gerado por `scripts/env.js`.
+  - A verificação do código LALA virou uma função SQL atômica (`check_lalider_code` + gatilho de cadastro), em vez de Edge Function, para validar e marcar o código na mesma transação.
+- **Falta, e depende do autor:** criar o projeto no Supabase, importar na Vercel e seguir `docs/supabase.md`. Só então os critérios "dois navegadores" e "app publicada" ficam verificáveis em produção.
 
 ---
 
@@ -232,7 +240,7 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 ## 7. Checklist de progresso
 - [x] Fase 1: Fundação, correções e segurança (branch `fase-1-correcoes`)
 - [x] Fase 2: Brasil, PT-BR, LGPD e acessibilidade (branch `fase-2-ptbr`)
-- [ ] Fase 3: Backend Supabase e deploy
+- [x] Fase 3: Backend Supabase e deploy (branch `fase-3-supabase`; falta ligar o projeto do autor)
 - [ ] Fase 4.1: Assistente de pedido
 - [ ] Fase 4.2: Triagem por foto
 - [ ] Fase 4.3: Matching inteligente
