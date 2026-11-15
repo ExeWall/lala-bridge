@@ -214,6 +214,53 @@
                 <option value="" data-i18n="donate.selectCondition">Selecione o estado</option>
               </select>
             </div>
+            <fieldset class="form-group fieldset">
+              <legend class="form-label" data-i18n="donate.specs">
+                Configurações (opcional, ajudam o match)
+              </legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="donation-ram" class="form-label" data-i18n="donate.ram"
+                    >Memória RAM (GB)</label
+                  >
+                  <input
+                    type="number"
+                    min="1"
+                    max="128"
+                    inputmode="numeric"
+                    class="form-input"
+                    id="donation-ram"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="donation-storage" class="form-label" data-i18n="donate.storage"
+                    >Armazenamento (GB)</label
+                  >
+                  <input
+                    type="number"
+                    min="1"
+                    max="8192"
+                    inputmode="numeric"
+                    class="form-input"
+                    id="donation-storage"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="donation-os" class="form-label" data-i18n="donate.os"
+                  >Sistema operacional</label
+                >
+                <input
+                  type="text"
+                  maxlength="30"
+                  class="form-input"
+                  id="donation-os"
+                  data-i18n-attr="placeholder:donate.osPlaceholder"
+                  placeholder="ex.: Windows 11"
+                />
+              </div>
+            </fieldset>
+
             <div class="location-fields" data-location="donation">
               <div class="form-group">
                 <label

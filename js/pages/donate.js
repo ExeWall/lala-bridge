@@ -34,6 +34,12 @@ App.ready(() => {
   });
 
   document.getElementById('donation-form').addEventListener('submit', handleDonation);
+  renderAnalyzeButton();
+  document.addEventListener('lala:photos-changed', renderAnalyzeButton);
+  // Specs escritas no título preenchem os campos vazios (o doador pode mudar).
+  document.getElementById('donation-title').addEventListener('blur', (e) => {
+    fillSpecs(LocalAI.parseSpecs(e.target.value), { onlyEmpty: true });
+  });
   document.getElementById('donation-photos').addEventListener('change', (e) => {
     addPhotos([...e.target.files]);
     e.target.value = '';
@@ -74,7 +80,82 @@ function renderPhotoPreviews() {
   });
 }
 
+// ------------------------------------------------- análise de fotos (IA)
+let aiDonation = null;
+
+function renderAnalyzeButton() {
+  const slot = document.getElementById('ai-photo-slot');
+  if (!selectedPhotos.length) {
+    slot.innerHTML = '';
+    return;
+  }
+  if (slot.querySelector('#analyze-photos')) return;
+  slot.innerHTML = `
+    <button type="button" class="btn btn--outline btn--sm" id="analyze-photos" data-action="analyze-photos">✨ ${App.escapeHTML(I18n.t('donate.analyze'))}</button>
+    <p class="form-hint">${App.escapeHTML(I18n.t('donate.analyzeHint'))}</p>
+    <div id="analyze-result" aria-live="polite"></div>`;
+}
+
+function fillSpecs(specs = {}, { onlyEmpty = false } = {}) {
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (value === undefined || value === null || value === '') return;
+    if (onlyEmpty && el.value) return;
+    el.value = value;
+  };
+  set('donation-ram', specs.ramGb);
+  set('donation-storage', specs.storageGb);
+  set('donation-os', specs.os);
+}
+
+function readSpecs() {
+  const specs = {};
+  const ram = Number(document.getElementById('donation-ram').value);
+  const storage = Number(document.getElementById('donation-storage').value);
+  const os = document.getElementById('donation-os').value.trim();
+  if (ram > 0) specs.ramGb = ram;
+  if (storage > 0) specs.storageGb = storage;
+  if (os) specs.os = os;
+  return specs;
+}
+
+async function analyzePhotos(btn) {
+  btn.disabled = true;
+  btn.textContent = I18n.t('donate.analyzing');
+  const images = [];
+  for (const file of selectedPhotos) {
+    images.push(await Photos.compress(file, { maxSize: 768, quality: 0.75, output: 'dataURL' }));
+  }
+  const result = await AI.analyzeDonation(images, document.getElementById('donation-title').value);
+  btn.disabled = false;
+  btn.textContent = `✨ ${I18n.t('donate.analyze')}`;
+  const box = document.getElementById('analyze-result');
+  if (!result.success) {
+    fillSpecs(result.specs, { onlyEmpty: true });
+    box.innerHTML = `<div class="ai-note ai-note--local"><p>${App.escapeHTML(result.message)}</p></div>`;
+    return;
+  }
+  const s = result.suggestion;
+  aiDonation = s;
+  if (s.category) selectCategory(s.category);
+  const title = document.getElementById('donation-title');
+  if (!title.value.trim() && s.model) title.value = s.model;
+  if (s.condition) document.getElementById('donation-condition').value = s.condition;
+  fillSpecs(s.specs);
+  const uses = s.recommendedUses?.length
+    ? `<p class="text-sm">${App.escapeHTML(I18n.t('donate.recommendedUses', { uses: s.recommendedUses.join(', ') }))}</p>`
+    : '';
+  box.innerHTML = `<div class="ai-note ai-note--ai">
+    <p><strong>${App.escapeHTML(I18n.t('ai.badgeAi'))}</strong></p>
+    <p>${App.escapeHTML(I18n.t('donate.analyzed'))}</p>
+    ${uses}
+    ${s.notes ? `<p class="text-sm">${App.escapeHTML(s.notes)}</p>` : ''}
+    <p class="text-xs text-muted">${App.escapeHTML(I18n.t('donate.confidence', { pct: Math.round(s.confidence * 100) }))} · ${App.escapeHTML(I18n.t('ai.mayBeWrong'))}</p>
+  </div>`;
+}
+
 App.registerActions({
+  'analyze-photos': (el) => analyzePhotos(el),
   'remove-photo': (el) => {
     selectedPhotos.splice(Number(el.dataset.index), 1);
     renderPhotoPreviews();
@@ -146,6 +227,8 @@ async function handleDonation(e) {
   }
   const result = await Api.createDonation({
     photos,
+    specs: readSpecs(),
+    aiSuggestion: aiDonation ? { source: 'ai', ...aiDonation } : null,
     category: selectedCategory,
     title: document.getElementById('donation-title').value,
     description: document.getElementById('donation-desc').value,

@@ -335,7 +335,18 @@
     "photosHint": "Optional. Photos help the Lalíder see the item. They are resized on your phone before upload.",
     "tooManyPhotos": "Send at most {max} photos.",
     "removePhoto": "Remove photo {n}",
-    "uploading": "Uploading photos..."
+    "uploading": "Uploading photos...",
+    "analyze": "Analyze photos with AI",
+    "analyzing": "Analyzing photos...",
+    "analyzeHint": "AI suggests category, model, condition and visible specs. You confirm or correct before publishing.",
+    "analyzed": "Check it: we filled in category, title, condition and specs. Fix anything that is wrong.",
+    "confidence": "AI confidence: {pct}%",
+    "recommendedUses": "Good for: {uses}",
+    "specs": "Specs (optional, they help matching)",
+    "ram": "RAM (GB)",
+    "storage": "Storage (GB)",
+    "os": "Operating system",
+    "osPlaceholder": "e.g. Windows 11"
   },
   "donations": {
     "onlyDonors": "Only donors can publish donations.",

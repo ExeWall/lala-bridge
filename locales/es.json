@@ -335,7 +335,18 @@
     "photosHint": "Opcional. Las fotos ayudan al Lalíder a conocer el artículo. Se reducen en tu celular antes de enviarlas.",
     "tooManyPhotos": "Envía como máximo {max} fotos.",
     "removePhoto": "Quitar foto {n}",
-    "uploading": "Enviando fotos..."
+    "uploading": "Enviando fotos...",
+    "analyze": "Analizar fotos con IA",
+    "analyzing": "Analizando fotos...",
+    "analyzeHint": "La IA sugiere categoría, modelo, estado y especificaciones visibles. Tú confirmas o corriges antes de publicar.",
+    "analyzed": "Revisa: completamos categoría, título, estado y especificaciones. Corrige lo que esté mal.",
+    "confidence": "Confianza de la IA: {pct}%",
+    "recommendedUses": "Bueno para: {uses}",
+    "specs": "Especificaciones (opcional, ayudan al match)",
+    "ram": "Memoria RAM (GB)",
+    "storage": "Almacenamiento (GB)",
+    "os": "Sistema operativo",
+    "osPlaceholder": "p. ej.: Windows 11"
   },
   "donations": {
     "onlyDonors": "Solo los donantes pueden publicar donaciones.",
