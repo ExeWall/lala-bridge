@@ -129,6 +129,7 @@ function renderLaliderDashboard(user) {
   `;
 
   let html = renderOffersSections(user);
+  html += renderRecommendationsForLalider(myNeeds);
 
   html += section(
     t('dashboard.sectionMyRequests'),
@@ -190,6 +191,7 @@ function renderDonorDashboard(user) {
   `;
 
   let html = renderOffersSections(user);
+  html += renderRecommendationsForDonor(myDonations);
 
   html += section(
     t('dashboard.sectionMyDonations'),
@@ -212,6 +214,56 @@ function renderDonorDashboard(user) {
 
   html += renderMyDataSection(user);
   document.getElementById('dashboard-content').innerHTML = html;
+}
+
+// ------------------------------------------------------------ matching
+function sectionWithIntro(title, intro, body) {
+  return section(
+    title,
+    `<p class="text-muted" style="margin: calc(-1 * var(--s-3)) 0 var(--s-5);">${esc(intro)}</p>${body}`
+  );
+}
+
+/** Lalíder: as doações mais compatíveis com seus pedidos abertos. */
+function renderRecommendationsForLalider(myNeeds) {
+  const open = myNeeds.filter((n) => n.status === 'open');
+  if (!open.length) return '';
+  const best = new Map();
+  open.forEach((need) => {
+    Matching.forNeed(need, Donations.getAvailable(), 3).forEach(({ donation, match }) => {
+      const current = best.get(donation.id);
+      if (!current || current.match.score < match.score) best.set(donation.id, { donation, match });
+    });
+  });
+  const top = [...best.values()].sort((a, b) => b.match.score - a.match.score).slice(0, 4);
+  const body = top.length
+    ? grid(top.map(({ donation, match }) => App.renderDonationCard(donation, { match })))
+    : `<p class="text-muted">${esc(t('match.none'))}</p>`;
+  return sectionWithIntro(t('match.forYou'), t('match.forYouDesc'), body);
+}
+
+/** Doador: para cada doação disponível, os pedidos que ela pode atender. */
+function renderRecommendationsForDonor(myDonations) {
+  const available = myDonations.filter((d) => d.status === 'available');
+  if (!available.length) return '';
+  const groups = available
+    .map((donation) => ({
+      donation,
+      results: Matching.forDonation(donation, Donations.getOpenNeeds(), 3),
+    }))
+    .filter((g) => g.results.length);
+  const body = groups.length
+    ? groups
+        .map(
+          ({
+            donation,
+            results,
+          }) => `<h3 class="h-4 match-group__title">${esc(t('match.forDonation', { title: donation.title }))}</h3>
+          ${grid(results.map(({ need, match }) => App.renderNeedCard(need, { match })))}`
+        )
+        .join('')
+    : `<p class="text-muted">${esc(t('match.none'))}</p>`;
+  return sectionWithIntro(t('match.forDonations'), t('match.forDonationsDesc'), body);
 }
 
 /**

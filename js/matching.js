@@ -4,18 +4,23 @@
  * Score de 0 a 100, somando fatores simples que dá para explicar em uma frase:
  *
  *   requisitos  35  specs da doação ≥ requisitos mínimos do pedido
- *   localização 20  mesma UF (20), mesma região (12), mesmo país (6)
+ *   localização 10  mesma UF (10), mesma região (6), mesmo país (3)
  *   urgência    15  alta (15), média (9), baixa (4)
  *   espera      15  dias com o pedido aberto (até 30), para ninguém ficar esquecido
- *   semântica   15  similaridade entre o uso pretendido e a descrição da doação
+ *   semântica   10  similaridade entre o uso pretendido e a descrição da doação
  *                   (embeddings do servidor quando há; senão, similaridade local)
+ *   equidade    15  regiões que receberam menos doações sobem na lista
+ *
+ * Por que equidade: a checagem de justiça (scripts/fairness.js,
+ * docs/matching-justica.md) mostrou que, com doações concentradas no Sudeste,
+ * só a proximidade deixava o Centro-Oeste sem nenhum atendimento.
  *
  * Categoria diferente não gera match. O score só ordena sugestões: quem
  * decide oferecer, pedir e aceitar são as pessoas.
  */
 
 const Matching = {
-  WEIGHTS: { requirements: 35, location: 20, urgency: 15, waiting: 15, semantic: 15 },
+  WEIGHTS: { requirements: 35, location: 10, urgency: 15, waiting: 15, semantic: 10, equity: 15 },
   SIMILARITY_KEY: 'lala_bridge_similarity',
 
   REGIONS: {
@@ -223,9 +228,50 @@ const Matching = {
   },
 
   /**
+   * Parcela já atendida dos pedidos de cada região (matched + entregues sobre
+   * o total), a partir de uma lista de pedidos. Usada pelo fator de equidade.
+   */
+  regionStats(needs = Donations.getAllNeeds()) {
+    const stats = {};
+    needs.forEach((n) => {
+      const key = n.country === 'BR' ? this.regionOf(n.state) : n.country;
+      if (!key) return;
+      stats[key] ??= { total: 0, served: 0 };
+      stats[key].total++;
+      if (n.status !== 'open') stats[key].served++;
+    });
+    return stats;
+  },
+
+  equityFactor(need, regionStats) {
+    const max = this.WEIGHTS.equity;
+    const key = need.country === 'BR' ? this.regionOf(need.state) : need.country;
+    const st = regionStats?.[key];
+    const servedShare = st && st.total ? st.served / st.total : 0;
+    const all = Object.values(regionStats || {}).reduce(
+      (acc, r) => ({ total: acc.total + r.total, served: acc.served + r.served }),
+      { total: 0, served: 0 }
+    );
+    const overall = all.total ? all.served / all.total : 0;
+    // Só vira razão explícita quando a região está bem atrás da média.
+    const behind = overall > 0 && servedShare < overall - 0.15;
+    const label = need.country === 'BR' ? 'match.equity' : 'match.equityCountry';
+    const region =
+      need.country === 'BR' && key ? I18n.t(`match.region.${key}`) : I18n.countryName(need.country);
+    return {
+      key: 'equity',
+      points: max * (1 - servedShare),
+      max,
+      label,
+      params: { region },
+      behind,
+    };
+  },
+
+  /**
    * @returns {null | { score: number, factors: object[], reasons: string[] }}
    */
-  score(need, donation, { now = new Date() } = {}) {
+  score(need, donation, { now = new Date(), regionStats = null } = {}) {
     if (!need || !donation || need.category !== donation.category) return null;
     const factors = [
       this.requirementsFactor(need, donation),
@@ -233,6 +279,7 @@ const Matching = {
       this.urgencyFactor(need),
       this.waitingFactor(need, now),
       this.semanticFactor(need, donation),
+      this.equityFactor(need, regionStats || this.regionStats()),
     ];
     const score = Math.round(factors.reduce((s, f) => s + f.points, 0));
     return { score, factors, reasons: this.explain(factors) };
@@ -242,7 +289,9 @@ const Matching = {
   explain(factors) {
     const negative = factors.filter((f) => f.negative);
     const strong = factors
-      .filter((f) => !f.negative && f.points / f.max >= 0.5 && f.label !== 'match.noReq')
+      .filter((f) => !f.negative && f.max > 0 && f.points / f.max >= 0.5)
+      .filter((f) => f.key !== 'equity' || f.behind)
+      .filter((f) => f.label !== 'match.noReq')
       .sort((a, b) => b.points - a.points)
       .slice(0, 3 - Math.min(negative.length, 1));
     return [...negative.slice(0, 1), ...strong].map((f) => I18n.t(f.label, f.params));
@@ -250,9 +299,10 @@ const Matching = {
 
   /** Doações disponíveis que mais combinam com um pedido. */
   forNeed(need, donations, limit = 3) {
+    const regionStats = this.regionStats();
     return donations
       .filter((d) => d.status === 'available' && d.donorId !== need.laliderId)
-      .map((donation) => ({ donation, match: this.score(need, donation) }))
+      .map((donation) => ({ donation, match: this.score(need, donation, { regionStats }) }))
       .filter((r) => r.match && r.match.score > 0)
       .sort((a, b) => b.match.score - a.match.score)
       .slice(0, limit);
@@ -260,9 +310,10 @@ const Matching = {
 
   /** Pedidos abertos que uma doação pode atender. */
   forDonation(donation, needs, limit = 3) {
+    const regionStats = this.regionStats();
     return needs
       .filter((n) => n.status === 'open')
-      .map((need) => ({ need, match: this.score(need, donation) }))
+      .map((need) => ({ need, match: this.score(need, donation, { regionStats }) }))
       .filter((r) => r.match && r.match.score > 0)
       .sort((a, b) => b.match.score - a.match.score)
       .slice(0, limit);

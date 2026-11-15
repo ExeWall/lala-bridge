@@ -105,4 +105,20 @@ describe('Matching', () => {
     );
     expect(Matching.textSimilarity('notebook', 'livro de receitas')).toBe(0);
   });
+
+  it('equidade: região bem menos atendida sobe e a razão aparece na explicação', () => {
+    const { Matching } = loadApp();
+    const regionStats = {
+      SE: { total: 10, served: 8 },
+      CO: { total: 10, served: 0 },
+    };
+    const go = need({ id: 'go', state: 'GO' });
+    const sp = need({ id: 'sp', state: 'SP' });
+    const d = donation({ state: 'MG' });
+    const mGo = Matching.score(go, d, { now, regionStats });
+    const mSp = Matching.score(sp, d, { now, regionStats });
+    expect(mGo.score).toBeGreaterThan(mSp.score);
+    expect(mGo.reasons).toContain('Prioridade: região Centro-Oeste recebeu menos doações');
+    expect(mSp.reasons.join()).not.toMatch(/Prioridade/);
+  });
 });

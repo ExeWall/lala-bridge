@@ -472,6 +472,7 @@ const MockDB = {
   sampleDonations: [
     {
       id: 'don-001',
+      specs: { ramGb: 8, storageGb: 256, os: 'Windows' },
       donorId: 'donor-001',
       donorName: 'Instituto Ponte Digital',
       category: 'laptop',
@@ -489,6 +490,7 @@ const MockDB = {
     },
     {
       id: 'don-002',
+      specs: { storageGb: 128, os: 'Android', camera: true },
       donorId: 'donor-002',
       donorName: 'Mariana Costa',
       category: 'phone',
@@ -524,6 +526,7 @@ const MockDB = {
     },
     {
       id: 'don-004',
+      specs: { ramGb: 8, storageGb: 256, os: 'Windows' },
       donorId: 'donor-001',
       donorName: 'Instituto Ponte Digital',
       category: 'laptop',
@@ -558,6 +561,7 @@ const MockDB = {
     },
     {
       id: 'don-006',
+      specs: { screenIn: 24 },
       donorId: 'donor-005',
       donorName: 'Rede Doa Bem',
       category: 'monitor',
@@ -580,6 +584,8 @@ const MockDB = {
   sampleNeeds: [
     {
       id: 'need-001',
+      intendedUse: 'Rodar IDE e máquina virtual na faculdade de engenharia de software',
+      requirements: { ramGb: 4 },
       laliderId: 'lalider-sample-larissa',
       laliderName: 'Larissa O.',
       camp: 'VLB32',
@@ -597,6 +603,8 @@ const MockDB = {
     },
     {
       id: 'need-002',
+      intendedUse: 'Videochamadas do estágio remoto',
+      requirements: { camera: true },
       laliderId: 'lalider-sample-joao',
       laliderName: 'João S.',
       camp: 'BLB10',
@@ -614,6 +622,8 @@ const MockDB = {
     },
     {
       id: 'need-003',
+      intendedUse: 'Assistir aulas online com concentração',
+      requirements: {},
       laliderId: 'lalider-sample-yara',
       laliderName: 'Yara B.',
       camp: 'BLB10',
@@ -631,6 +641,8 @@ const MockDB = {
     },
     {
       id: 'need-004',
+      intendedUse: 'Estudar ciência de dados com Python e Jupyter',
+      requirements: { ramGb: 8 },
       laliderId: 'lalider-sample-yara',
       laliderName: 'Yara B.',
       camp: 'BLB10',
@@ -648,6 +660,8 @@ const MockDB = {
     },
     {
       id: 'need-005',
+      intendedUse: 'Fazer curso de Python e enviar currículos',
+      requirements: { ramGb: 8 },
       laliderId: 'lalider-demo-ana',
       laliderName: 'Ana S.',
       camp: 'VLB32',

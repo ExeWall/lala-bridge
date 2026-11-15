@@ -592,7 +592,7 @@ const App = {
   // Card Renderers
   // =========================================================================
 
-  renderDonationCard(donation) {
+  renderDonationCard(donation, { match = null } = {}) {
     const e = (v) => this.escapeHTML(v);
     const cat = this.getCategory(donation.category);
     const cond = this.getCondition(donation.condition);
@@ -617,6 +617,7 @@ const App = {
         </div>
         <h3 class="donation-card__title">${e(donation.title)}</h3>
         <p class="donation-card__desc">${e(donation.description)}</p>
+        ${this.renderMatchBlock(match)}
         <div class="card__footer">
           <div class="donation-card__meta">
             <span class="donation-card__meta-item">${e(this.formatLocation(donation))}</span>
@@ -632,7 +633,7 @@ const App = {
     `;
   },
 
-  renderNeedCard(need) {
+  renderNeedCard(need, { match = null } = {}) {
     const e = (v) => this.escapeHTML(v);
     const cat = this.getCategory(need.category);
     const urgencyClass = ['high', 'medium', 'low'].includes(need.urgency)
@@ -666,6 +667,7 @@ const App = {
         </div>
         <h3 class="donation-card__title">${e(need.title)}</h3>
         <p class="donation-card__desc">${e(need.description)}</p>
+        ${this.renderMatchBlock(match)}
         <div class="card__footer">
           <span class="donation-card__meta-item">${this.formatDate(need.createdAt)}</span>
           ${need.status && need.status !== 'open' ? this.renderStatusBadge(need.status) : ''}
@@ -673,6 +675,23 @@ const App = {
         </div>
       </div>
     `;
+  },
+
+  /**
+   * Compatibilidade de um match e o "Por que este match?" (razões em
+   * linguagem simples). Vazio quando não há match.
+   */
+  renderMatchBlock(match) {
+    if (!match) return '';
+    const e = (v) => this.escapeHTML(v);
+    const level = match.score >= 70 ? 'high' : match.score >= 45 ? 'medium' : 'low';
+    return `<div class="match-block">
+      <span class="match-score match-score--${level}">${e(I18n.t('match.score', { score: match.score }))}</span>
+      <details class="match-why">
+        <summary>${e(I18n.t('match.why'))}</summary>
+        <ul>${match.reasons.map((r) => `<li>${e(r)}</li>`).join('')}</ul>
+      </details>
+    </div>`;
   },
 
   renderStatusBadge(status) {

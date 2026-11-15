@@ -7,7 +7,7 @@
 
 const Migrations = {
   VERSION_KEY: 'lala_bridge_schema_version',
-  CURRENT_VERSION: 4,
+  CURRENT_VERSION: 5,
 
   getVersion() {
     return parseInt(Store.get(this.VERSION_KEY, 1), 10);
@@ -139,6 +139,11 @@ const Migrations = {
         ...MockDB.sampleOffers.map((o) => ({ ...o })),
         ...offers,
       ]);
+    },
+
+    /** v4 → v5 (só no modo demo): dados de exemplo ganham specs e requisitos (matching). */
+    5() {
+      Migrations.steps[4]();
     },
   },
 

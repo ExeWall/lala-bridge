@@ -685,7 +685,9 @@
     "forDonations": "Pedidos que tu donación puede atender",
     "forDonationsDesc": "Para cada donación disponible, los pedidos más compatibles. Tú decides a quién ofrecer.",
     "forDonation": "Para: {title}",
-    "none": "Todavía no hay artículos compatibles. Los nuevos aparecerán aquí en cuanto se publiquen."
+    "none": "Todavía no hay artículos compatibles. Los nuevos aparecerán aquí en cuanto se publiquen.",
+    "equity": "Prioridad: la región {region} recibió menos donaciones",
+    "equityCountry": "Prioridad: {region} recibió menos donaciones"
   },
   "assistant": {
     "title": "Cuéntalo con tus palabras",

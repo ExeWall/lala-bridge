@@ -2311,3 +2311,54 @@ main {
   max-height: calc(100vh - 32px);
   overflow-y: auto;
 }
+
+/* Matching: compatibilidade e "Por que este match?" */
+.match-block {
+  margin-top: var(--s-4);
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--cream);
+}
+
+.match-score {
+  display: inline-block;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 2px 10px;
+  border-radius: var(--r-full);
+}
+
+.match-score--high {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.match-score--medium {
+  background: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.match-score--low {
+  background: var(--white);
+  color: var(--text-2);
+}
+
+.match-why summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.match-why ul {
+  margin: 0;
+  padding-left: var(--s-5);
+  font-size: 0.85rem;
+  list-style: disc;
+}
+
+.match-group__title {
+  margin: var(--s-5) 0 var(--s-3);
+}

@@ -685,7 +685,9 @@
     "forDonations": "Requests your donation can meet",
     "forDonationsDesc": "For each available donation, the best matching requests. You decide whom to offer to.",
     "forDonation": "For: {title}",
-    "none": "No compatible items yet. New items will show up here as soon as they are published."
+    "none": "No compatible items yet. New items will show up here as soon as they are published.",
+    "equity": "Priority: the {region} region has received fewer donations",
+    "equityCountry": "Priority: {region} has received fewer donations"
   },
   "assistant": {
     "title": "Tell us in your own words",
