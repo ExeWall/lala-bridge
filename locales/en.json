@@ -617,5 +617,56 @@
       "scam_pattern": "Text with a pattern common in scams",
       "contact_in_text": "Personal contact published in the text"
     }
+  },
+  "ai": {
+    "notConfigured": "AI is not configured on this server yet.",
+    "unavailable": "AI did not respond right now. You can fill in the form manually.",
+    "limitReached": "The daily AI usage limit was reached. Please fill in manually today.",
+    "invalidOutput": "AI returned an invalid answer. Please fill in manually.",
+    "invalidInput": "Invalid AI request.",
+    "textTooShort": "Write a bit more about what you need.",
+    "audioMissing": "No audio was recorded.",
+    "audioTooLong": "The recording is too long. Record up to 1 minute.",
+    "imagesMissing": "Send at least one photo.",
+    "voiceNeedsServer": "AI transcription needs the server. In this mode, use browser dictation or type.",
+    "photoNeedsServer": "AI photo analysis needs the server with AI configured. Fill in the fields below.",
+    "localJustification": "Simple automatic suggestion (no AI), based on keywords in your text. Check and adjust.",
+    "localImpactSummary": "{name} received {item} and shared: “{quote}”",
+    "theItem": "the equipment",
+    "badgeAi": "AI suggestion — review before publishing",
+    "badgeLocal": "Simple automatic suggestion (no AI) — review",
+    "mayBeWrong": "Automatic suggestions can be wrong. You can change everything before publishing."
+  },
+  "match": {
+    "ram": "{gb} GB of RAM",
+    "storage": "{gb} GB of storage",
+    "camera": "camera",
+    "reqMet": "Meets {list}",
+    "reqFail": "Note: does not meet {list}",
+    "reqUnknown": "Specs not provided; check with the donor",
+    "noReq": "Request without technical requirements",
+    "sameState": "Same state ({uf})",
+    "sameRegion": "Same region ({region})",
+    "sameCountry": "Same country",
+    "farAway": "In another country",
+    "urgent": "Urgent request",
+    "notUrgent": "Non-urgent request",
+    "waiting": "Waiting for {days} days",
+    "similar": "Use similar to what the donor described",
+    "region": {
+      "N": "North",
+      "NE": "Northeast",
+      "CO": "Center-West",
+      "SE": "Southeast",
+      "S": "South"
+    },
+    "score": "Match {score}%",
+    "why": "Why this match?",
+    "forYou": "Donations recommended for you",
+    "forYouDesc": "Sorted by match with your open requests. You decide whether to ask.",
+    "forDonations": "Requests your donation can meet",
+    "forDonationsDesc": "For each available donation, the best matching requests. You decide whom to offer to.",
+    "forDonation": "For: {title}",
+    "none": "No compatible items yet. New items will show up here as soon as they are published."
   }
 }

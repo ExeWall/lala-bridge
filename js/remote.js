@@ -85,6 +85,27 @@ const Remote = {
     return { success: true, message: successKey ? I18n.t(successKey) : '', data };
   },
 
+  /**
+   * Chama uma Edge Function. Devolve { data } ou { errorKey } (chave de i18n).
+   * Aceita JSON ou FormData no corpo.
+   */
+  async invoke(name, body) {
+    try {
+      const { data, error } = await this.client.functions.invoke(name, { body });
+      if (!error) return { data };
+      let key = 'ai.unavailable';
+      try {
+        const payload = await error.context?.json?.();
+        if (payload?.error) key = payload.error;
+      } catch {
+        /* resposta sem JSON */
+      }
+      return { errorKey: key };
+    } catch {
+      return { errorKey: 'ai.unavailable' };
+    }
+  },
+
   // --------------------------------------------- conversão de formatos
   photoUrl(path) {
     if (!path || /^(data:|https?:)/.test(path)) return path;
@@ -226,6 +247,14 @@ const Remote = {
         else users[idx] = full;
       }
       offers = (offerRows.data || []).map((o) => this.mapOffer(o));
+
+      // Similaridade semântica (embeddings) dos meus pedidos/doações, para o matching.
+      const { data: sims } = await db.rpc('semantic_scores');
+      const simMap = {};
+      (sims || []).forEach((r) => {
+        simMap[`${r.need_id}|${r.donation_id}`] = r.similarity;
+      });
+      Store.set(Matching.SIMILARITY_KEY, simMap);
       impact = (impactRows.data || []).map((i) => this.mapImpact(i));
 
       // Contatos da outra parte, só nas ofertas aceitas ou entregues.

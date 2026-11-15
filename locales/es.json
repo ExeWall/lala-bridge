@@ -617,5 +617,56 @@
       "scam_pattern": "Texto con un patrón común en estafas",
       "contact_in_text": "Contacto personal publicado en el texto"
     }
+  },
+  "ai": {
+    "notConfigured": "La IA todavía no está configurada en este servidor.",
+    "unavailable": "La IA no respondió ahora. Puedes completar el formulario manualmente.",
+    "limitReached": "Se alcanzó el límite diario de uso de la IA. Completa manualmente por hoy.",
+    "invalidOutput": "La IA devolvió una respuesta inválida. Completa manualmente.",
+    "invalidInput": "Solicitud inválida para la IA.",
+    "textTooShort": "Escribe un poco más sobre lo que necesitas.",
+    "audioMissing": "No se grabó ningún audio.",
+    "audioTooLong": "El audio quedó demasiado largo. Graba hasta 1 minuto.",
+    "imagesMissing": "Envía al menos una foto.",
+    "voiceNeedsServer": "La transcripción por IA necesita el servidor. En este modo, usa el dictado del navegador o escribe.",
+    "photoNeedsServer": "El análisis de fotos por IA necesita el servidor con IA configurada. Completa los campos de abajo.",
+    "localJustification": "Sugerencia automática simple (sin IA), basada en palabras clave de tu texto. Revisa y ajusta.",
+    "localImpactSummary": "{name} recibió {item} y contó: “{quote}”",
+    "theItem": "el equipo",
+    "badgeAi": "Sugerencia de la IA — revisa antes de publicar",
+    "badgeLocal": "Sugerencia automática simple (sin IA) — revisa",
+    "mayBeWrong": "Las sugerencias automáticas pueden equivocarse. Puedes cambiar todo antes de publicar."
+  },
+  "match": {
+    "ram": "{gb} GB de RAM",
+    "storage": "{gb} GB de almacenamiento",
+    "camera": "cámara",
+    "reqMet": "Cumple {list}",
+    "reqFail": "Atención: no cumple {list}",
+    "reqUnknown": "Configuración no informada; confirma con el donante",
+    "noReq": "Pedido sin requisitos técnicos",
+    "sameState": "Mismo estado ({uf})",
+    "sameRegion": "Misma región ({region})",
+    "sameCountry": "En el mismo país",
+    "farAway": "En otro país",
+    "urgent": "Pedido urgente",
+    "notUrgent": "Pedido sin urgencia",
+    "waiting": "Esperando hace {days} días",
+    "similar": "Uso parecido a lo que describió el donante",
+    "region": {
+      "N": "Norte",
+      "NE": "Nordeste",
+      "CO": "Centro-Oeste",
+      "SE": "Sudeste",
+      "S": "Sur"
+    },
+    "score": "Compatibilidad {score}%",
+    "why": "¿Por qué este match?",
+    "forYou": "Donaciones recomendadas para ti",
+    "forYouDesc": "Ordenadas por compatibilidad con tus pedidos abiertos. Tú decides si solicitar.",
+    "forDonations": "Pedidos que tu donación puede atender",
+    "forDonationsDesc": "Para cada donación disponible, los pedidos más compatibles. Tú decides a quién ofrecer.",
+    "forDonation": "Para: {title}",
+    "none": "Todavía no hay artículos compatibles. Los nuevos aparecerán aquí en cuanto se publiquen."
   }
 }
