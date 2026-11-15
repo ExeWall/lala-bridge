@@ -2362,3 +2362,48 @@ main {
 .match-group__title {
   margin: var(--s-5) 0 var(--s-3);
 }
+
+/* Relato de impacto */
+.impact-update {
+  margin-top: var(--s-3);
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--success-bg);
+}
+
+.impact-update__photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  margin-top: var(--s-2);
+}
+
+/* Página de impacto */
+.impact-bars {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+}
+
+.impact-bars li {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 3fr auto;
+  align-items: center;
+  gap: var(--s-3);
+  font-size: 0.9rem;
+}
+
+.impact-bars__bar {
+  height: 12px;
+  border-radius: var(--r-full);
+  background: var(--gold);
+}
+
+.hero__impact-link {
+  display: inline-flex;
+  margin-top: var(--s-5);
+}

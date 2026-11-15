@@ -105,6 +105,7 @@ for (const n of MockDB.sampleNeeds) {
   needIds[n.id] = data.id;
 }
 
+const offerIds = {};
 for (const o of MockDB.sampleOffers) {
   const { data, error } = await db
     .from('offers')
@@ -117,16 +118,37 @@ for (const o of MockDB.sampleOffers) {
       message: o.message,
       status: o.status,
       accepted_at: o.acceptedAt,
+      delivered_at: o.deliveredAt || null,
     })
     .select('id')
     .single();
   if (error) throw error;
-  if (o.status === 'accepted' && o.donationId) {
-    await db
-      .from('donations')
-      .update({ status: 'matched', matched_to: ids[o.laliderId], offer_id: data.id })
-      .eq('id', donationIds[o.donationId]);
+  offerIds[o.id] = data.id;
+  if (['accepted', 'delivered'].includes(o.status)) {
+    const status = o.status === 'accepted' ? 'matched' : 'delivered';
+    if (o.donationId) {
+      await db
+        .from('donations')
+        .update({ status, matched_to: ids[o.laliderId], offer_id: data.id })
+        .eq('id', donationIds[o.donationId]);
+    }
+    if (o.needId) {
+      await db
+        .from('needs')
+        .update({ status, matched_donor_id: ids[o.donorId], offer_id: data.id })
+        .eq('id', needIds[o.needId]);
+    }
   }
+}
+
+for (const i of MockDB.sampleImpact) {
+  const { error } = await db.from('impact_updates').insert({
+    offer_id: offerIds[i.offerId],
+    author_id: ids[i.authorId],
+    text: i.text,
+    summary: i.summary,
+  });
+  if (error) throw error;
 }
 
 console.log('Pronto: dados de demonstração criados.');

@@ -7,7 +7,7 @@
 
 const Migrations = {
   VERSION_KEY: 'lala_bridge_schema_version',
-  CURRENT_VERSION: 5,
+  CURRENT_VERSION: 6,
 
   getVersion() {
     return parseInt(Store.get(this.VERSION_KEY, 1), 10);
@@ -139,10 +139,22 @@ const Migrations = {
         ...MockDB.sampleOffers.map((o) => ({ ...o })),
         ...offers,
       ]);
+
+      const sampleImpactIds = new Set(MockDB.sampleImpact.map((i) => i.id));
+      const impact = Migrations._read(Impact.STORAGE_KEY).filter((i) => !sampleImpactIds.has(i.id));
+      Migrations._write(Impact.STORAGE_KEY, [
+        ...MockDB.sampleImpact.map((i) => ({ ...i })),
+        ...impact,
+      ]);
     },
 
     /** v4 → v5 (só no modo demo): dados de exemplo ganham specs e requisitos (matching). */
     5() {
+      Migrations.steps[4]();
+    },
+
+    /** v5 → v6 (só no modo demo): entrega concluída e relato de impacto de exemplo. */
+    6() {
       Migrations.steps[4]();
     },
   },

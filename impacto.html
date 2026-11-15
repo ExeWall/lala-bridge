@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="impactPage.metaTitle">Impacto — LALA Bridge</title>
+    <meta
+      data-i18n-attr="content:impactPage.desc"
+      name="description"
+      content="Números agregados, sem dados pessoais, atualizados a cada entrega confirmada."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Source+Serif+4:wght@400;600&amp;display=swap"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="js/env.js"></script>
+    <script defer src="js/config.js"></script>
+    <script defer src="js/i18n.js"></script>
+    <script defer src="js/store.js"></script>
+    <script defer src="js/mock-data.js"></script>
+    <script defer src="js/auth.js"></script>
+    <script defer src="js/donations.js"></script>
+    <script defer src="js/offers.js"></script>
+    <script defer src="js/impact.js"></script>
+    <script defer src="js/trust.js"></script>
+    <script defer src="js/privacy.js"></script>
+    <script defer src="js/migrations.js"></script>
+    <script defer src="js/photos.js"></script>
+    <script defer src="js/ai.js"></script>
+    <script defer src="js/matching.js"></script>
+    <script defer src="js/api.js"></script>
+    <script defer src="js/remote.js"></script>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/pages/impact.js"></script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
+    <nav class="nav" id="navbar">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          <div class="nav__logo-mark">B</div>
+          LALA Bridge
+        </a>
+        <div class="nav__links" id="nav-menu">
+          <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
+          <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
+          <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
+          <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
+        </div>
+        <div class="nav__actions"></div>
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      <div class="page-header">
+        <div class="container">
+          <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="impactPage.eyebrow">
+            Transparência
+          </p>
+          <h1 class="page-header__title" data-i18n="impactPage.title">Nosso impacto</h1>
+          <p class="page-header__desc" data-i18n="impactPage.desc">
+            Números agregados, sem dados pessoais, atualizados a cada entrega confirmada.
+          </p>
+        </div>
+      </div>
+
+      <div class="container" style="padding-bottom: var(--s-9)">
+        <div class="dashboard__grid" id="impact-metrics" aria-live="polite"></div>
+
+        <section class="admin-section" aria-labelledby="impact-states-title">
+          <h2 class="h-3" id="impact-states-title" data-i18n="impactPage.statesList">
+            Estados que já receberam doações
+          </h2>
+          <p id="impact-states"></p>
+        </section>
+
+        <section class="admin-section" aria-labelledby="impact-cat-title">
+          <h2 class="h-3" id="impact-cat-title" data-i18n="impactPage.byCategory">
+            Entregas por tipo de equipamento
+          </h2>
+          <ul id="impact-categories" class="impact-bars"></ul>
+        </section>
+
+        <p class="text-sm text-muted" data-i18n="impactPage.method">
+          Como calculamos o lixo eletrônico evitado: somamos um peso médio aproximado por tipo de
+          equipamento entregue (notebook 2 kg, celular 0,2 kg, fone 0,3 kg, monitor 4 kg,
+          periféricos 0,5 kg; livros não contam). É uma estimativa, não uma medição.
+        </p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__bottom">
+          <p class="footer__copyright" data-i18n="footer.copyright">
+            © 2026 LALA Bridge. Uma iniciativa comunitária de Lalíderes, para Lalíderes.
+          </p>
+          <a
+            href="privacidade.html"
+            class="footer__link footer__bottom-link"
+            data-i18n="footer.privacy"
+            >Política de Privacidade</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

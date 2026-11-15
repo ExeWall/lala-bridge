@@ -121,6 +121,27 @@ const LocalApi = {
     return this._wrap(() => Offers.cancel(offerId, this.me()?.id));
   },
 
+  // --------------------------------------------------------------- impacto
+  async addImpactUpdate(offerId, text, photoFile = null) {
+    const me = this.me();
+    let photo = null;
+    if (photoFile) photo = await Photos.compress(photoFile, Photos.LOCAL_OPTIONS);
+    const result = Impact.add({ offerId, authorId: me?.id, text, photo });
+    if (!result.success) return result;
+    const offer = Offers.getById(offerId);
+    const donation = offer?.donationId ? Donations.getById(offer.donationId) : null;
+    const { summary, source } = await AI.impactSummary(result.update, {
+      laliderName: App.displayName(me),
+      donationTitle: donation?.title,
+    });
+    Impact.setSummary(result.update.id, summary);
+    return { ...result, summary, source };
+  },
+
+  impactStats() {
+    return Promise.resolve(Impact.stats());
+  },
+
   // ----------------------------------------------------------------- admin
   _requireAdmin() {
     if (!Auth.isAdmin()) throw new Error(I18n.t('admin.onlyAdmin'));

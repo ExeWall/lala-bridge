@@ -179,33 +179,40 @@ Objetivo: sair do `localStorage` para ter dados compartilhados, autenticação r
 Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nunca vai para o front. Crie uma camada `ai/provider.ts` com interface única (`chat`, `vision`, `embed`) e implementação configurável por `.env`, de preferência compatível com a API da OpenAI, para poder trocar entre modelos abertos e comerciais. **Pergunte ao autor qual provedor e orçamento usar.** Registre o custo e o uso por chamada e defina um limite diário.
 
 **4.1 Assistente de pedido em linguagem natural (prioridade 1)**
-- [ ] Na tela "Novo pedido", um campo livre para escrever ou **gravar áudio** (MediaRecorder, transcrito por um modelo de fala para texto).
-- [ ] A Edge Function `structure-need` recebe o texto e devolve JSON validado (zod ou JSON Schema): `{ categoria, titulo, uso_pretendido, requisitos_minimos: { ram_gb?, armazenamento_gb?, so?, camera? }, urgencia_sugerida, justificativa }`.
-- [ ] O formulário vem pré-preenchido e o jovem revisa e edita antes de publicar.
-- [ ] O prompt fica em `ai/prompts/structure-need.md`, versionado, em PT-BR, com exemplos.
-- [ ] Fallback: se a IA falhar, aparece o formulário manual normal.
+- [x] Na tela "Novo pedido", um campo livre para escrever ou **gravar áudio** (MediaRecorder, transcrito por um modelo de fala para texto).
+- [x] A Edge Function `structure-need` recebe o texto e devolve JSON validado (zod ou JSON Schema): `{ categoria, titulo, uso_pretendido, requisitos_minimos: { ram_gb?, armazenamento_gb?, so?, camera? }, urgencia_sugerida, justificativa }`.
+- [x] O formulário vem pré-preenchido e o jovem revisa e edita antes de publicar.
+- [x] O prompt fica em `ai/prompts/structure-need.md`, versionado, em PT-BR, com exemplos.
+- [x] Fallback: se a IA falhar, aparece o formulário manual normal.
 
 **4.2 Triagem de doações por foto (prioridade 2)**
-- [ ] O doador envia de 1 a 3 fotos e a Edge Function `analyze-donation` usa um modelo de visão para sugerir `{ categoria, marca_modelo_provavel, estado_estimado, specs_visiveis, usos_recomendados[] }`.
-- [ ] O doador confirma ou corrige. As specs confirmadas viram `donations.specs`.
-- [ ] Aviso visível de que a sugestão é automática e pode errar.
+- [x] O doador envia de 1 a 3 fotos e a Edge Function `analyze-donation` usa um modelo de visão para sugerir `{ categoria, marca_modelo_provavel, estado_estimado, specs_visiveis, usos_recomendados[] }`.
+- [x] O doador confirma ou corrige. As specs confirmadas viram `donations.specs`.
+- [x] Aviso visível de que a sugestão é automática e pode errar.
 
 **4.3 Matching inteligente (prioridade 1)**
-- [ ] **Base (regras, explicável):** score de 0 a 100 combinando categoria compatível (filtro), specs ≥ requisitos mínimos, urgência, mesma UF ou distância e tempo de espera do pedido (para não deixar ninguém esquecido).
-- [ ] **Semântica:** gerar embeddings de `needs` e `donations` (`uso_pretendido` + descrição) em `pgvector` e somar a similaridade de cosseno ao score.
-- [ ] Mostrar o **"Por que este match?"** com os 2 ou 3 fatores principais em linguagem simples.
-- [ ] No dashboard do doador: "Pedidos que sua doação pode atender". No dashboard do Lalíder: "Doações recomendadas para você".
-- [ ] Fazer uma checagem simples de justiça: medir se o matching favorece sistematicamente alguma UF e documentar o resultado.
+- [x] **Base (regras, explicável):** score de 0 a 100 combinando categoria compatível (filtro), specs ≥ requisitos mínimos, urgência, mesma UF ou distância e tempo de espera do pedido (para não deixar ninguém esquecido).
+- [x] **Semântica:** gerar embeddings de `needs` e `donations` (`uso_pretendido` + descrição) em `pgvector` e somar a similaridade de cosseno ao score.
+- [x] Mostrar o **"Por que este match?"** com os 2 ou 3 fatores principais em linguagem simples.
+- [x] No dashboard do doador: "Pedidos que sua doação pode atender". No dashboard do Lalíder: "Doações recomendadas para você".
+- [x] Fazer uma checagem simples de justiça: medir se o matching favorece sistematicamente alguma UF e documentar o resultado.
 
 **4.4 Confiança: detecção de suspeitas (prioridade 3)**
-- [ ] Heurísticas, com IA opcional: textos quase idênticos entre pedidos diferentes (similaridade de embedding), muitos pedidos em pouco tempo, muitas contas por dispositivo ou IP e doações com padrão de golpe.
-- [ ] Gerar `flags` para **revisão humana** no painel admin. Nunca bloquear automaticamente.
+- [x] Heurísticas, com IA opcional: textos quase idênticos entre pedidos diferentes (similaridade de embedding), muitos pedidos em pouco tempo, muitas contas por dispositivo ou IP e doações com padrão de golpe.
+- [x] Gerar `flags` para **revisão humana** no painel admin. Nunca bloquear automaticamente.
 
 **4.5 Relatórios de impacto (prioridade 3)**
-- [ ] Depois da entrega, o jovem posta uma atualização curta (texto, foto opcional).
-- [ ] A IA gera um resumo amigável para o doador e um resumo agregado na home: equipamentos entregues, UFs alcançadas e quilos de lixo eletrônico evitados (com estimativa documentada).
+- [x] Depois da entrega, o jovem posta uma atualização curta (texto, foto opcional).
+- [x] A IA gera um resumo amigável para o doador e um resumo agregado na home: equipamentos entregues, UFs alcançadas e quilos de lixo eletrônico evitados (com estimativa documentada).
 
 **Critério de pronto:** pedido por áudio → pedido estruturado → recomendação de doação com explicação → oferta aceita → entrega → relatório, tudo funcionando na URL pública.
+
+**Resultado (15/11/2026, branch `fase-4-ia`):**
+- Provedor de IA configurável e compatível com a API da OpenAI (`supabase/functions/_shared/ai/provider.ts`), com registro de uso e custo por chamada, limite diário e remoção de dados pessoais antes do envio. Prompts versionados em `ai/prompts/`.
+- Edge Functions: `structure-need`, `transcribe`, `analyze-donation`, `embed` e `impact-summary`. Toda resposta da IA é validada, e a pessoa revisa antes de publicar.
+- Cada frente tem alternativa sem IA: regras simples para organizar pedidos, ditado do navegador, similaridade de texto local no matching e um modelo de texto para o resumo de impacto. O fluxo inteiro do critério funciona no modo local; com IA de verdade, falta o autor escolher o provedor e configurar as chaves (seção 8, item 2).
+- Checagem de justiça do matching documentada em `docs/matching-justica.md`. Ela levou à criação do fator de equidade.
+- Suspeitas viram sinalizações para revisão humana no painel admin. Nada é bloqueado automaticamente.
 
 ---
 
@@ -241,11 +248,11 @@ Arquitetura: **todas as chamadas de IA passam por Edge Functions** e a chave nun
 - [x] Fase 1: Fundação, correções e segurança (branch `fase-1-correcoes`)
 - [x] Fase 2: Brasil, PT-BR, LGPD e acessibilidade (branch `fase-2-ptbr`)
 - [x] Fase 3: Backend Supabase e deploy (branch `fase-3-supabase`; falta ligar o projeto do autor)
-- [ ] Fase 4.1: Assistente de pedido
-- [ ] Fase 4.2: Triagem por foto
-- [ ] Fase 4.3: Matching inteligente
-- [ ] Fase 4.4: Detecção de suspeitas
-- [ ] Fase 4.5: Relatórios de impacto
+- [x] Fase 4.1: Assistente de pedido
+- [x] Fase 4.2: Triagem por foto
+- [x] Fase 4.3: Matching inteligente
+- [x] Fase 4.4: Detecção de suspeitas
+- [x] Fase 4.5: Relatórios de impacto
 - [ ] Fase 5: Demo Day
 
 ## 8. Decisões que dependem do autor (pergunte antes)

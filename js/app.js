@@ -878,8 +878,23 @@ const App = {
         </div>`
       : '';
 
+    const isLaliderViewer = viewer.id === offer.laliderId;
+    const updates = offer.status === 'delivered' ? Impact.getForOffer(offer.id) : [];
+    const impactHTML = updates
+      .map(
+        (u) => `<div class="impact-update">
+          <p class="text-xs" style="color: var(--text-2);">${e(isLaliderViewer ? t('impact.yourUpdate') : I18n.t('impact.fromLalider', { name: this.displayName(other) }))}</p>
+          <p>“${e(u.text)}”</p>
+          ${u.photo ? `<img class="impact-update__photo" src="${e(u.photo)}" alt="${e(t('impact.photoAlt'))}" loading="lazy">` : ''}
+          ${!isLaliderViewer && u.summary ? `<p class="text-sm"><strong>${e(t('impact.summaryForYou'))}:</strong> ${e(u.summary)}</p>` : ''}
+        </div>`
+      )
+      .join('');
+
     let actions = '';
-    if (offer.status === 'pending' && isRecipient) {
+    if (offer.status === 'delivered' && isLaliderViewer && !updates.length) {
+      actions = `<button type="button" class="btn btn--primary btn--sm" data-action="share-impact" data-offer-id="${e(offer.id)}">${t('impact.share')}</button>`;
+    } else if (offer.status === 'pending' && isRecipient) {
       actions = `
         <button type="button" class="btn btn--ghost btn--sm" data-action="decline-offer" data-offer-id="${e(offer.id)}">${t('offerCard.decline')}</button>
         <button type="button" class="btn btn--primary btn--sm" data-action="accept-offer" data-offer-id="${e(offer.id)}">${t('offerCard.accept')}</button>`;
@@ -908,12 +923,49 @@ const App = {
         ${items}
         ${message}
         ${contactHTML}
+        ${impactHTML}
         <div class="card__footer">
           <span class="donation-card__meta-item">${this.formatDate(offer.updatedAt || offer.createdAt)}</span>
           <div class="flex items-center gap-2">${actions}</div>
         </div>
       </div>
     `;
+  },
+
+  /** Lalíder conta como a doação ajudou (texto e foto opcional). */
+  showImpactModal(offerId) {
+    const e = (v) => this.escapeHTML(v);
+    this.showModal(
+      I18n.t('impact.modalTitle'),
+      `<div class="form-group" style="text-align: left;">
+        <label class="form-label form-label--required" for="impact-text">${e(I18n.t('impact.textLabel'))}</label>
+        <textarea class="form-textarea" id="impact-text" maxlength="1000" placeholder="${e(I18n.t('impact.textPlaceholder'))}"></textarea>
+      </div>
+      <div class="form-group" style="text-align: left;">
+        <label class="form-label" for="impact-photo">${e(I18n.t('impact.photoLabel'))}</label>
+        <input type="file" class="form-input" id="impact-photo" accept="image/jpeg,image/png,image/webp">
+        <p class="form-hint">${e(I18n.t('impact.photoHint'))}</p>
+      </div>`,
+      [
+        {
+          label: I18n.t('impact.send'),
+          class: 'btn--primary',
+          onClick: async (ev) => {
+            const text = document.getElementById('impact-text').value.trim();
+            if (!text) {
+              this.showToast(I18n.t('impact.textRequired'), 'error');
+              return;
+            }
+            ev.currentTarget.disabled = true;
+            const photo = document.getElementById('impact-photo').files[0] || null;
+            const result = await Api.addImpactUpdate(offerId, text, photo);
+            this.closeModal();
+            this.showToast(result.message, result.success ? 'success' : 'error');
+            this.refresh();
+          },
+        },
+      ]
+    );
   },
 
   async _offerAction(fn, button) {
@@ -934,6 +986,7 @@ App.registerActions({
     App._offerAction(() => Api.respondOffer(el.dataset.offerId, 'accept'), el),
   'decline-offer': (el) =>
     App._offerAction(() => Api.respondOffer(el.dataset.offerId, 'decline'), el),
+  'share-impact': (el) => App.showImpactModal(el.dataset.offerId),
   'cancel-offer': (el) => {
     if (!window.confirm(I18n.t('offerCard.confirmCancel'))) return;
     App._offerAction(() => Api.cancelOffer(el.dataset.offerId), el);

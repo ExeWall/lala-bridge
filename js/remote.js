@@ -256,6 +256,16 @@ const Remote = {
       });
       Store.set(Matching.SIMILARITY_KEY, simMap);
       impact = (impactRows.data || []).map((i) => this.mapImpact(i));
+      const paths = impact.map((i) => i.photo).filter(Boolean);
+      if (paths.length) {
+        const { data: signed } = await db.storage
+          .from(this.IMPACT_BUCKET)
+          .createSignedUrls(paths, 3600);
+        const byPath = new Map((signed || []).map((x) => [x.path, x.signedUrl]));
+        impact.forEach((i) => {
+          if (i.photo) i.photo = byPath.get(i.photo) || null;
+        });
+      }
 
       // Contatos da outra parte, só nas ofertas aceitas ou entregues.
       const visible = offers.filter((o) => ['accepted', 'delivered'].includes(o.status));
@@ -481,6 +491,40 @@ const Remote = {
       { p_offer_id: offerId },
       before?.status === 'accepted' ? 'offers.matchCancelled' : 'offers.withdrawn'
     );
+  },
+
+  // --------------------------------------------------------------- impacto
+  async addImpactUpdate(offerId, text, photoFile = null) {
+    let photo = null;
+    if (photoFile) {
+      const blob = await Photos.compress(photoFile, Photos.REMOTE_OPTIONS);
+      photo = `${offerId}/${newId('impacto')}.jpg`;
+      const { error } = await this.client.storage
+        .from(this.IMPACT_BUCKET)
+        .upload(photo, blob, { contentType: 'image/jpeg' });
+      if (error) return this._fail(error);
+    }
+    const { data, error } = await this.client.rpc('add_impact_update', {
+      p_offer_id: offerId,
+      p_text: text,
+      p_photo: photo,
+    });
+    if (error) return this._fail(error);
+    const update = this.mapImpact(data);
+    const offer = Offers.getById(offerId);
+    const donation = offer?.donationId ? Donations.getById(offer.donationId) : null;
+    const { summary, source } = await AI.impactSummary(update, {
+      laliderName: App.displayName(this.me()),
+      donationTitle: donation?.title,
+    });
+    await this.pull();
+    return { success: true, message: I18n.t('impact.posted'), update, summary, source };
+  },
+
+  async impactStats() {
+    const { data, error } = await this.client.rpc('impact_stats');
+    if (error || !data) return Impact.stats();
+    return data;
   },
 
   // ----------------------------------------------------------------- admin

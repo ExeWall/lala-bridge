@@ -17,7 +17,8 @@
       "one": "{count} offer waiting for your answer",
       "other": "{count} offers waiting for your answer"
     },
-    "admin": "Admin"
+    "admin": "Admin",
+    "impact": "Impact"
   },
   "roles": {
     "donor": "Donor",
@@ -572,7 +573,18 @@
     "onlyLalider": "Only the person who received the donation can share how it helped.",
     "onlyDelivered": "You can only share an update after the delivery.",
     "textRequired": "Write a few words about how the donation helped.",
-    "posted": "Thank you! The donor will see your update."
+    "posted": "Thank you! The donor will see your update.",
+    "share": "Share how the donation helped",
+    "modalTitle": "How did the donation help you?",
+    "textLabel": "Your update (the donor will read it)",
+    "textPlaceholder": "E.g. I finished the first Python module and sent 5 CVs!",
+    "photoLabel": "Photo (optional)",
+    "photoHint": "Only the donor and the team see the photo. Avoid showing other people's faces and documents.",
+    "send": "Send update",
+    "yourUpdate": "Your update",
+    "fromLalider": "Update from {name}",
+    "summaryForYou": "Summary for you",
+    "photoAlt": "Photo sent with the impact update"
   },
   "admin": {
     "metaTitle": "Team panel — LALA Bridge",
@@ -706,5 +718,22 @@
     "micDenied": "No microphone access. Allow the microphone or type your request.",
     "filled": "Done! Check the fields below and adjust anything you want.",
     "or": "or fill in directly"
+  },
+  "impactPage": {
+    "metaTitle": "Impact — LALA Bridge",
+    "eyebrow": "Transparency",
+    "title": "Our impact",
+    "desc": "Aggregate numbers, with no personal data, updated with every confirmed delivery.",
+    "delivered": "Devices delivered",
+    "states": "States reached",
+    "ewaste": "Kg of e-waste avoided (estimate)",
+    "available": "Donations available now",
+    "openNeeds": "Requests waiting for a donation",
+    "inProgress": "Deliveries arranged, on the way",
+    "byCategory": "Deliveries by type of equipment",
+    "statesList": "States that have received donations",
+    "none": "No confirmed deliveries yet.",
+    "method": "How we estimate the e-waste avoided: we add an approximate average weight per type of device delivered (laptop 2 kg, phone 0.2 kg, headphones 0.3 kg, monitor 4 kg, peripherals 0.5 kg; books do not count). It is an estimate, not a measurement.",
+    "cta": "See our impact"
   }
 }

@@ -9,6 +9,12 @@
 const Impact = {
   STORAGE_KEY: 'lala_bridge_impact',
 
+  init() {
+    if (LALA_CONFIG.DEMO_MODE && Store.mode === 'local' && !Store.has(this.STORAGE_KEY)) {
+      Store.set(this.STORAGE_KEY, MockDB.sampleImpact);
+    }
+  },
+
   getAll() {
     return Store.get(this.STORAGE_KEY, []);
   },
@@ -80,5 +86,7 @@ const Impact = {
     };
   },
 };
+
+Impact.init();
 
 window.Impact = Impact;

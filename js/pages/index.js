@@ -16,12 +16,12 @@ function renderNeedsPreview() {
 }
 
 /** Métricas reais, calculadas a partir dos dados (não números inventados). */
-function renderMetrics() {
-  const stats = Donations.getStats();
+async function renderMetrics() {
+  const stats = await Api.impactStats();
   const values = {
-    'metric-available': stats.availableDonations,
+    'metric-available': stats.available,
     'metric-open': stats.openNeeds,
-    'metric-delivered': stats.deliveredDonations,
+    'metric-delivered': stats.delivered,
   };
   Object.entries(values).forEach(([id, value]) => {
     const el = document.getElementById(id);

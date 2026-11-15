@@ -17,7 +17,8 @@
       "one": "{count} oferta aguardando sua resposta",
       "other": "{count} ofertas aguardando sua resposta"
     },
-    "admin": "Admin"
+    "admin": "Admin",
+    "impact": "Impacto"
   },
   "roles": {
     "donor": "Doador",
@@ -572,7 +573,18 @@
     "onlyLalider": "Só quem recebeu a doação pode contar como ela ajudou.",
     "onlyDelivered": "O relato só pode ser enviado depois da entrega.",
     "textRequired": "Escreva algumas palavras sobre como a doação ajudou.",
-    "posted": "Obrigado! O doador vai ver seu relato."
+    "posted": "Obrigado! O doador vai ver seu relato.",
+    "share": "Conte como a doação ajudou",
+    "modalTitle": "Como a doação ajudou você?",
+    "textLabel": "Seu relato (o doador vai ler)",
+    "textPlaceholder": "Ex.: Já terminei o primeiro módulo do curso de Python e mandei 5 currículos!",
+    "photoLabel": "Foto (opcional)",
+    "photoHint": "Só a pessoa que doou e a equipe veem a foto. Evite mostrar rostos de outras pessoas e documentos.",
+    "send": "Enviar relato",
+    "yourUpdate": "Seu relato",
+    "fromLalider": "Relato de {name}",
+    "summaryForYou": "Resumo para você",
+    "photoAlt": "Foto enviada no relato de impacto"
   },
   "admin": {
     "metaTitle": "Painel da equipe — LALA Bridge",
@@ -706,5 +718,22 @@
     "micDenied": "Sem acesso ao microfone. Permita o microfone ou escreva o pedido.",
     "filled": "Pronto! Confira os campos abaixo e ajuste o que quiser.",
     "or": "ou preencha direto"
+  },
+  "impactPage": {
+    "metaTitle": "Impacto — LALA Bridge",
+    "eyebrow": "Transparência",
+    "title": "Nosso impacto",
+    "desc": "Números agregados, sem dados pessoais, atualizados a cada entrega confirmada.",
+    "delivered": "Equipamentos entregues",
+    "states": "Estados alcançados",
+    "ewaste": "Kg de lixo eletrônico evitado (estimado)",
+    "available": "Doações disponíveis agora",
+    "openNeeds": "Pedidos esperando doação",
+    "inProgress": "Entregas combinadas, a caminho",
+    "byCategory": "Entregas por tipo de equipamento",
+    "statesList": "Estados que já receberam doações",
+    "none": "Ainda não há entregas confirmadas.",
+    "method": "Como calculamos o lixo eletrônico evitado: somamos um peso médio aproximado por tipo de equipamento entregue (notebook 2 kg, celular 0,2 kg, fone 0,3 kg, monitor 4 kg, periféricos 0,5 kg; livros não contam). É uma estimativa, não uma medição.",
+    "cta": "Ver nosso impacto"
   }
 }
