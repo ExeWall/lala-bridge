@@ -2264,3 +2264,50 @@ main {
   padding: var(--s-3);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
+
+/* Assistente de pedido e avisos de IA */
+.assistant {
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--gold-muted);
+  margin-bottom: var(--s-4);
+}
+
+.assistant h3 {
+  margin-bottom: var(--s-3);
+}
+
+.assistant__divider {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-3);
+  margin: var(--s-3) 0;
+}
+
+.ai-note {
+  margin-top: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-left: 4px solid var(--violet);
+  background: var(--white);
+  border-radius: var(--r-md);
+  font-size: 0.9rem;
+}
+
+.ai-note--local {
+  border-left-color: var(--gold-dark);
+}
+
+.fieldset {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+}
+
+.fieldset legend {
+  padding: 0 var(--s-2);
+}
+
+.modal {
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}

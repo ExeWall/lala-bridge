@@ -67,6 +67,7 @@ const LocalApi = {
         donorId: user?.id,
         donorName: user?.organization || user?.name,
       });
+      Trust.scanDonation(donation);
       return { success: true, message: I18n.t('donate.published'), donation };
     });
   },
@@ -83,6 +84,7 @@ const LocalApi = {
         state: user?.state,
         city: user?.city,
       });
+      Trust.scanNeed(need);
       return { success: true, message: I18n.t('request.submitted'), need };
     });
   },

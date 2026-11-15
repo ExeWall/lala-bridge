@@ -10,8 +10,8 @@ describe('LocalAI (alternativa sem IA)', () => {
     expect(s.category).toBe('laptop');
     expect(s.requirements.ramGb).toBe(8);
     expect(s.urgency).toBe('high');
-    expect(s.intendedUse).toMatch(/^Fazer curso de Python/);
-    expect(s.title).toMatch(/^Notebook para fazer curso de Python/);
+    expect(s.intendedUse).toBe('Fazer curso de Python e mandar currículo');
+    expect(s.title).toBe('Notebook para fazer curso de Python e mandar currículo');
   });
 
   it('lê specs escritas de vários jeitos', () => {

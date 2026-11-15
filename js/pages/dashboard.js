@@ -291,10 +291,26 @@ function showRequestForm() {
   const urgencyHTML = ['medium', 'high', 'low']
     .map((u) => `<option value="${u}">${esc(t(`urgency.option.${u}`))}</option>`)
     .join('');
+  const canVoice =
+    (AI.remote && window.MediaRecorder && navigator.mediaDevices) || AI.browserSpeech();
 
   App.showModal(
     t('request.modalTitle'),
-    `<form id="request-form" style="text-align: left;">
+    `<div class="assistant" style="text-align: left;">
+      <h3 class="h-4">${esc(t('assistant.title'))}</h3>
+      <div class="form-group">
+        <label class="form-label" for="assistant-text">${esc(t('assistant.label'))}</label>
+        <textarea class="form-textarea" id="assistant-text" maxlength="1500" placeholder="${esc(t('assistant.placeholder'))}"></textarea>
+      </div>
+      <div class="flex gap-2" style="flex-wrap: wrap;">
+        ${canVoice ? `<button type="button" class="btn btn--outline btn--sm" id="assistant-mic" aria-pressed="false">🎤 ${esc(t('assistant.record'))}</button>` : ''}
+        <button type="button" class="btn btn--primary btn--sm" id="assistant-organize">✨ ${esc(t('assistant.organize'))}</button>
+      </div>
+      <p class="form-hint">${esc(t(AI.remote ? 'assistant.privacyAi' : 'assistant.privacyLocal'))}</p>
+      <div id="assistant-result" aria-live="polite"></div>
+    </div>
+    <p class="assistant__divider">${esc(t('assistant.or'))}</p>
+    <form id="request-form" style="text-align: left;">
     <div class="form-group">
       <label class="form-label form-label--required" for="request-category">${esc(t('request.category'))}</label>
       <select class="form-select" id="request-category" required><option value="">${esc(t('request.selectCategory'))}</option>${categoriesHTML}</select>
@@ -304,9 +320,30 @@ function showRequestForm() {
       <input type="text" class="form-input" id="request-title" maxlength="120" placeholder="${esc(t('request.titlePlaceholder'))}" required>
     </div>
     <div class="form-group">
+      <label class="form-label" for="request-use">${esc(t('request.intendedUse'))}</label>
+      <input type="text" class="form-input" id="request-use" maxlength="200" placeholder="${esc(t('request.intendedUsePlaceholder'))}">
+    </div>
+    <div class="form-group">
       <label class="form-label form-label--required" for="request-desc">${esc(t('request.description'))}</label>
       <textarea class="form-textarea" id="request-desc" maxlength="1000" placeholder="${esc(t('request.descriptionPlaceholder'))}" required></textarea>
     </div>
+    <fieldset class="form-group fieldset">
+      <legend class="form-label">${esc(t('request.requirements'))}</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="request-ram">${esc(t('request.ram'))}</label>
+          <input type="number" min="1" max="128" inputmode="numeric" class="form-input" id="request-ram">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="request-storage">${esc(t('request.storage'))}</label>
+          <input type="number" min="1" max="8192" inputmode="numeric" class="form-input" id="request-storage">
+        </div>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" id="request-camera">
+        <label for="request-camera">${esc(t('request.camera'))}</label>
+      </div>
+    </fieldset>
     <div class="form-group">
       <label class="form-label" for="request-urgency">${esc(t('request.priority'))}</label>
       <select class="form-select" id="request-urgency">${urgencyHTML}</select>
@@ -314,6 +351,132 @@ function showRequestForm() {
   </form>`,
     [{ label: t('request.submit'), class: 'btn--primary', onClick: submitRequest }]
   );
+  lastSuggestion = null;
+  document.getElementById('assistant-organize').addEventListener('click', organizeRequest);
+  document
+    .getElementById('assistant-mic')
+    ?.addEventListener('click', (e) => toggleVoice(e.currentTarget));
+}
+
+/** Última sugestão aplicada (guardada no pedido, para auditoria). */
+let lastSuggestion = null;
+
+async function organizeRequest() {
+  const btn = document.getElementById('assistant-organize');
+  const text = document.getElementById('assistant-text').value;
+  btn.disabled = true;
+  btn.textContent = t('assistant.organizing');
+  const result = await AI.structureNeed(text);
+  btn.disabled = false;
+  btn.textContent = `✨ ${t('assistant.organize')}`;
+  if (!result.success) {
+    App.showToast(result.message, 'error');
+    return;
+  }
+  applySuggestion(result.suggestion, result.source, text);
+}
+
+function applySuggestion(s, source, originalText) {
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el && value !== undefined && value !== null) el.value = value;
+  };
+  set('request-category', s.category);
+  set('request-title', s.title);
+  set('request-use', s.intendedUse);
+  if (!document.getElementById('request-desc').value.trim())
+    set('request-desc', originalText.trim());
+  set('request-ram', s.requirements?.ramGb ?? '');
+  set('request-storage', s.requirements?.storageGb ?? '');
+  document.getElementById('request-camera').checked = s.requirements?.camera === true;
+  set('request-urgency', s.urgency);
+  lastSuggestion = { source, ...s };
+
+  document.getElementById('assistant-result').innerHTML = `
+    <div class="ai-note ai-note--${source}">
+      <p><strong>${esc(t(source === 'ai' ? 'ai.badgeAi' : 'ai.badgeLocal'))}</strong></p>
+      <p>${esc(t('assistant.filled'))}</p>
+      ${s.justification ? `<p class="text-sm">${esc(t('request.justification', { text: s.justification }))}</p>` : ''}
+    </div>`;
+  document.getElementById('request-title').focus();
+}
+
+// ------------------------------------------------------------ voz
+let recorder = null;
+let speech = null;
+
+async function toggleVoice(btn) {
+  const textarea = document.getElementById('assistant-text');
+  const append = (text) => {
+    textarea.value = [textarea.value.trim(), text.trim()].filter(Boolean).join(' ');
+  };
+  const reset = () => {
+    btn.textContent = `🎤 ${t('assistant.record')}`;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.disabled = false;
+  };
+
+  // Parar uma gravação em andamento.
+  if (recorder?.state === 'recording') {
+    recorder.stop();
+    return;
+  }
+  if (speech) {
+    speech.stop();
+    return;
+  }
+
+  // 1) Com servidor: grava e transcreve com a IA.
+  if (AI.remote && window.MediaRecorder && navigator.mediaDevices?.getUserMedia) {
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      App.showToast(t('assistant.micDenied'), 'error');
+      return;
+    }
+    const chunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = (e) => chunks.push(e.data);
+    recorder.onstop = async () => {
+      stream.getTracks().forEach((tr) => tr.stop());
+      clearTimeout(recorder._limit);
+      btn.disabled = true;
+      btn.textContent = t('assistant.transcribing');
+      const result = await AI.transcribe(
+        new Blob(chunks, { type: recorder.mimeType || 'audio/webm' })
+      );
+      reset();
+      if (result.success) append(result.text);
+      else App.showToast(result.message, 'error');
+    };
+    recorder.start();
+    recorder._limit = setTimeout(() => recorder?.state === 'recording' && recorder.stop(), 60000);
+    btn.textContent = `⏹ ${t('assistant.stop')}`;
+    btn.setAttribute('aria-pressed', 'true');
+    App.showToast(t('assistant.listening'), 'info', 2500);
+    return;
+  }
+
+  // 2) Sem servidor: ditado do próprio navegador, se existir.
+  const Rec = AI.browserSpeech();
+  if (!Rec) {
+    App.showToast(t('assistant.voiceUnavailable'), 'warning');
+    return;
+  }
+  speech = new Rec();
+  speech.lang = I18n.locale;
+  speech.interimResults = false;
+  speech.onresult = (e) => append([...e.results].map((r) => r[0].transcript).join(' '));
+  speech.onerror = () => App.showToast(t('assistant.micDenied'), 'error');
+  speech.onend = () => {
+    speech = null;
+    reset();
+  };
+  speech.start();
+  btn.textContent = `⏹ ${t('assistant.stop')}`;
+  btn.setAttribute('aria-pressed', 'true');
+  App.showToast(t('assistant.browserVoice'), 'info', 3500);
 }
 
 async function submitRequest() {
@@ -321,16 +484,29 @@ async function submitRequest() {
     App.showToast(t('request.onlyLalideres'), 'error');
     return;
   }
-  const category = document.getElementById('request-category').value;
-  const title = document.getElementById('request-title').value.trim();
-  const desc = document.getElementById('request-desc').value.trim();
-  const urgency = document.getElementById('request-urgency').value;
+  const value = (id) => document.getElementById(id).value.trim();
+  const category = value('request-category');
+  const title = value('request-title');
+  const desc = value('request-desc');
   if (!category || !title || !desc) {
     App.showToast(t('request.fillRequired'), 'error');
     return;
   }
+  const requirements = {};
+  if (Number(value('request-ram')) > 0) requirements.ramGb = Number(value('request-ram'));
+  if (Number(value('request-storage')) > 0)
+    requirements.storageGb = Number(value('request-storage'));
+  if (document.getElementById('request-camera').checked) requirements.camera = true;
 
-  const result = await Api.createNeed({ category, title, description: desc, urgency });
+  const result = await Api.createNeed({
+    category,
+    title,
+    description: desc,
+    intendedUse: value('request-use'),
+    requirements,
+    urgency: value('request-urgency'),
+    aiSuggestion: lastSuggestion,
+  });
   App.closeModal();
   App.showToast(result.message, result.success ? 'success' : 'error');
   App.refresh();

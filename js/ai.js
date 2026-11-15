@@ -59,9 +59,9 @@ const LocalAI = {
 
   /** Para que a pessoa vai usar: o trecho depois de "pra"/"para". */
   intendedUse(text) {
-    const m = String(text || '').match(/\b(?:pra|para)\s+([^.!?\n]{4,140})/i);
+    const m = String(text || '').match(/\b(?:pra|para)\s+([^.!?\n,;]{4,140})/i);
     if (!m) return '';
-    const use = m[1].trim().replace(/[,;:]$/, '');
+    const use = m[1].split(/\s+(?:porque|pois|mas|já que)\s+/i)[0].trim();
     return use.charAt(0).toUpperCase() + use.slice(1);
   },
 
@@ -98,7 +98,8 @@ const LocalAI = {
       intendedUse: use,
       requirements,
       urgency,
-      justification: I18n.t('ai.localJustification'),
+      // Sem IA, não há justificativa a dar além do aviso de origem na tela.
+      justification: '',
     };
   },
 

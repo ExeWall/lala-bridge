@@ -404,6 +404,7 @@ const Remote = {
       .single();
     if (error) return this._fail(error);
     await this.pull();
+    AI.embed('donation', data.id);
     return { success: true, message: I18n.t('donate.published'), donation: this.mapDonation(data) };
   },
 
@@ -425,6 +426,7 @@ const Remote = {
       .single();
     if (error) return this._fail(error);
     await this.pull();
+    AI.embed('need', data.id); // matching semântico e detecção de duplicados (segundo plano)
     return { success: true, message: I18n.t('request.submitted'), need: this.mapNeed(data) };
   },
 

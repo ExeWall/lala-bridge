@@ -173,6 +173,9 @@ const Donations = {
     title,
     description,
     urgency,
+    intendedUse = '',
+    requirements = {},
+    aiSuggestion = null,
   }) {
     if (!Auth.hasRole(laliderId, 'lalider')) {
       throw new Error(I18n.t('donations.onlyLalideres'));
@@ -189,6 +192,9 @@ const Donations = {
       category,
       title,
       description,
+      intendedUse,
+      requirements,
+      aiSuggestion,
       urgency: urgency || 'medium',
       status: 'open',
       createdAt: new Date().toISOString(),

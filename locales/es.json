@@ -423,7 +423,14 @@
     "submit": "Enviar pedido",
     "fillRequired": "Completa todos los campos obligatorios.",
     "onlyLalideres": "Solo los Lalíderes verificados pueden hacer pedidos.",
-    "submitted": "¡Pedido enviado! Los donantes ya pueden verlo."
+    "submitted": "¡Pedido enviado! Los donantes ya pueden verlo.",
+    "intendedUse": "Para qué lo vas a usar",
+    "intendedUsePlaceholder": "Ej.: estudiar programación y enviar CVs",
+    "requirements": "Requisitos mínimos (opcional)",
+    "ram": "Memoria RAM (GB)",
+    "storage": "Almacenamiento (GB)",
+    "camera": "Necesita cámara",
+    "justification": "Por qué la sugerencia: {text}"
   },
   "card": {
     "offerHelp": "Ofrecer ayuda",
@@ -668,5 +675,23 @@
     "forDonationsDesc": "Para cada donación disponible, los pedidos más compatibles. Tú decides a quién ofrecer.",
     "forDonation": "Para: {title}",
     "none": "Todavía no hay artículos compatibles. Los nuevos aparecerán aquí en cuanto se publiquen."
+  },
+  "assistant": {
+    "title": "Cuéntalo con tus palabras",
+    "label": "¿Qué necesitas y para qué?",
+    "placeholder": "Ej.: necesito una laptop para hacer un curso de Python y enviar mi CV; hoy solo tengo el celular",
+    "record": "Grabar audio",
+    "stop": "Detener y transcribir",
+    "listening": "Escuchando... habla con normalidad",
+    "transcribing": "Transcribiendo...",
+    "organize": "Organizar mi pedido",
+    "organizing": "Organizando...",
+    "privacyAi": "Tu texto va a la IA sin nombre, correo ni teléfono. El audio no se guarda.",
+    "privacyLocal": "En este modo, el texto se organiza con reglas simples en tu propio dispositivo.",
+    "browserVoice": "Usando el dictado del navegador (el audio lo procesa el servicio de voz del navegador).",
+    "voiceUnavailable": "La grabación de voz no está disponible en este navegador. Escribe el pedido.",
+    "micDenied": "Sin acceso al micrófono. Permite el micrófono o escribe el pedido.",
+    "filled": "¡Listo! Revisa los campos de abajo y ajusta lo que quieras.",
+    "or": "o completa directamente"
   }
 }

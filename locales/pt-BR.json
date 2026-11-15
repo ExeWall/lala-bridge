@@ -423,7 +423,14 @@
     "submit": "Enviar pedido",
     "fillRequired": "Preencha todos os campos obrigatórios.",
     "onlyLalideres": "Só Lalíderes verificados podem fazer pedidos.",
-    "submitted": "Pedido enviado! Os doadores já podem vê-lo."
+    "submitted": "Pedido enviado! Os doadores já podem vê-lo.",
+    "intendedUse": "Para que você vai usar",
+    "intendedUsePlaceholder": "Ex.: estudar programação e enviar currículos",
+    "requirements": "Requisitos mínimos (opcional)",
+    "ram": "Memória RAM (GB)",
+    "storage": "Armazenamento (GB)",
+    "camera": "Precisa de câmera",
+    "justification": "Por que a sugestão: {text}"
   },
   "card": {
     "offerHelp": "Oferecer ajuda",
@@ -668,5 +675,23 @@
     "forDonationsDesc": "Para cada doação disponível, os pedidos mais compatíveis. Você decide a quem oferecer.",
     "forDonation": "Para: {title}",
     "none": "Ainda não há itens compatíveis. Novos itens aparecem aqui assim que forem publicados."
+  },
+  "assistant": {
+    "title": "Conte com suas palavras",
+    "label": "Do que você precisa e para quê?",
+    "placeholder": "Ex.: preciso de um notebook pra fazer curso de Python e mandar currículo, hoje só tenho o celular",
+    "record": "Gravar áudio",
+    "stop": "Parar e transcrever",
+    "listening": "Ouvindo... fale normalmente",
+    "transcribing": "Transcrevendo...",
+    "organize": "Organizar meu pedido",
+    "organizing": "Organizando...",
+    "privacyAi": "Seu texto vai para a IA sem nome, e-mail ou telefone. O áudio não é guardado.",
+    "privacyLocal": "Neste modo, o texto é organizado por regras simples no seu próprio aparelho.",
+    "browserVoice": "Usando o ditado do navegador (o áudio é processado pelo serviço de voz do navegador).",
+    "voiceUnavailable": "Gravação de voz não disponível neste navegador. Escreva o pedido.",
+    "micDenied": "Sem acesso ao microfone. Permita o microfone ou escreva o pedido.",
+    "filled": "Pronto! Confira os campos abaixo e ajuste o que quiser.",
+    "or": "ou preencha direto"
   }
 }

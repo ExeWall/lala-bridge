@@ -363,11 +363,13 @@ const Auth = {
       needDescription: needDescription || '',
       verified: true,
       ...this._consentRecord(),
+      deviceId: Trust.deviceId(),
       createdAt: new Date().toISOString(),
     };
 
     users.push(user);
     this.saveUsers(users);
+    Trust.scanProfile(user);
 
     return { success: true, message: I18n.t('auth.welcomeLalider'), user };
   },
@@ -400,11 +402,13 @@ const Auth = {
       ...location,
       organization: organization || '',
       ...this._consentRecord(),
+      deviceId: Trust.deviceId(),
       createdAt: new Date().toISOString(),
     };
 
     users.push(user);
     this.saveUsers(users);
+    Trust.scanProfile(user);
 
     return { success: true, message: I18n.t('auth.welcomeDonor'), user };
   },

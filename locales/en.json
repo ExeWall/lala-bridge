@@ -423,7 +423,14 @@
     "submit": "Submit request",
     "fillRequired": "Please fill in all required fields.",
     "onlyLalideres": "Only verified Lalíderes can submit requests.",
-    "submitted": "Request submitted! Donors can now see it."
+    "submitted": "Request submitted! Donors can now see it.",
+    "intendedUse": "What you will use it for",
+    "intendedUsePlaceholder": "E.g. study programming and send CVs",
+    "requirements": "Minimum requirements (optional)",
+    "ram": "RAM (GB)",
+    "storage": "Storage (GB)",
+    "camera": "Needs a camera",
+    "justification": "Why this suggestion: {text}"
   },
   "card": {
     "offerHelp": "Offer to help",
@@ -668,5 +675,23 @@
     "forDonationsDesc": "For each available donation, the best matching requests. You decide whom to offer to.",
     "forDonation": "For: {title}",
     "none": "No compatible items yet. New items will show up here as soon as they are published."
+  },
+  "assistant": {
+    "title": "Tell us in your own words",
+    "label": "What do you need and what for?",
+    "placeholder": "E.g. I need a laptop to take a Python course and send my CV; today I only have my phone",
+    "record": "Record audio",
+    "stop": "Stop and transcribe",
+    "listening": "Listening... speak normally",
+    "transcribing": "Transcribing...",
+    "organize": "Organize my request",
+    "organizing": "Organizing...",
+    "privacyAi": "Your text goes to the AI without name, email or phone. Audio is not stored.",
+    "privacyLocal": "In this mode, the text is organized by simple rules on your own device.",
+    "browserVoice": "Using browser dictation (audio is processed by the browser's speech service).",
+    "voiceUnavailable": "Voice recording is not available in this browser. Please type your request.",
+    "micDenied": "No microphone access. Allow the microphone or type your request.",
+    "filled": "Done! Check the fields below and adjust anything you want.",
+    "or": "or fill in directly"
   }
 }
