@@ -205,7 +205,13 @@ const App = {
       const typeBadge =
         user?.type === 'lalider'
           ? `<span class="badge badge--lalider">${I18n.t('roles.lalider')}</span>`
-          : `<span class="badge badge--donor">${I18n.t('roles.donor')}</span>`;
+          : user?.type === 'admin'
+            ? `<span class="badge badge--dark">${I18n.t('roles.admin')}</span>`
+            : `<span class="badge badge--donor">${I18n.t('roles.donor')}</span>`;
+      const adminLink =
+        user?.type === 'admin'
+          ? `<a href="admin.html" class="btn btn--ghost btn--sm">${I18n.t('nav.admin')}</a>`
+          : '';
 
       const pending = user ? Offers.getPendingFor(user.id).length : 0;
       const pendingBadge = pending
@@ -215,6 +221,7 @@ const App = {
       actionsContainer.innerHTML = `
         ${typeBadge}
         <a href="dashboard.html" class="btn btn--ghost btn--sm">${I18n.t('nav.dashboard')}${pendingBadge}</a>
+        ${adminLink}
         <button type="button" class="btn btn--ghost btn--sm" id="logout-btn" data-action="logout">${I18n.t('nav.logout')}</button>
       `;
     } else {

@@ -2237,3 +2237,30 @@ main {
     display: none;
   }
 }
+
+/* Painel admin */
+.admin-section {
+  margin-bottom: var(--s-8);
+}
+
+.admin-section > h2 {
+  margin-bottom: var(--s-3);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: var(--white);
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: var(--s-3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}

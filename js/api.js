@@ -119,6 +119,52 @@ const LocalApi = {
     return this._wrap(() => Offers.cancel(offerId, this.me()?.id));
   },
 
+  // ----------------------------------------------------------------- admin
+  _requireAdmin() {
+    if (!Auth.isAdmin()) throw new Error(I18n.t('admin.onlyAdmin'));
+  },
+
+  adminData() {
+    return this._wrap(() => {
+      this._requireAdmin();
+      const users = Auth.getUsers();
+      const usedBy = new Map(
+        users.filter((u) => u.verificationCode).map((u) => [u.verificationCode, u])
+      );
+      return {
+        success: true,
+        flags: Trust.getFlags(),
+        codes: Auth.getVerificationCodes().map((c) => ({
+          ...c,
+          usedBy: usedBy.get(c.code.toUpperCase())?.id || null,
+        })),
+        aiUsage: Store.get('lala_bridge_ai_usage', []),
+      };
+    });
+  },
+
+  reviewFlag(flagId, status) {
+    return this._wrap(() => {
+      this._requireAdmin();
+      const flag = Trust.reviewFlag(flagId, status, this.me().id);
+      return flag
+        ? { success: true, message: I18n.t('admin.flagReviewed'), flag }
+        : { success: false, message: I18n.t('remote.genericError') };
+    });
+  },
+
+  addVerificationCodes(rows) {
+    return this._wrap(() => {
+      this._requireAdmin();
+      const added = Auth.addVerificationCodes(rows);
+      return {
+        success: true,
+        added: added.length,
+        message: I18n.t('admin.codesAdded', { count: added.length }),
+      };
+    });
+  },
+
   // ------------------------------------------------------------------ LGPD
   exportMyData() {
     return this._wrap(() => {

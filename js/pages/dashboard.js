@@ -14,6 +14,10 @@ App.ready(() => {
 function renderDashboard() {
   const user = Auth.getCurrentUser();
   if (!user) return;
+  if (user.type === 'admin') {
+    window.location.href = 'admin.html';
+    return;
+  }
   if (user.type === 'lalider') renderLaliderDashboard(user);
   else renderDonorDashboard(user);
 }

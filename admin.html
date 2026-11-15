@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-i18n="admin.metaTitle">Painel da equipe — LALA Bridge</title>
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&amp;family=Source+Serif+4:wght@400;600&amp;display=swap"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="js/env.js"></script>
+    <script defer src="js/config.js"></script>
+    <script defer src="js/i18n.js"></script>
+    <script defer src="js/store.js"></script>
+    <script defer src="js/mock-data.js"></script>
+    <script defer src="js/auth.js"></script>
+    <script defer src="js/donations.js"></script>
+    <script defer src="js/offers.js"></script>
+    <script defer src="js/impact.js"></script>
+    <script defer src="js/trust.js"></script>
+    <script defer src="js/privacy.js"></script>
+    <script defer src="js/migrations.js"></script>
+    <script defer src="js/photos.js"></script>
+    <script defer src="js/api.js"></script>
+    <script defer src="js/remote.js"></script>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/pages/admin.js"></script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffc200'/><text x='50' y='68' font-size='60' text-anchor='middle' fill='%231a1a1a' font-family='sans-serif' font-weight='900'>B</text></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="nav.skip">Pular para o conteúdo</a>
+    <nav class="nav" id="navbar">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          <div class="nav__logo-mark">B</div>
+          LALA Bridge
+        </a>
+        <div class="nav__links" id="nav-menu">
+          <a href="index.html" class="nav__link" data-i18n="nav.home">Início</a>
+          <a href="browse.html" class="nav__link" data-i18n="nav.browse">Explorar</a>
+          <a href="donate.html" class="nav__link" data-i18n="nav.donate">Doar</a>
+          <a href="dashboard.html" class="nav__link" data-i18n="nav.dashboard">Painel</a>
+        </div>
+        <div class="nav__actions"></div>
+        <button
+          data-i18n-attr="aria-label:nav.menu"
+          class="nav__hamburger"
+          type="button"
+          aria-controls="nav-menu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      <div class="page-header">
+        <div class="container">
+          <p class="eyebrow" style="margin-bottom: var(--s-3)" data-i18n="admin.eyebrow">
+            Equipe LALA Bridge
+          </p>
+          <h1 class="page-header__title" data-i18n="admin.title">Painel da equipe</h1>
+          <p class="page-header__desc" data-i18n="admin.desc">
+            Métricas, sinalizações para revisão e códigos de verificação. Nada aqui é decidido
+            automaticamente: a IA e as regras só sinalizam; quem decide é uma pessoa.
+          </p>
+        </div>
+      </div>
+
+      <div class="container" style="padding-bottom: var(--s-9)">
+        <div id="admin-denied" class="empty-state card" hidden>
+          <p class="empty-state__desc" data-i18n="admin.onlyAdmin">
+            Esta área é só para a equipe do LALA Bridge.
+          </p>
+          <a href="login.html" class="btn btn--primary" data-i18n="nav.login">Entrar</a>
+        </div>
+
+        <div id="admin-content" hidden>
+          <section class="admin-section" aria-labelledby="metrics-title">
+            <h2 class="h-3" id="metrics-title" data-i18n="admin.metrics">Métricas</h2>
+            <div class="dashboard__grid" id="admin-metrics"></div>
+          </section>
+
+          <section class="admin-section" aria-labelledby="flags-title">
+            <h2 class="h-3" id="flags-title" data-i18n="admin.flags">Sinalizações para revisão</h2>
+            <p class="text-muted" data-i18n="admin.flagsDesc">
+              Sinais automáticos de possível fraude ou erro. Revise cada um: nada é bloqueado sem
+              uma decisão humana.
+            </p>
+            <div class="form-check" style="margin: var(--s-4) 0">
+              <input type="checkbox" id="flags-show-all" />
+              <label for="flags-show-all" data-i18n="admin.showAll"
+                >Mostrar também as revisadas</label
+              >
+            </div>
+            <div id="admin-flags" class="grid-auto"></div>
+          </section>
+
+          <section class="admin-section" aria-labelledby="codes-title">
+            <h2 class="h-3" id="codes-title" data-i18n="admin.codes">Códigos de verificação</h2>
+            <p class="text-muted" data-i18n="admin.codesDesc">
+              Cole uma linha por Lalíder no formato CÓDIGO;Nome completo;Turma;País (ex.:
+              LALA-VLB33-001;Maria Souza;VLB33;BR). Códigos repetidos são ignorados.
+            </p>
+            <form id="codes-form" class="card card--flat" style="margin: var(--s-4) 0">
+              <div class="form-group">
+                <label for="codes-input" class="form-label" data-i18n="admin.codesInput"
+                  >Novos códigos</label
+                >
+                <textarea
+                  id="codes-input"
+                  class="form-textarea"
+                  rows="4"
+                  spellcheck="false"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary" data-i18n="admin.codesSubmit">
+                Adicionar códigos
+              </button>
+            </form>
+            <p class="text-sm text-muted" id="codes-summary"></p>
+            <div class="table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col" data-i18n="admin.colCode">Código</th>
+                    <th scope="col" data-i18n="admin.colName">Nome registrado</th>
+                    <th scope="col" data-i18n="admin.colCamp">Turma</th>
+                    <th scope="col" data-i18n="admin.colStatus">Situação</th>
+                  </tr>
+                </thead>
+                <tbody id="codes-table"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__bottom">
+          <p class="footer__copyright" data-i18n="footer.copyright">
+            © 2026 LALA Bridge. Uma iniciativa comunitária de Lalíderes, para Lalíderes.
+          </p>
+          <a
+            href="privacidade.html"
+            class="footer__link footer__bottom-link"
+            data-i18n="footer.privacy"
+            >Política de Privacidade</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

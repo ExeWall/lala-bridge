@@ -123,7 +123,7 @@ describe('Auth: modo demo', () => {
   it('com DEMO_MODE ativo, cria contas demo e permite entrar sem senha', () => {
     const { Auth } = loadApp({ config: { DEMO_MODE: true } });
     const accounts = Auth.getDemoAccounts();
-    expect(accounts.map((u) => u.type).sort()).toEqual(['donor', 'lalider']);
+    expect(accounts.map((u) => u.type).sort()).toEqual(['admin', 'donor', 'lalider']);
     expect(Auth.loginAsDemo(accounts[0].id).success).toBe(true);
     expect(Auth.getCurrentUser().id).toBe(accounts[0].id);
   });
@@ -231,7 +231,7 @@ describe('Auth: contas demo em navegador com dados antigos', () => {
     expect(tech.password).toBeUndefined();
     expect(tech.demoLogin).toBe(true);
     expect(Auth.getUsers().find((u) => u.id === 'donor-999').passwordHash).toBe('x');
-    expect(Auth.getDemoAccounts()).toHaveLength(2);
+    expect(Auth.getDemoAccounts()).toHaveLength(3);
     expect(tech.name).toBe('Instituto Ponte Digital'); // dados demo brasileiros
     expect(Donations.getNeedById('need-001').laliderId).toBe('lalider-sample-larissa');
   });
@@ -294,5 +294,25 @@ describe('Auth: consentimento (LGPD)', () => {
     const withConsent = await Auth.registerDonor({ ...data, consent: true });
     expect(withConsent.user.consentAt).toBeTruthy();
     expect(withConsent.user.consentVersion).toBe(Auth.PRIVACY_POLICY_VERSION);
+  });
+});
+
+describe('Admin (modo local)', () => {
+  it('só admin acessa os dados do painel e cadastra códigos', async () => {
+    const { Auth, Api } = loadApp({ config: { DEMO_MODE: true } });
+    expect((await Api.adminData()).success).toBe(false);
+    Auth.loginAsDemo('lalider-demo-ana');
+    expect((await Api.adminData()).success).toBe(false);
+    Auth.loginAsDemo('admin-demo');
+    const data = await Api.adminData();
+    expect(data.success).toBe(true);
+    expect(data.codes.find((c) => c.code === 'LALA-VLB32-003').usedBy).toBe('lalider-demo-ana');
+    const added = await Api.addVerificationCodes([
+      { code: 'lala-x-1', name: 'Nova Pessoa', camp: 'VLB40', country: 'br' },
+      { code: 'LALA-X-1', name: 'Repetida' },
+      { code: 'LALA-VLB32-003', name: 'Já existe' },
+    ]);
+    expect(added.added).toBe(1);
+    expect(Auth.verifyLaliderCode('LALA-X-1', 'nova pessoa').valid).toBe(true);
   });
 });

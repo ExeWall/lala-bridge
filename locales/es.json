@@ -16,11 +16,13 @@
     "pendingOffers": {
       "one": "{count} oferta esperando tu respuesta",
       "other": "{count} ofertas esperando tu respuesta"
-    }
+    },
+    "admin": "Admin"
   },
   "roles": {
     "donor": "Donante",
-    "lalider": "Lalíder"
+    "lalider": "Lalíder",
+    "admin": "Equipo"
   },
   "footer": {
     "desc": "Conectamos donantes con Lalíderes verificados de la Latin American Leadership Academy para que ningún joven deje de estudiar por falta de equipo.",
@@ -553,5 +555,67 @@
     "onlyDelivered": "El relato solo se puede enviar después de la entrega.",
     "textRequired": "Escribe algunas palabras sobre cómo ayudó la donación.",
     "posted": "¡Gracias! El donante verá tu relato."
+  },
+  "admin": {
+    "metaTitle": "Panel del equipo — LALA Bridge",
+    "eyebrow": "Equipo LALA Bridge",
+    "title": "Panel del equipo",
+    "desc": "Métricas, señalizaciones para revisar y códigos de verificación. Nada aquí se decide automáticamente: la IA y las reglas solo señalan; decide una persona.",
+    "onlyAdmin": "Esta área es solo para el equipo de LALA Bridge.",
+    "metrics": "Métricas",
+    "metricDonors": "Donantes",
+    "metricLalideres": "Lalíderes",
+    "metricDonations": "Donaciones publicadas",
+    "metricNeeds": "Pedidos hechos",
+    "metricPending": "Ofertas pendientes",
+    "metricDelivered": "Entregas concluidas",
+    "metricStates": "Estados alcanzados",
+    "metricEwaste": "Basura electrónica evitada (estimada)",
+    "metricAiCalls": "Llamadas de IA (24h)",
+    "metricAiCost": "Costo de IA (24h)",
+    "flags": "Señalizaciones para revisar",
+    "flagsDesc": "Señales automáticas de posible fraude o error. Revisa cada una: nada se bloquea sin una decisión humana.",
+    "noFlags": "No hay señalizaciones abiertas.",
+    "showAll": "Mostrar también las revisadas",
+    "dismiss": "Falsa alarma",
+    "confirm": "Confirmar problema",
+    "reopen": "Reabrir",
+    "flagReviewed": "Revisión registrada.",
+    "flagStatus": {
+      "open": "Abierta",
+      "dismissed": "Falsa alarma",
+      "confirmed": "Confirmada"
+    },
+    "flagScore": "Confianza de la señal: {score}%",
+    "entity": {
+      "profile": "Cuenta",
+      "need": "Pedido",
+      "donation": "Donación",
+      "offer": "Oferta"
+    },
+    "codes": "Códigos de verificación",
+    "codesDesc": "Pega una línea por Lalíder con el formato CÓDIGO;Nombre completo;Generación;País (p. ej.: LALA-VLB33-001;Maria Souza;VLB33;BR). Los códigos repetidos se ignoran.",
+    "codesInput": "Nuevos códigos",
+    "codesSubmit": "Agregar códigos",
+    "codesAdded": {
+      "one": "{count} código agregado.",
+      "other": "{count} códigos agregados."
+    },
+    "codesTotal": "{used} de {total} códigos ya usados",
+    "colCode": "Código",
+    "colName": "Nombre registrado",
+    "colCamp": "Generación",
+    "colStatus": "Situación",
+    "codeUsed": "Usado",
+    "codeFree": "Libre"
+  },
+  "trust": {
+    "reason": {
+      "duplicate_text": "Texto casi idéntico a otro pedido",
+      "many_requests": "Muchos pedidos en poco tiempo",
+      "many_accounts_device": "Varias cuentas en el mismo dispositivo",
+      "scam_pattern": "Texto con un patrón común en estafas",
+      "contact_in_text": "Contacto personal publicado en el texto"
+    }
   }
 }

@@ -16,11 +16,13 @@
     "pendingOffers": {
       "one": "{count} offer waiting for your answer",
       "other": "{count} offers waiting for your answer"
-    }
+    },
+    "admin": "Admin"
   },
   "roles": {
     "donor": "Donor",
-    "lalider": "Lalíder"
+    "lalider": "Lalíder",
+    "admin": "Team"
   },
   "footer": {
     "desc": "We connect donors with verified Lalíderes from the Latin American Leadership Academy so no young person stops studying for lack of equipment.",
@@ -553,5 +555,67 @@
     "onlyDelivered": "You can only share an update after the delivery.",
     "textRequired": "Write a few words about how the donation helped.",
     "posted": "Thank you! The donor will see your update."
+  },
+  "admin": {
+    "metaTitle": "Team panel — LALA Bridge",
+    "eyebrow": "LALA Bridge team",
+    "title": "Team panel",
+    "desc": "Metrics, flags for review and verification codes. Nothing here is decided automatically: AI and rules only flag; a person decides.",
+    "onlyAdmin": "This area is for the LALA Bridge team only.",
+    "metrics": "Metrics",
+    "metricDonors": "Donors",
+    "metricLalideres": "Lalíderes",
+    "metricDonations": "Donations listed",
+    "metricNeeds": "Requests made",
+    "metricPending": "Pending offers",
+    "metricDelivered": "Completed deliveries",
+    "metricStates": "States reached",
+    "metricEwaste": "E-waste avoided (estimate)",
+    "metricAiCalls": "AI calls (24h)",
+    "metricAiCost": "AI cost (24h)",
+    "flags": "Flags for review",
+    "flagsDesc": "Automatic signs of possible fraud or mistakes. Review each one: nothing is blocked without a human decision.",
+    "noFlags": "No open flags.",
+    "showAll": "Also show reviewed ones",
+    "dismiss": "False alarm",
+    "confirm": "Confirm problem",
+    "reopen": "Reopen",
+    "flagReviewed": "Review recorded.",
+    "flagStatus": {
+      "open": "Open",
+      "dismissed": "False alarm",
+      "confirmed": "Confirmed"
+    },
+    "flagScore": "Signal confidence: {score}%",
+    "entity": {
+      "profile": "Account",
+      "need": "Request",
+      "donation": "Donation",
+      "offer": "Offer"
+    },
+    "codes": "Verification codes",
+    "codesDesc": "Paste one line per Lalíder in the format CODE;Full name;Cohort;Country (e.g. LALA-VLB33-001;Maria Souza;VLB33;BR). Repeated codes are ignored.",
+    "codesInput": "New codes",
+    "codesSubmit": "Add codes",
+    "codesAdded": {
+      "one": "{count} code added.",
+      "other": "{count} codes added."
+    },
+    "codesTotal": "{used} of {total} codes already used",
+    "colCode": "Code",
+    "colName": "Registered name",
+    "colCamp": "Cohort",
+    "colStatus": "Status",
+    "codeUsed": "Used",
+    "codeFree": "Available"
+  },
+  "trust": {
+    "reason": {
+      "duplicate_text": "Text nearly identical to another request",
+      "many_requests": "Many requests in a short time",
+      "many_accounts_device": "Several accounts on the same device",
+      "scam_pattern": "Text with a pattern common in scams",
+      "contact_in_text": "Personal contact published in the text"
+    }
   }
 }

@@ -452,6 +452,82 @@ const Remote = {
     );
   },
 
+  // ----------------------------------------------------------------- admin
+  async adminData() {
+    if (!Auth.isAdmin()) return { success: false, message: I18n.t('admin.onlyAdmin') };
+    const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const [flags, codes, usage] = await Promise.all([
+      this.client.from('flags').select('*').order('created_at', { ascending: false }),
+      this.client.from('verification_codes').select('*').order('code'),
+      this.client.from('ai_usage').select('*').gte('created_at', since),
+    ]);
+    const error = flags.error || codes.error || usage.error;
+    if (error) return this._fail(error);
+    return {
+      success: true,
+      flags: (flags.data || []).map((f) => ({
+        id: f.id,
+        entityType: f.entity_type,
+        entityId: f.entity_id,
+        reason: f.reason,
+        score: Number(f.score),
+        details: f.details || {},
+        status: f.status,
+        reviewedAt: f.reviewed_at,
+        createdAt: f.created_at,
+      })),
+      codes: (codes.data || []).map((c) => ({
+        code: c.code,
+        name: c.registered_name,
+        camp: c.camp,
+        country: c.country,
+        usedBy: c.used_by,
+      })),
+      aiUsage: (usage.data || []).map((u) => ({
+        functionName: u.function_name,
+        model: u.model,
+        costUsd: Number(u.cost_usd),
+        ok: u.ok,
+        createdAt: u.created_at,
+      })),
+    };
+  },
+
+  async reviewFlag(flagId, status) {
+    const { error } = await this.client
+      .from('flags')
+      .update({
+        status,
+        reviewed_by: this.session?.user?.id,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq('id', flagId);
+    if (error) return this._fail(error);
+    return { success: true, message: I18n.t('admin.flagReviewed') };
+  },
+
+  async addVerificationCodes(rows) {
+    const clean = rows
+      .map((r) => ({
+        code: String(r.code || '')
+          .trim()
+          .toUpperCase(),
+        registered_name: String(r.name || '').trim(),
+        camp: String(r.camp || '').trim(),
+        country: String(r.country || 'BR')
+          .trim()
+          .toUpperCase(),
+      }))
+      .filter((r) => r.code && r.registered_name);
+    const { data, error } = await this.client
+      .from('verification_codes')
+      .upsert(clean, { onConflict: 'code', ignoreDuplicates: true })
+      .select();
+    if (error) return this._fail(error);
+    const count = data?.length || 0;
+    return { success: true, added: count, message: I18n.t('admin.codesAdded', { count }) };
+  },
+
   // ------------------------------------------------------------------ LGPD
   async exportMyData() {
     const { data, error } = await this.client.rpc('export_my_data');

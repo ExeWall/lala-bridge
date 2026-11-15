@@ -147,6 +147,47 @@ const Auth = {
       .trim();
   },
 
+  CODES_KEY: 'lala_bridge_codes',
+
+  /**
+   * Códigos de verificação: os de exemplo (MockDB) mais os cadastrados pela
+   * equipe no painel admin (modo local).
+   */
+  getVerificationCodes() {
+    return [...MockDB.verificationCodes, ...Store.get(this.CODES_KEY, [])];
+  },
+
+  /**
+   * Cadastra códigos (painel admin, modo local). Ignora repetidos.
+   * @param {{code, name, camp, country}[]} rows
+   */
+  addVerificationCodes(rows) {
+    const known = new Set(this.getVerificationCodes().map((c) => c.code.toUpperCase()));
+    const added = [];
+    rows.forEach((r) => {
+      const code = String(r.code || '')
+        .trim()
+        .toUpperCase();
+      const name = String(r.name || '').trim();
+      if (!code || !name || known.has(code)) return;
+      known.add(code);
+      added.push({
+        code,
+        name,
+        camp: String(r.camp || '').trim(),
+        country: String(r.country || 'BR')
+          .trim()
+          .toUpperCase(),
+      });
+    });
+    Store.set(this.CODES_KEY, [...Store.get(this.CODES_KEY, []), ...added]);
+    return added;
+  },
+
+  isAdmin() {
+    return this.getCurrentUser()?.type === 'admin';
+  },
+
   /**
    * Indica se um código já foi usado por alguma conta cadastrada.
    */
@@ -166,7 +207,7 @@ const Auth = {
     const normalized = String(code || '')
       .trim()
       .toUpperCase();
-    const entry = MockDB.verificationCodes.find((v) => v.code.toUpperCase() === normalized);
+    const entry = this.getVerificationCodes().find((v) => v.code.toUpperCase() === normalized);
 
     if (!entry) {
       return {
